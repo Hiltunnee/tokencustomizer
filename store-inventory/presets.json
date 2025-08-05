@@ -1,0 +1,21 @@
+{"presets":[
+    {
+        "ManaColor":"White",
+        "sets":[
+            {
+                "id": 1,
+                "holderSize":16,
+                "tokens":[
+                    {
+                        "text":"+1/+1",
+                        "amount":8
+                    },
+                    {
+                        "text":"-1/-1",
+                        "amount":8
+                    }
+                ]
+            }
+        ]
+    }
+]}

@@ -1,0 +1,14 @@
+{"colors":[
+    {
+        "id": 1,
+        "name":"White",
+        "colorCode":"255, 255, 255",
+        "available":true
+    },
+    {
+        "id": 2,
+        "name":"Black",
+        "colorCode":"0, 0, 0",
+        "available":true
+    }
+]}
