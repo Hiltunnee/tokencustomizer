@@ -1,5 +1,4 @@
 import HolderCardContainer from "../../components/HolderCardContainer/HolderCardContainer";
-import { useState } from "react";
 import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
