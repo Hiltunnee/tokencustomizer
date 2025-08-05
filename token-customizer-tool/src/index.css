@@ -33,7 +33,9 @@
 body {
   margin: 0;
   display: flex;
-  justify-items: center;
-
+  flex-direction: column;
+  max-width: 100%;
+  padding: 2rem;
+  text-align: center;
 }
 
