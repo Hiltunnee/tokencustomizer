@@ -10,7 +10,7 @@ import { HolderContext } from "./contexts/HolderContext";
 function App() {
   const [theme, setTheme] = useState("light");
   const [tokenSet, setTokenSet] = useState([]);
-  const [selectedHolder, setSelectedHolder] = useState();
+  const [selectedHolder, setSelectedHolder] = useState(1); //Default holder is id=1
 
   return (
     <ThemeContext.Provider value={{theme, setTheme}}>
