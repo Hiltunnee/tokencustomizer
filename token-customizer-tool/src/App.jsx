@@ -1,5 +1,5 @@
 //Components
-import TabsRouter from "./components/TabsRouter";
+import TabsRouter from "./components/TabsRouter/TabsRouter";
 
 //Style
 import './App.css'
