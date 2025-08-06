@@ -28,6 +28,7 @@ const manaColorStyle = {
     flexShrink: "1",
     border: "solid",
     borderColor: "var(--accent-primary)",
+    borderRadius: "5px",
     padding: "1em",
     backgroundColor: "var(--backgound-secondary)",
 };
