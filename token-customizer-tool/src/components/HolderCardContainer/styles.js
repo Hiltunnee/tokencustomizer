@@ -5,6 +5,7 @@ const cardStyle = {
     justifyContent: "center",
     alignContent: "center",
     padding: "1em",
+    backgroundColor: "var(--backgound-secondary)"
 };
 
 const contentStyle = {

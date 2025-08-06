@@ -11,11 +11,12 @@ const holderCardStyle = {
     // Border style
     borderStyle: "solid",
     borderWidth: "0.3em",
-    borderColor: "var(--color-dark-pink)",
+    borderColor: "var(--accent-primary)",
     borderRadius: "20px",
 
     //Colors
     color: "var(--color-primary)",
+    backgroundColor: "var(--accent-tertiary)"
 };
 
 const radioButtonStyle = {

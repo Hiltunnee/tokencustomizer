@@ -2,11 +2,12 @@ import HolderCardContainer from "../../components/HolderCardContainer/HolderCard
 import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import { pageStyle } from "./styles";
 
 export default function Home() {
 
     return (
-        <Container>
+        <Container sx={pageStyle}>
             <Card>
                 <p>Choose how many tokens you want</p>
             </Card>
