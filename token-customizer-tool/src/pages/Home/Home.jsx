@@ -1,11 +1,14 @@
 import HolderCardContainer from "../../components/HolderCardContainer/HolderCardContainer";
+import ManaColorContainer from "../../components/ManaColorContainer/ManaColorContainer";
 import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
+import { useState } from "react";
 
 export default function Home() {
+    const [selectedManaColor, setSelectedManaColor] = useState("Custom");
 
     return (
         <Container sx={pageStyle}>
@@ -21,7 +24,7 @@ export default function Home() {
                     <p>You get to freely customize this later!</p>
                 </Card>
                 <Box>
-                    <p>Manavärit tänne</p>
+                    <ManaColorContainer selectedManaColor={selectedManaColor} setSelectedManaColor={setSelectedManaColor} />
                 </Box>
             </Stack>
         </Container>
