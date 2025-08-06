@@ -8,7 +8,7 @@ import { pageStyle, textCardStyle } from "./styles";
 import { useState } from "react";
 
 export default function Home() {
-    const [selectedManaColor, setSelectedManaColor] = useState("Custom");
+    const [selectedManaColor, setSelectedManaColor] = useState(7);
 
     return (
         <Container sx={pageStyle}>
