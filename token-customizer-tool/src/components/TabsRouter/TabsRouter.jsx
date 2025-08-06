@@ -54,7 +54,7 @@ function MyTabs() {
   const currentTab = routeMatch?.pattern?.path;
 
   return (
-    <Tabs value={currentTab}>
+    <Tabs value={currentTab} centered>
       <Tab label="Home" value="/" to="/" component={Link} />
       <Tab label="Customization" value="/customization" to="/customization" component={Link} />
       <Tab label="Confirm order" value="/confirmation" to="/confirmation" component={Link} />
