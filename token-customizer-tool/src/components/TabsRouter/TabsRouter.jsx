@@ -55,9 +55,9 @@ function MyTabs() {
 
   return (
     <Tabs value={currentTab} centered>
-      <Tab label="Home" value="/" to="/" component={Link} />
-      <Tab label="Customization" value="/customization" to="/customization" component={Link} />
-      <Tab label="Confirm order" value="/confirmation" to="/confirmation" component={Link} />
+      <Tab label="Home" value="/" disableRipple />
+      <Tab label="Customization" value="/customization" disableRipple />
+      <Tab label="Confirm order" value="/confirmation" disableRipple />
     </Tabs>
   );
 }
