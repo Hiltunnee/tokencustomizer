@@ -6,9 +6,15 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
 import { useState } from "react";
+import Button from "@mui/material/Button";
+import { TokensContext } from "../../contexts/TokensContext"
+import { useNavigate } from "react-router";
 
 export default function Home() {
     const [selectedManaColor, setSelectedManaColor] = useState(7);
+
+    //const { selectedManaColor, setSelectedManaColor } = useContext(TokensContext);
+    const navigate = useNavigate();
 
     return (
         <Container sx={pageStyle}>
@@ -25,6 +31,11 @@ export default function Home() {
                 </Card>
                 <Box>
                     <ManaColorContainer selectedManaColor={selectedManaColor} setSelectedManaColor={setSelectedManaColor} />
+                </Box>
+                <Box>
+                    <Button variant="contained" onClick={() => navigate("/customization")}>
+                        Continue
+                    </Button>
                 </Box>
             </Stack>
         </Container>
