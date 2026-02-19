@@ -1,30 +1,43 @@
 import Token from "../../components/Token/Token";
+import TokenCustom from "../../components/TokenCustom/TokenCustom";
 import Card from "@mui/material/Card";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
+import { useState, useContext, useEffect } from "react";
+import { TokensContext } from "../../contexts/TokensContext";
+import { HolderContext } from "../../contexts/HolderContext";
 import { useNavigate } from "react-router";
+import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
 
 export default function Customization() {
-
     const navigate = useNavigate();
+    const { tokenSet, setTokenSet } = useContext(TokensContext);
+    const [tokenState, setTokenState] = useState(tokenSet[0].tokens);
+    const holderSize = tokenSet[0].holderSize;
+
+    const updateTokenContext = () => {};
+
+    useEffect(() => {
+        console.log(tokenSet);
+        console.log(tokenState);
+    }, []);
 
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
                 <Card sx={textCardStyle}>
-                    <p>Choose how many tokens you want</p>
+                    <p>Customize your tokens.</p>
                 </Card>
                 <Box>
                     <Box>
-                        <Token text="+1  +1" color="black" borderColor="red" isNumberToken={true} />
+                        <TokenCustomContainer tokens={tokenState} />
                     </Box>
                 </Box>
                 <Card>
-                    <p>Choose the base color of your deck</p>
-                    <p>You get to freely customize this later!</p>
+                    <p>You have {holderSize} amount of tokens in your holder!</p>
                 </Card>
                 <Box>
                     <Button variant="contained" onClick={() => navigate("/home")}>
