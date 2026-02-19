@@ -1,8 +1,8 @@
 const boxStyle = {
     margin: 0,
     padding: 0,
-    maxWidth: "200px",
-    maxHeight: "200px",
+    maxWidth: "130px",
+    maxHeight: "130px",
 };
 
 const amountTextStyle= {
