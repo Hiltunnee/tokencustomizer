@@ -5,16 +5,45 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "@mui/material/Button";
 import { TokensContext } from "../../contexts/TokensContext"
+import { HolderContext } from "../../contexts/HolderContext";
+import setInventory from "../../../../store-inventory/presets.json"
 import { useNavigate } from "react-router";
 
 export default function Home() {
+    //Basic set
     const [selectedManaColor, setSelectedManaColor] = useState(7);
+    const { selectedHolder, setSelectedHolder } = useContext(HolderContext);
+    const { tokenSet, setTokenSet } = useContext(TokensContext);
 
     //const { selectedManaColor, setSelectedManaColor } = useContext(TokensContext);
     const navigate = useNavigate();
+
+    const moveToCustomization = () => {
+        searchMatchingPreset();
+        navigate("/customization");
+    };
+
+    //Holder id: 1.16x, 2.32x, 3.40x, 4.48x 
+    //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic
+    const searchMatchingPreset = () => {
+        const holderSizeFromId = (selectedHolder == 4) ? 48 : (selectedHolder == 2) ? 32 : (selectedHolder == 3) ? 40 : 16
+        const matchingColorSets = setInventory.presets.filter(preset => preset.ManaId == selectedManaColor).flatMap(preset => preset.sets);
+        const matchingSet = matchingColorSets.filter(preset => preset.holderSize == holderSizeFromId).flatMap(preset => preset);
+        if (matchingSet.length == 0) {
+            console.log("PRESET PUUTTUU!");
+        } else {
+            console.log("Preset asetettu");
+            matchingSet[0].tokens.forEach(token => {
+                token.baseColor = "Black",
+                token.borderColor = "Red",
+                token.text = token.text.toUpperCase()
+            });
+        };
+        setTokenSet(matchingSet);
+    };
 
     return (
         <Container sx={pageStyle}>
@@ -33,7 +62,7 @@ export default function Home() {
                     <ManaColorContainer selectedManaColor={selectedManaColor} setSelectedManaColor={setSelectedManaColor} />
                 </Box>
                 <Box>
-                    <Button variant="contained" onClick={() => navigate("/customization")}>
+                    <Button variant="contained" onClick={moveToCustomization}>
                         Continue
                     </Button>
                 </Box>
