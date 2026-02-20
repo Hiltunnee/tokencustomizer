@@ -11,6 +11,14 @@ const svgStyle = {
   },
 };
 
+const svgStyleNoInteraction = {
+    preserveAspectRatio: "xMidYMid meet",
+    display: "block", 
+    width: "100%",
+    height: "auto",
+    cursor: "default", 
+};
+
 const textStyle = {
     fontFamily: "var(--font-family-token)",
     pointerEvents: "none",
@@ -29,4 +37,4 @@ const textTokenStyle = {
   letterSpacing: 1,
 };
 
-export { textStyle, svgStyle, numberTokenStyle, textTokenStyle };
+export { textStyle, svgStyle, numberTokenStyle, textTokenStyle, svgStyleNoInteraction };
