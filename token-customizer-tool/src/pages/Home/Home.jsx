@@ -61,11 +61,11 @@ export default function Home() {
                 <Box>
                     <ManaColorContainer selectedManaColor={selectedManaColor} setSelectedManaColor={setSelectedManaColor} />
                 </Box>
-                <Box>
+                <Stack direction="row" sx={{justifyContent: "flex-end"}}>
                     <Button variant="contained" onClick={moveToCustomization}>
                         Continue
                     </Button>
-                </Box>
+                </Stack>
             </Stack>
         </Container>
     );

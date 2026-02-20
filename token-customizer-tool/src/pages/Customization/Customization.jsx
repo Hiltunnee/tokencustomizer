@@ -46,16 +46,18 @@ export default function Customization() {
                 <Card>
                     <p>You have {holderSize} amount of tokens in your holder!</p>
                 </Card>
-                <Box>
-                    <Button variant="contained" onClick={() => navigate("/home")}>
-                        Back
-                    </Button>
-                </Box>
-                <Box>
-                    <Button variant="contained" onClick={() => navigate("/confirmation")}>
-                        Continue
-                    </Button>
-                </Box>
+                <Stack direction="row" sx={{justifyContent: "space-between"}}>
+                    <Box>
+                        <Button variant="contained" onClick={() => navigate("/home")}>
+                            Back
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Button variant="contained" onClick={() => navigate("/confirmation")}>
+                            Continue
+                        </Button>
+                    </Box>
+                </Stack>
                 {/* Token customization dialog */}
                 {selectedToken && (
                     <Dialog open onClose={() => setSelectedToken(null)}>

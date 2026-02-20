@@ -17,15 +17,15 @@ export default function Confirmation() {
                     <p>Tilaus tiedot jne jne</p>
                 </Card>
                 <Box>
-                    <Button variant="contained" onClick={() => navigate("/customization")}>
-                        Back
-                    </Button>
-                </Box>
-                <Box>
                     <Button variant="contained">
                         Add a holder
                     </Button>
                 </Box>
+                <Stack direction="row" sx={{justifyContent: "flex-start"}}>
+                    <Button variant="contained" onClick={() => navigate("/customization")}>
+                        Back
+                    </Button>
+                </Stack>
             </Stack>
         </Container>
     );
