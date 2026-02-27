@@ -11,7 +11,7 @@ export default function TokenCustomContainer({tokens, onTokenClick}) {
         <Card>
             <Box sx={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 5, justifyItems: "start", padding: "2em"}}>
                 {tokens.map(token => (
-                    <TokenCustom key={token.text} text={token.text} baseColor={token.baseColor} borderColor={token.borderColor} isNumberToken={false} amount={token.amount} onClick={() => onTokenClick(token)}  />
+                    <TokenCustom key={token.text} text={token.text} baseColor={token.baseColorCode} borderColor={token.borderColorCode} isNumberToken={token.isNumberToken} amount={token.amount} onClick={() => onTokenClick(token)}  />
                 ))}
             </Box>
         </Card>

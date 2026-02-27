@@ -38,7 +38,9 @@ export default function Home() {
             console.log("Preset asetettu");
             matchingSet[0].tokens.forEach(token => {
                 token.baseColor = "Black",
+                token.baseColorCode = "#000000",
                 token.borderColor = "Red",
+                token.borderColorCode = "#ea140e",
                 token.text = token.text.toUpperCase()
             });
         };

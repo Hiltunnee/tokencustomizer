@@ -18,9 +18,6 @@ export default function HolderCardContainer() {
 
     const { selectedHolder, setSelectedHolder } = useContext(HolderContext);
 
-    //State for holder selection radio buttons, first holder (id=1) is selected by default
-    //const [selectedHolderCard, setSelectedHolder] = useState(1); 
-
     const handleChange = (event) => {
         setSelectedHolder(event.target.value);
     };
