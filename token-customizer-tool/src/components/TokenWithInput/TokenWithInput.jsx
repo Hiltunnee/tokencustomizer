@@ -8,9 +8,16 @@ export default function TokenWithInput({text, color, borderColor, isNumberToken,
     <Box component="svg" viewBox=" 8 20 84 61" sx={interactable ? svgStyle : svgStyleNoInteraction} onClick={onClick}>
       <polygon points="50 20 92 37 92 81 50 68 8 81 8 37" fill={borderColor}/>
       <polygon points="50 25 88 40 88 76 50 64 12 76 12 40" fill={color}/>
-      <text x="50" y="53" textAnchor="middle" dominantBaseline="middle" fill={borderColor} style={isNumberToken ? numberTokenStyle : textTokenStyle}>
+      {!isNumberToken && (
+        <text contentEditable x="50" y="53" textAnchor="middle" dominantBaseline="middle" fill={borderColor} style={textTokenStyle}>
         {text}
       </text>
+      )}
+      {isNumberToken && (
+        <text x="50" y="53" textAnchor="middle" dominantBaseline="middle" fill={borderColor} style={numberTokenStyle}>
+        {text}
+      </text>
+      )}
     </Box>
   );
 }
