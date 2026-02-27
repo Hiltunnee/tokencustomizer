@@ -10,6 +10,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
 import { useState, useContext, useEffect } from "react";
@@ -17,6 +19,7 @@ import { TokensContext } from "../../contexts/TokensContext";
 import { useNavigate } from "react-router";
 import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
 import NumberChanger from "../../components/NumberChanger/NumberChanger";
+import TokenWithInput from "../../components/TokenWithInput/TokenWithInput";
 import tokenColors from "../../../../store-inventory/token-colors.json";
 
 export default function Customization() {
@@ -38,7 +41,6 @@ export default function Customization() {
     const handleTokenClick = (token) => {
         setSelectedToken(token);
         setUpdatedSelectedToken(token);
-        console.log(updatedSelectedToken);
     };
 
     const updateAmount = (change) => {
@@ -57,6 +59,18 @@ export default function Customization() {
         setUpdatedSelectedToken({...updatedSelectedToken, borderColorCode: event.target.value, borderColor: selectedColorName});
     };
 
+    const updateTokenType = () => {
+        if (updatedSelectedToken.isNumberToken) {
+            if (selectedToken.isNumberToken) {
+                setUpdatedSelectedToken({...updatedSelectedToken, text: "", isNumberToken: false});
+            } else {
+                setUpdatedSelectedToken({...updatedSelectedToken, text: selectedToken.text, isNumberToken: false});
+            }
+        } else {
+            setUpdatedSelectedToken({...updatedSelectedToken, text: "+1+1", isNumberToken: true});
+        }
+    };
+
     const saveUpdates = () => {
         if (selectedToken != updatedSelectedToken) {
             setTokenState(prev => 
@@ -72,8 +86,11 @@ export default function Customization() {
     };
 
     useEffect(() => {
+        console.log(tokenState);
+    }, [tokenState]);
+
+    useEffect(() => {
         console.log(updatedSelectedToken);
-        // console.log(tokenState);
     }, [updatedSelectedToken]);
 
     return (
@@ -106,11 +123,19 @@ export default function Customization() {
                 {selectedToken && (
                     <Dialog open onClose={() => setSelectedToken(null)}>
                         <DialogTitle>Token customization</DialogTitle>
-                        <Stack spacing={2} sx={{padding:"20px", textAlign: 'center'}}>
-                            <p>Numero token vai ei?</p>
+                        <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
+                            <ToggleButtonGroup
+                                color="primary"
+                                value={updatedSelectedToken.isNumberToken}
+                                exclusive
+                                onChange={updateTokenType}
+                                aria-label="Token-type"
+                                >
+                                <ToggleButton value={true}>Numeric</ToggleButton>
+                                <ToggleButton value={false}>Keyword</ToggleButton>
+                            </ToggleButtonGroup>
                             <Stack direction="row" alignItems="center" justifyContent="center">
-                                <Token text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></Token>
-                                {/* <p>{selectedToken.amount}</p> */}
+                                <TokenWithInput text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></TokenWithInput>
                                 <NumberChanger amount={updatedSelectedToken.amount} changeAmount={updateAmount} />
                             </Stack>
                             <Stack direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
