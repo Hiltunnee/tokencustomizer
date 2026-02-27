@@ -2,6 +2,7 @@
     "presets": [
         {
             "ManaColor": "White",
+            "ManaId": 2,
             "sets": [
                 {
                     "id": 1,
@@ -195,6 +196,7 @@
         },
         {
             "ManaColor": "Blue",
+            "ManaId": 3,
             "sets": [
                 {
                     "id": 5,
@@ -384,6 +386,7 @@
         },
         {
             "ManaColor": "Black",
+            "ManaId": 1,
             "sets": [
                 {
                     "id": 9,
@@ -553,6 +556,7 @@
         },
         {
             "ManaColor": "Red",
+            "ManaId": 5,
             "sets": [
                 {
                     "id": 13,
@@ -737,50 +741,8 @@
             ]
         },
         {
-            "ManaColor": "White",
-            "sets": [
-                {
-                    "id": 17,
-                    "holderSize": 16,
-                    "tokens": [
-                        {
-                            "text": "+1+1",
-                            "amount": 4
-                        },
-                        {
-                            "text": "-1-1",
-                            "amount": 1
-                        },
-                        {
-                            "text": "+0+1",
-                            "amount": 1
-                        },
-                        {
-                            "text": "Vigilance",
-                            "amount": 2
-                        },
-                        {
-                            "text": "First Strike",
-                            "amount": 2
-                        },
-                        {
-                            "text": "Flying",
-                            "amount": 2
-                        },
-                        {
-                            "text": "Lifelink",
-                            "amount": 2
-                        },
-                        {
-                            "text": "Double Strike",
-                            "amount": 2
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "ManaColor": "Green",
+            "ManaId": 4,
             "sets": [
                 {
                     "id": 18,
@@ -982,6 +944,7 @@
         },
         {
             "ManaColor": "Colorless",
+            "ManaId": 6,
             "sets": [
                 {
                     "id": 22,
@@ -1231,6 +1194,7 @@
         },
         {
             "ManaColor": "Basic",
+            "ManaId": 7,
             "sets": [
                 {
                     "id": 26,
