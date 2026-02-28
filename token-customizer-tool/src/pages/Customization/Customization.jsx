@@ -178,9 +178,7 @@ export default function Customization() {
     // Tokenien määrän lasku
     useEffect(() => {
         let newTokenAmount = 0;
-        console.log(tokenState);
         tokenState.forEach(token => newTokenAmount += token.amount);
-        console.log(newTokenAmount);
         setTokenAmount(newTokenAmount);
     }, [tokenState]);
 
