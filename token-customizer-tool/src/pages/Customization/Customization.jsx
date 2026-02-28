@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import NumberSpinner from "../../components/NumberSpinner/NumberSpinner";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TokensContext } from "../../contexts/TokensContext";
 import { useNavigate } from "react-router";
 import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
@@ -31,11 +31,11 @@ export default function Customization() {
     ));
 
     const holderSize = tokenSet[0].holderSize;
-    const tokenAmount = holderSize;
+    //let tokenAmount = holderSize;
+    const [tokenAmount, setTokenAmount] = useState(holderSize);
 
     const [selectedToken, setSelectedToken] = useState(null);
     const [updatedSelectedToken, setUpdatedSelectedToken] = useState(null);
-    const prevToken = useRef(null);
 
     const [selectedTokenNumbers, setSelectedTokenNumbers] = useState([1,1]);
     const [availableTokenColors, setAvailableTokenColors] = useState(tokenColors.colors.filter(color => color.available == true));
@@ -171,10 +171,18 @@ export default function Customization() {
                     );
                 }
             }
-
         }
         setSelectedToken(null)
     };
+
+    // Tokenien määrän lasku
+    useEffect(() => {
+        let newTokenAmount = 0;
+        console.log(tokenState);
+        tokenState.forEach(token => newTokenAmount += token.amount);
+        console.log(newTokenAmount);
+        setTokenAmount(newTokenAmount);
+    }, [tokenState]);
 
     return (
         <Container sx={pageStyle}>
@@ -188,7 +196,8 @@ export default function Customization() {
                     </Box>
                 </Box>
                 <Card>
-                    <p>You have {holderSize} amount of tokens in your holder!</p>
+                    <p>You have {tokenAmount} amount of tokens in your holder!</p>
+                    <p>Your holdersize is {holderSize} tokens.</p>
                 </Card>
                 <Stack direction="row" sx={{justifyContent: "space-between"}}>
                     <Box>
