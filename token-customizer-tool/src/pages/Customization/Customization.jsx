@@ -16,12 +16,11 @@ import TextField from "@mui/material/TextField";
 import NumberSpinner from "../../components/NumberSpinner/NumberSpinner";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { TokensContext } from "../../contexts/TokensContext";
 import { useNavigate } from "react-router";
 import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
 import NumberChanger from "../../components/NumberChanger/NumberChanger";
-import TokenWithInput from "../../components/TokenWithInput/TokenWithInput";
 import tokenColors from "../../../../store-inventory/token-colors.json";
 
 export default function Customization() {
@@ -36,14 +35,28 @@ export default function Customization() {
 
     const [selectedToken, setSelectedToken] = useState(null);
     const [updatedSelectedToken, setUpdatedSelectedToken] = useState(null);
+    const prevToken = useRef(null);
+
+    const [selectedTokenNumbers, setSelectedTokenNumbers] = useState([1,1]);
     const [availableTokenColors, setAvailableTokenColors] = useState(tokenColors.colors.filter(color => color.available == true));
 
     const updateTokenContext = () => {};
 
     const handleTokenClick = (token) => {
         setSelectedToken(token);
-        setUpdatedSelectedToken(token);
     };
+
+    useEffect(() => {
+        setUpdatedSelectedToken(selectedToken);
+        if (selectedToken != null) {
+            if (selectedToken.isNumberToken) {
+                const tokenNumbers = selectedToken.text.match(/\d+/g);
+                setSelectedTokenNumbers([Number(tokenNumbers[0]), Number(tokenNumbers[1])]);
+            } else {
+                setSelectedTokenNumbers([1,1]);
+            }
+        }
+    }, [selectedToken]);
 
     const updateAmount = (change) => {
         setUpdatedSelectedToken({...updatedSelectedToken, amount: updatedSelectedToken.amount + change});
@@ -73,27 +86,95 @@ export default function Customization() {
         }
     };
 
-    const saveUpdates = () => {
-        if (selectedToken != updatedSelectedToken) {
-            setTokenState(prev => 
-                prev.map(token => 
-                    token.text == selectedToken.text && 
-                    token.baseColor == selectedToken.baseColor && 
-                    token.borderColor == selectedToken.borderColor 
-                    ? updatedSelectedToken : token
-                )
-            );
-        }
-        setSelectedToken(null)
+    const selectedTokenNumbersToText = () => {
+        let str = "";
+        selectedTokenNumbers.forEach((number) => {
+            if (number >= 0) {
+                str = str.concat("+", number.toString())
+            } else {
+                str = str.concat(number.toString())
+            }
+        });
+        return str;
+    };
+
+    const updateTokenNumberPower = (newValue) => {
+        const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
+        setSelectedTokenNumbers(prev => ([newValue, prev[1]]));
+    };
+
+    const updateTokenNumberToughness = (newValue) => {
+        const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
+        setSelectedTokenNumbers(prev => ([prev[0], newValue]));
     };
 
     useEffect(() => {
-        console.log(tokenState);
-    }, [tokenState]);
+        const numbersAsString = selectedTokenNumbersToText();
+        if (updatedSelectedToken) {
+            if (updatedSelectedToken.isNumberToken) {
+                setUpdatedSelectedToken({...updatedSelectedToken, text: numbersAsString});
+            }
+        }
+    }, [selectedTokenNumbers]);
 
-    useEffect(() => {
-        console.log(updatedSelectedToken);
-    }, [updatedSelectedToken]);
+    const saveUpdates = () => {
+        // Ilman mitään muutoksia
+        if (selectedToken != updatedSelectedToken) {
+
+            // Vain määrä muutos
+            if (selectedToken.text == updatedSelectedToken.text && selectedToken.baseColor == updatedSelectedToken.baseColor && selectedToken.borderColor == updatedSelectedToken.borderColor) {
+                setTokenState(prev => 
+                        prev.map(token => 
+                            token.text == selectedToken.text && 
+                            token.baseColor == selectedToken.baseColor && 
+                            token.borderColor == selectedToken.borderColor 
+                            ? updatedSelectedToken : token
+                        )
+                    );
+            } else {
+
+                // Samanlainen tokeni kun jo olemassa oleva
+                if (tokenState.some(token =>
+                    token.text == updatedSelectedToken.text && 
+                    token.baseColor == updatedSelectedToken.baseColor && 
+                    token.borderColor == updatedSelectedToken.borderColor 
+                )) {
+                    const matchingToken = tokenState.filter(token =>
+                        token.text == updatedSelectedToken.text && 
+                        token.baseColor == updatedSelectedToken.baseColor && 
+                        token.borderColor == updatedSelectedToken.borderColor);
+
+                    const a = matchingToken[0].amount + updatedSelectedToken.amount;
+
+                    setTokenState(prev => 
+                        prev.map(token => 
+                            token.text == updatedSelectedToken.text && 
+                            token.baseColor == updatedSelectedToken.baseColor && 
+                            token.borderColor == updatedSelectedToken.borderColor 
+                            ? {...updatedSelectedToken, amount: a} : token
+                        ).filter(token => 
+                            !(token.text == selectedToken.text && 
+                            token.baseColor == selectedToken.baseColor && 
+                            token.borderColor == selectedToken.borderColor) 
+                        )
+                    );
+
+                // Muita muutoksia
+                } else {
+                    setTokenState(prev => 
+                        prev.map(token => 
+                            token.text == selectedToken.text && 
+                            token.baseColor == selectedToken.baseColor && 
+                            token.borderColor == selectedToken.borderColor 
+                            ? updatedSelectedToken : token
+                        )
+                    );
+                }
+            }
+
+        }
+        setSelectedToken(null)
+    };
 
     return (
         <Container sx={pageStyle}>
@@ -122,7 +203,7 @@ export default function Customization() {
                     </Box>
                 </Stack>
                 {/* Token customization dialog */}
-                {selectedToken && (
+                {selectedToken && updatedSelectedToken && (
                     <Dialog open onClose={() => setSelectedToken(null)}>
                         <DialogTitle>Token customization</DialogTitle>
                         <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
@@ -140,10 +221,13 @@ export default function Customization() {
                                 <TextField id="keyword-input" variant="outlined" value={updatedSelectedToken.text} onChange={(event) => {setUpdatedSelectedToken(prev => ({...prev, text: event.target.value.toUpperCase()}))}}/>
                             )}
                             {updatedSelectedToken.isNumberToken && (
-                                <NumberSpinner label="Number Spinner" min={10} max={40} />
+                                <Stack direction="row">
+                                    <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
+                                    <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
+                                </Stack>
                             )}
                             <Stack direction="row" alignItems="center" justifyContent="center">
-                                <TokenWithInput text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></TokenWithInput>
+                                <Token text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></Token>
                                 <NumberChanger amount={updatedSelectedToken.amount} changeAmount={updateAmount} />
                             </Stack>
                             <Stack direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
