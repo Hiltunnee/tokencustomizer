@@ -14,6 +14,8 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
 import NumberSpinner from "../../components/NumberSpinner/NumberSpinner";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
 import { useState, useContext, useEffect } from "react";
@@ -40,7 +42,9 @@ export default function Customization() {
     const [availableTokenColors, setAvailableTokenColors] = useState(tokenColors.colors.filter(color => color.available == true));
     const [addingNewToken, setAddingNewToken] = useState(false);
 
-    const updateTokenContext = () => {};
+    const handleConfirmClick = () => {
+        navigate("/confirmation");
+    };
 
     const handleTokenClick = (token) => {
         setSelectedToken(token);
@@ -61,7 +65,9 @@ export default function Customization() {
     }, [selectedToken]);
 
     const updateAmount = (change) => {
-        setUpdatedSelectedToken({...updatedSelectedToken, amount: updatedSelectedToken.amount + change});
+        if (!(updatedSelectedToken.amount == 0 && change < 0)) {
+            setUpdatedSelectedToken({...updatedSelectedToken, amount: updatedSelectedToken.amount + change});
+        }
     };
 
     const updateBaseColor = (event) => {
@@ -262,6 +268,17 @@ export default function Customization() {
         setSelectedToken(null)
     };
 
+    const handleTokenDeletion = () => {
+        setTokenState(prev => 
+            prev.filter(token => 
+                !(token.text == selectedToken.text && 
+                token.baseColor == selectedToken.baseColor && 
+                token.borderColor == selectedToken.borderColor) 
+            )
+        );
+        setSelectedToken(null);
+    };
+
     // Tokenien määrän lasku
     useEffect(() => {
         let newTokenAmount = 0;
@@ -313,7 +330,7 @@ export default function Customization() {
                         </Button>
                     </Box>
                     <Box>
-                        <Button variant="contained" disabled={!tokenAmountCorrect} onClick={() => navigate("/confirmation")}>
+                        <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
                             Confirm
                         </Button>
                     </Box>
@@ -322,6 +339,9 @@ export default function Customization() {
                 {selectedToken && updatedSelectedToken && (
                     <Dialog open onClose={() => setSelectedToken(null)}>
                         <DialogTitle>Token customization</DialogTitle>
+                        <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={handleTokenDeletion}>
+                            <DeleteIcon />
+                        </IconButton>
                         <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
                             <ToggleButtonGroup
                                 color="primary"
