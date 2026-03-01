@@ -31,14 +31,14 @@ export default function Customization() {
     ));
 
     const holderSize = tokenSet[0].holderSize;
-    //let tokenAmount = holderSize;
     const [tokenAmount, setTokenAmount] = useState(holderSize);
+    const [tokenAmountCorrect, setTokenAmountCorrect] = useState(true);
 
     const [selectedToken, setSelectedToken] = useState(null);
     const [updatedSelectedToken, setUpdatedSelectedToken] = useState(null);
-
     const [selectedTokenNumbers, setSelectedTokenNumbers] = useState([1,1]);
     const [availableTokenColors, setAvailableTokenColors] = useState(tokenColors.colors.filter(color => color.available == true));
+    const [addingNewToken, setAddingNewToken] = useState(false);
 
     const updateTokenContext = () => {};
 
@@ -50,11 +50,13 @@ export default function Customization() {
         setUpdatedSelectedToken(selectedToken);
         if (selectedToken != null) {
             if (selectedToken.isNumberToken) {
-                const tokenNumbers = selectedToken.text.match(/\d+/g);
+                const tokenNumbers = selectedToken.text.match(/-?\d+/g);
                 setSelectedTokenNumbers([Number(tokenNumbers[0]), Number(tokenNumbers[1])]);
             } else {
                 setSelectedTokenNumbers([1,1]);
             }
+        } else {
+            setAddingNewToken(false);
         }
     }, [selectedToken]);
 
@@ -117,28 +119,124 @@ export default function Customization() {
         }
     }, [selectedTokenNumbers]);
 
+    // Kokonaan uusi tokeni
+    const addNewToken = () => {
+        setSelectedToken({text: '', amount: 1, baseColor: 'Black', baseColorCode: '#000000', borderColor: "Red", borderColorCode: "#ea140e", isNumberToken: false});
+        setAddingNewToken(true);
+    };
+
     const saveUpdates = () => {
-        // Ilman mitään muutoksia
+        // Muutoksia
         if (selectedToken != updatedSelectedToken) {
 
-            // Vain määrä muutos
-            if (selectedToken.text == updatedSelectedToken.text && selectedToken.baseColor == updatedSelectedToken.baseColor && selectedToken.borderColor == updatedSelectedToken.borderColor) {
-                setTokenState(prev => 
-                        prev.map(token => 
-                            token.text == selectedToken.text && 
-                            token.baseColor == selectedToken.baseColor && 
-                            token.borderColor == selectedToken.borderColor 
-                            ? updatedSelectedToken : token
-                        )
-                    );
-            } else {
+            //Lisätty uuden tokenin napista
+            if (addingNewToken) {
 
                 // Samanlainen tokeni kun jo olemassa oleva
+                    if (tokenState.some(token =>
+                        token.text == updatedSelectedToken.text && 
+                        token.baseColor == updatedSelectedToken.baseColor && 
+                        token.borderColor == updatedSelectedToken.borderColor 
+                    )) {
+
+                        const matchingToken = tokenState.filter(token =>
+                            token.text == updatedSelectedToken.text && 
+                            token.baseColor == updatedSelectedToken.baseColor && 
+                            token.borderColor == updatedSelectedToken.borderColor);
+
+                        const a = matchingToken[0].amount + updatedSelectedToken.amount;
+
+                        setTokenState(prev => 
+                            prev.map(token => 
+                                token.text == updatedSelectedToken.text && 
+                                token.baseColor == updatedSelectedToken.baseColor && 
+                                token.borderColor == updatedSelectedToken.borderColor 
+                                ? {...updatedSelectedToken, amount: a} : token
+                            ).filter(token => 
+                                !(token.text == selectedToken.text && 
+                                token.baseColor == selectedToken.baseColor && 
+                                token.borderColor == selectedToken.borderColor) 
+                            )
+                        );
+                    } else {
+                        //Uusi uniikki tokeni
+                        setTokenState(prev => [...prev, updatedSelectedToken]);
+                    }
+
+            } else {
+                // Vain määrä muutos
+                if (selectedToken.text == updatedSelectedToken.text && selectedToken.baseColor == updatedSelectedToken.baseColor && selectedToken.borderColor == updatedSelectedToken.borderColor) {
+                    //Nollattu
+                    if (updatedSelectedToken.amount < 1) {
+                        setTokenState(prev => 
+                            prev.filter(token => 
+                                !(token.text == updatedSelectedToken.text && 
+                                token.baseColor == updatedSelectedToken.baseColor && 
+                                token.borderColor == updatedSelectedToken.borderColor) 
+                            )
+                        );
+                    } else {
+                        //Ei nollattu
+                        setTokenState(prev => 
+                            prev.map(token => 
+                                token.text == selectedToken.text && 
+                                token.baseColor == selectedToken.baseColor && 
+                                token.borderColor == selectedToken.borderColor 
+                                ? updatedSelectedToken : token
+                            )
+                        );
+                    }
+                } else {
+
+                    // Samanlainen tokeni kun jo olemassa oleva
+                    if (tokenState.some(token =>
+                        token.text == updatedSelectedToken.text && 
+                        token.baseColor == updatedSelectedToken.baseColor && 
+                        token.borderColor == updatedSelectedToken.borderColor 
+                    )) {
+                        const matchingToken = tokenState.filter(token =>
+                            token.text == updatedSelectedToken.text && 
+                            token.baseColor == updatedSelectedToken.baseColor && 
+                            token.borderColor == updatedSelectedToken.borderColor);
+
+                        const a = matchingToken[0].amount + updatedSelectedToken.amount;
+
+                        setTokenState(prev => 
+                            prev.map(token => 
+                                token.text == updatedSelectedToken.text && 
+                                token.baseColor == updatedSelectedToken.baseColor && 
+                                token.borderColor == updatedSelectedToken.borderColor 
+                                ? {...updatedSelectedToken, amount: a} : token
+                            ).filter(token => 
+                                !(token.text == selectedToken.text && 
+                                token.baseColor == selectedToken.baseColor && 
+                                token.borderColor == selectedToken.borderColor) 
+                            )
+                        );
+
+                    // Muita muutoksia
+                    } else {
+                        setTokenState(prev => 
+                            prev.map(token => 
+                                token.text == selectedToken.text && 
+                                token.baseColor == selectedToken.baseColor && 
+                                token.borderColor == selectedToken.borderColor 
+                                ? updatedSelectedToken : token
+                            )
+                        );
+                    }
+                }
+            }
+        } else {
+            //Uusi tokeni ilman muutoksia (esim. tyhjä)
+         
+            // Samanlainen tokeni kun jo olemassa oleva
                 if (tokenState.some(token =>
                     token.text == updatedSelectedToken.text && 
                     token.baseColor == updatedSelectedToken.baseColor && 
                     token.borderColor == updatedSelectedToken.borderColor 
                 )) {
+
                     const matchingToken = tokenState.filter(token =>
                         token.text == updatedSelectedToken.text && 
                         token.baseColor == updatedSelectedToken.baseColor && 
@@ -146,32 +244,21 @@ export default function Customization() {
 
                     const a = matchingToken[0].amount + updatedSelectedToken.amount;
 
-                    setTokenState(prev => 
-                        prev.map(token => 
-                            token.text == updatedSelectedToken.text && 
-                            token.baseColor == updatedSelectedToken.baseColor && 
-                            token.borderColor == updatedSelectedToken.borderColor 
-                            ? {...updatedSelectedToken, amount: a} : token
-                        ).filter(token => 
-                            !(token.text == selectedToken.text && 
-                            token.baseColor == selectedToken.baseColor && 
-                            token.borderColor == selectedToken.borderColor) 
+                    const tokensWithoutEmpty = tokenState.filter(token => 
+                        !(token.text == selectedToken.text && 
+                        token.baseColor == selectedToken.baseColor && 
+                        token.borderColor == selectedToken.borderColor) 
                         )
-                    );
 
-                // Muita muutoksia
+                    setTokenState(prev => [...tokensWithoutEmpty, {...updatedSelectedToken, amount: a}]);
+
                 } else {
-                    setTokenState(prev => 
-                        prev.map(token => 
-                            token.text == selectedToken.text && 
-                            token.baseColor == selectedToken.baseColor && 
-                            token.borderColor == selectedToken.borderColor 
-                            ? updatedSelectedToken : token
-                        )
-                    );
+                    //Uusi uniikki tokeni
+                    setTokenState(prev => [...prev, updatedSelectedToken]);
                 }
-            }
+            
         }
+
         setSelectedToken(null)
     };
 
@@ -182,6 +269,14 @@ export default function Customization() {
         setTokenAmount(newTokenAmount);
     }, [tokenState]);
 
+    useEffect(() => {
+        if (tokenAmount == holderSize) {
+            setTokenAmountCorrect(true);
+        } else {
+            setTokenAmountCorrect(false);
+        }
+    }, [tokenAmount]);
+
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
@@ -190,13 +285,27 @@ export default function Customization() {
                 </Card>
                 <Box>
                     <Box>
-                        <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} />
+                        <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} onNewTokenClick={addNewToken}/>
                     </Box>
                 </Box>
-                <Card>
-                    <p>You have {tokenAmount} amount of tokens in your holder!</p>
-                    <p>Your holdersize is {holderSize} tokens.</p>
-                </Card>
+                {tokenAmountCorrect && (
+                        <Card>
+                            <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
+                            <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
+                        </Card>
+                    )}
+                {!tokenAmountCorrect && (tokenAmount>holderSize) && (
+                    <Card>
+                        <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                        <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
+                    </Card>
+                )}
+                {!tokenAmountCorrect && (tokenAmount<holderSize) && (
+                    <Card>
+                        <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                        <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
+                    </Card>
+                )}
                 <Stack direction="row" sx={{justifyContent: "space-between"}}>
                     <Box>
                         <Button variant="contained" onClick={() => navigate("/home")}>
@@ -204,8 +313,8 @@ export default function Customization() {
                         </Button>
                     </Box>
                     <Box>
-                        <Button variant="contained" onClick={() => navigate("/confirmation")}>
-                            Continue
+                        <Button variant="contained" disabled={!tokenAmountCorrect} onClick={() => navigate("/confirmation")}>
+                            Confirm
                         </Button>
                     </Box>
                 </Stack>

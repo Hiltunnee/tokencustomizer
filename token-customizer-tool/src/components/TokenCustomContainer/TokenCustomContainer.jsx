@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import AddToken from "../../components/AddToken/AddToken";
 import Box from "@mui/material/Box";
 
-export default function TokenCustomContainer({tokens, onTokenClick}) {
+export default function TokenCustomContainer({tokens, onTokenClick, onNewTokenClick}) {
 
     return (
         <Card>
@@ -11,7 +11,7 @@ export default function TokenCustomContainer({tokens, onTokenClick}) {
                 {tokens.map(token => (
                     <TokenCustom key={`${token.text}-${token.baseColor}-${token.borderColor}`} text={token.text} baseColor={token.baseColorCode} borderColor={token.borderColorCode} isNumberToken={token.isNumberToken} amount={token.amount} onClick={() => onTokenClick(token)}  />
                 ))}
-                <AddToken onClick={() => {console.log("UUSI")}}/>
+                <AddToken onClick={onNewTokenClick}/>
             </Box>
         </Card>
     );
