@@ -28,9 +28,7 @@ import tokenColors from "../../../../store-inventory/token-colors.json";
 export default function Customization() {
     const navigate = useNavigate();
     const { tokenSet, setTokenSet } = useContext(TokensContext);
-    const [tokenState, setTokenState] = useState(tokenSet[0].tokens.map(
-        token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false})
-    ));
+    const [tokenState, setTokenState] = useState();
 
     const holderSize = tokenSet[0].holderSize;
     const [tokenAmount, setTokenAmount] = useState(holderSize);
@@ -42,7 +40,18 @@ export default function Customization() {
     const [availableTokenColors, setAvailableTokenColors] = useState(tokenColors.colors.filter(color => color.available == true));
     const [addingNewToken, setAddingNewToken] = useState(false);
 
+    useEffect(() => {
+        setTokenState(tokenSet[0].tokens.map(
+            token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false})
+        ));
+    }, []);
+
     const handleConfirmClick = () => {
+        setTokenSet(prev => {
+            const updatedSet = [...prev];
+            updatedSet[0] = {...prev[0], tokens: tokenState}
+            return updatedSet;
+        });
         navigate("/confirmation");
     };
 
@@ -281,9 +290,11 @@ export default function Customization() {
 
     // Tokenien määrän lasku
     useEffect(() => {
-        let newTokenAmount = 0;
-        tokenState.forEach(token => newTokenAmount += token.amount);
-        setTokenAmount(newTokenAmount);
+        if (tokenState) {
+            let newTokenAmount = 0;
+            tokenState.forEach(token => newTokenAmount += token.amount);
+            setTokenAmount(newTokenAmount);
+        }
     }, [tokenState]);
 
     useEffect(() => {
@@ -296,126 +307,128 @@ export default function Customization() {
 
     return (
         <Container sx={pageStyle}>
-            <Stack spacing={4}>
-                <Card sx={textCardStyle}>
-                    <p>Customize your tokens.</p>
-                </Card>
-                <Box>
+            {tokenState && (
+                <Stack spacing={4}>
+                    <Card sx={textCardStyle}>
+                        <p>Customize your tokens.</p>
+                    </Card>
                     <Box>
-                        <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} onNewTokenClick={addNewToken}/>
+                        <Box>
+                            <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} onNewTokenClick={addNewToken}/>
+                        </Box>
                     </Box>
-                </Box>
-                {tokenAmountCorrect && (
+                    {tokenAmountCorrect && (
+                            <Card>
+                                <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
+                                <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
+                            </Card>
+                        )}
+                    {!tokenAmountCorrect && (tokenAmount>holderSize) && (
                         <Card>
-                            <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
-                            <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
+                            <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                            <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
                         </Card>
                     )}
-                {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                    <Card>
-                        <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
-                        <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
-                    </Card>
-                )}
-                {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                    <Card>
-                        <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
-                        <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
-                    </Card>
-                )}
-                <Stack direction="row" sx={{justifyContent: "space-between"}}>
-                    <Box>
-                        <Button variant="contained" onClick={() => navigate("/home")}>
-                            Back
-                        </Button>
-                    </Box>
-                    <Box>
-                        <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
-                            Confirm
-                        </Button>
-                    </Box>
-                </Stack>
-                {/* Token customization dialog */}
-                {selectedToken && updatedSelectedToken && (
-                    <Dialog open onClose={() => setSelectedToken(null)}>
-                        <DialogTitle>Token customization</DialogTitle>
-                        <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={handleTokenDeletion}>
-                            <DeleteIcon />
-                        </IconButton>
-                        <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
-                            <ToggleButtonGroup
-                                color="primary"
-                                value={updatedSelectedToken.isNumberToken}
-                                exclusive
-                                onChange={updateTokenType}
-                                aria-label="Token-type"
-                                >
-                                <ToggleButton value={true}>Numeric</ToggleButton>
-                                <ToggleButton value={false}>Keyword</ToggleButton>
-                            </ToggleButtonGroup>
-                            {!updatedSelectedToken.isNumberToken && (
-                                <TextField id="keyword-input" variant="outlined" value={updatedSelectedToken.text} onChange={(event) => {setUpdatedSelectedToken(prev => ({...prev, text: event.target.value.toUpperCase()}))}}/>
-                            )}
-                            {updatedSelectedToken.isNumberToken && (
-                                <Stack direction="row">
-                                    <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
-                                    <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
+                    {!tokenAmountCorrect && (tokenAmount<holderSize) && (
+                        <Card>
+                            <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                            <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
+                        </Card>
+                    )}
+                    <Stack direction="row" sx={{justifyContent: "space-between"}}>
+                        <Box>
+                            <Button variant="contained" onClick={() => navigate("/home")}>
+                                Back
+                            </Button>
+                        </Box>
+                        <Box>
+                            <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
+                                Confirm
+                            </Button>
+                        </Box>
+                    </Stack>
+                    {/* Token customization dialog */}
+                    {selectedToken && updatedSelectedToken && (
+                        <Dialog open onClose={() => setSelectedToken(null)}>
+                            <DialogTitle>Token customization</DialogTitle>
+                            <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={handleTokenDeletion}>
+                                <DeleteIcon />
+                            </IconButton>
+                            <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
+                                <ToggleButtonGroup
+                                    color="primary"
+                                    value={updatedSelectedToken.isNumberToken}
+                                    exclusive
+                                    onChange={updateTokenType}
+                                    aria-label="Token-type"
+                                    >
+                                    <ToggleButton value={true}>Numeric</ToggleButton>
+                                    <ToggleButton value={false}>Keyword</ToggleButton>
+                                </ToggleButtonGroup>
+                                {!updatedSelectedToken.isNumberToken && (
+                                    <TextField id="keyword-input" variant="outlined" value={updatedSelectedToken.text} onChange={(event) => {setUpdatedSelectedToken(prev => ({...prev, text: event.target.value.toUpperCase()}))}}/>
+                                )}
+                                {updatedSelectedToken.isNumberToken && (
+                                    <Stack direction="row">
+                                        <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
+                                        <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
+                                    </Stack>
+                                )}
+                                <Stack direction="row" alignItems="center" justifyContent="center">
+                                    <Token text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></Token>
+                                    <NumberChanger amount={updatedSelectedToken.amount} changeAmount={updateAmount} />
                                 </Stack>
-                            )}
-                            <Stack direction="row" alignItems="center" justifyContent="center">
-                                <Token text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></Token>
-                                <NumberChanger amount={updatedSelectedToken.amount} changeAmount={updateAmount} />
+                                <Stack direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="basecolor-select-label">Base color</InputLabel>
+                                            <Select
+                                            labelId="basecolor-select-label"
+                                            id="basecolor-select"
+                                            value={updatedSelectedToken.baseColorCode}
+                                            onChange={updateBaseColor}
+                                            >
+                                                {availableTokenColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row">
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="bordercolor-select-label">Border color</InputLabel>
+                                            <Select
+                                            labelId="bordercolor-select-label"
+                                            id="bordercolor-select"
+                                            value={updatedSelectedToken.borderColorCode}
+                                            onChange={updateBorderColor}
+                                            >
+                                                {availableTokenColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row" >
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </Stack>
+                                <Stack direction="row" >
+                                    <Button onClick={() => setSelectedToken(null)}>Discard changes</Button>
+                                    <Button onClick={saveUpdates}>Save changes</Button>
+                                </Stack>
                             </Stack>
-                            <Stack direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
-                                <Box>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="basecolor-select-label">Base color</InputLabel>
-                                        <Select
-                                        labelId="basecolor-select-label"
-                                        id="basecolor-select"
-                                        value={updatedSelectedToken.baseColorCode}
-                                        onChange={updateBaseColor}
-                                        >
-                                            {availableTokenColors.map(col => 
-                                            <MenuItem value={col.colorCode}>
-                                                <Stack direction="row">
-                                                    <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
-                                                    </Box>
-                                                    {col.name}
-                                                </Stack>
-                                            </MenuItem>)}
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                                <Box>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="bordercolor-select-label">Border color</InputLabel>
-                                        <Select
-                                        labelId="bordercolor-select-label"
-                                        id="bordercolor-select"
-                                        value={updatedSelectedToken.borderColorCode}
-                                        onChange={updateBorderColor}
-                                        >
-                                            {availableTokenColors.map(col => 
-                                            <MenuItem value={col.colorCode}>
-                                                <Stack direction="row" >
-                                                    <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
-                                                    </Box>
-                                                    {col.name}
-                                                </Stack>
-                                            </MenuItem>)}
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            </Stack>
-                            <Stack direction="row" >
-                                <Button onClick={() => setSelectedToken(null)}>Discard changes</Button>
-                                <Button onClick={saveUpdates}>Save changes</Button>
-                            </Stack>
-                        </Stack>
-                    </Dialog>
-                )}
-            </Stack>
+                        </Dialog>
+                    )}
+                </Stack>
+            )}
         </Container>
     );
 };

@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { TokensContext } from "../../contexts/TokensContext"
 import { HolderContext } from "../../contexts/HolderContext";
@@ -17,8 +17,6 @@ export default function Home() {
     const [selectedManaColor, setSelectedManaColor] = useState(7);
     const { selectedHolder, setSelectedHolder } = useContext(HolderContext);
     const { tokenSet, setTokenSet } = useContext(TokensContext);
-
-    //const { selectedManaColor, setSelectedManaColor } = useContext(TokensContext);
     const navigate = useNavigate();
 
     const moveToCustomization = () => {
@@ -35,7 +33,6 @@ export default function Home() {
         if (matchingSet.length == 0) {
             console.log("PRESET PUUTTUU!");
         } else {
-            console.log("Preset asetettu");
             matchingSet[0].tokens.forEach(token => {
                 token.baseColor = "Black",
                 token.baseColorCode = "#000000",
@@ -44,7 +41,13 @@ export default function Home() {
                 token.text = token.text.toUpperCase()
             });
         };
-        setTokenSet(matchingSet);
+
+        //Onko kyseessä eka holder
+        if (tokenSet.length == 0) {
+            setTokenSet(matchingSet);
+        } else {
+            setTokenSet([...matchingSet, ...tokenSet]);
+        }
     };
 
     return (
