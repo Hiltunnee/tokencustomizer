@@ -120,6 +120,12 @@
         "available": true
     },
     {
+        "id": 21,
+        "name": "Gold",
+        "colorCode": "#f6d701",
+        "available": true
+    },
+    {
         "id": 22,
         "name": "White Marble",
         "colorCode": "#F7F3F0",
