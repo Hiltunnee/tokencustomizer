@@ -1,6 +1,6 @@
 import TabsRouter from "./components/TabsRouter/TabsRouter";
 import './App.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //Contexts
 import { ThemeContext } from "./contexts/ThemeContext";
@@ -11,6 +11,19 @@ function App() {
   const [theme, setTheme] = useState("light");
   const [tokenSet, setTokenSet] = useState([]);
   const [selectedHolder, setSelectedHolder] = useState(1); //Default holder is id=1
+
+  useEffect(() => {
+      const handleBeforeUnload = (e) => {
+          e.preventDefault();
+          e.returnValue = '';
+      };
+
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+  }, []);
 
   return (
     <ThemeContext.Provider value={{theme, setTheme}}>
