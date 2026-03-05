@@ -1,14 +1,14 @@
 {"colors":[
     {
         "id": 1,
-        "name": "White",
-        "colorCode": "#ffffff",
+        "name": "Black",
+        "colorCode": "#000000",
         "available": true
     },
     {
         "id": 2,
-        "name": "Black",
-        "colorCode": "#000000",
+        "name": "White",
+        "colorCode": "#ffffff",
         "available": true
     },
     {
