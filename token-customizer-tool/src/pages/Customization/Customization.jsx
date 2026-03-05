@@ -45,6 +45,8 @@ export default function Customization() {
     const [holderColor, setHolderColor] = useState({name: availableHolderColors[0].name, colorCode: availableHolderColors[0].colorCode});
     const [lidColor, setLidColor] = useState({name: availableHolderColors[0].name, colorCode: availableHolderColors[0].colorCode});
 
+    const [openTokenDeletion, setOpenTokenDeletion] = useState(false);
+
     useEffect(() => {
         setTokenState(tokenSet[0].tokens.map(
             token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false})
@@ -305,7 +307,6 @@ export default function Customization() {
         setSelectedToken(null);
     };
 
-    // Tokenien määrän lasku
     useEffect(() => {
         if (tokenState) {
             let newTokenAmount = 0;
@@ -429,9 +430,26 @@ export default function Customization() {
                     {selectedToken && updatedSelectedToken && (
                         <Dialog open onClose={() => setSelectedToken(null)}>
                             <DialogTitle>Token customization</DialogTitle>
-                            <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={handleTokenDeletion}>
+                            <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={() => {setOpenTokenDeletion(true)}}>
                                 <DeleteIcon />
                             </IconButton>
+
+                            {/* Token deletion dialog */}
+                            <Dialog
+                                open={openTokenDeletion}
+                                onClose={() => {setOpenTokenDeletion(false)}}
+                                aria-labelledby="token-deletion-dialog-title"
+                                aria-describedby="token-deletion-dialog"
+                            >
+                                <DialogTitle id="alert-dialog-title">
+                                    {"Delete token completely?"}
+                                </DialogTitle>
+                                <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                                    <Button onClick={() => {setOpenTokenDeletion(false)}}>Cancel</Button>
+                                    <Button onClick={handleTokenDeletion} autoFocus>Delete</Button>
+                                </Stack>
+                            </Dialog>
+
                             <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
                                 <ToggleButtonGroup
                                     color="primary"
