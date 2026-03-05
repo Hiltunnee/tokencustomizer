@@ -22,9 +22,11 @@ export default function Confirmation() {
     const [openHolders, setOpenHolders] = useState([]);
 
     const formatTokenData = () => {
-        setTokenData(tokenSet.map(holder => ({
-            holderSize: holder.holderSize,
-            tokens: holder.tokens.map(token => ({
+        setTokenData(tokenSet.map(set => ({
+            holderSize: set.holderSize,
+            holder: set.holder.name,
+            ...(set.lid !== undefined && { lid: set.lid.name }),
+            tokens: set.tokens.map(token => ({
                 amount: token.amount,
                 text: token.text,
                 base: token.baseColor,
@@ -72,6 +74,8 @@ export default function Confirmation() {
                         <p><strong>Holder size:</strong> {holder.holderSize}</p>
                         <Collapse in={openHolders.includes(index)}>
                             <Card sx={textCardStyle}>
+                                <p>Holder color: {holder.holder}</p>
+                                {holder.lid && (<p>Lid color: {holder.lid}</p>)}
                                 {holder.tokens.map((token, index) =>
                                     <p key={index}>{token.amount}x {token.text} ({token.base} / {token.border})</p>
                                 )}

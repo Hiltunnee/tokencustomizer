@@ -24,6 +24,7 @@ import { useNavigate } from "react-router";
 import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
 import NumberChanger from "../../components/NumberChanger/NumberChanger";
 import tokenColors from "../../../../store-inventory/token-colors.json";
+import holderColors from "../../../../store-inventory/holder-colors.json";
 
 export default function Customization() {
     const navigate = useNavigate();
@@ -40,16 +41,32 @@ export default function Customization() {
     const [availableTokenColors, setAvailableTokenColors] = useState(tokenColors.colors.filter(color => color.available == true));
     const [addingNewToken, setAddingNewToken] = useState(false);
 
+    const [availableHolderColors, setAvailableHolderColors] = useState(holderColors.colors.filter(color => color.available == true));
+    const [holderColor, setHolderColor] = useState({name: availableHolderColors[0].name, colorCode: availableHolderColors[0].colorCode});
+    const [lidColor, setLidColor] = useState({name: availableHolderColors[0].name, colorCode: availableHolderColors[0].colorCode});
+
     useEffect(() => {
         setTokenState(tokenSet[0].tokens.map(
             token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false})
         ));
+        if (tokenSet[0].holder != undefined) {
+            setHolderColor({name: tokenSet[0].holder.name, colorCode: tokenSet[0].holder.colorCode});
+            if (tokenSet[0].lid != undefined) {
+                setLidColor({name: tokenSet[0].lid.name, colorCode: tokenSet[0].lid.colorCode});
+            }
+        }
     }, []);
 
     const handleConfirmClick = () => {
+        let holderColorData = {};
+        if (holderColor.name == lidColor.name) {
+            holderColorData = {holder: holderColor, lid: undefined};
+        } else {
+            holderColorData = {holder: holderColor, lid: lidColor};
+        }
         setTokenSet(prev => {
             const updatedSet = [...prev];
-            updatedSet[0] = {...prev[0], tokens: tokenState}
+            updatedSet[0] = {...prev[0], ...holderColorData, tokens: tokenState}
             return updatedSet;
         });
         navigate("/confirmation");
@@ -305,48 +322,109 @@ export default function Customization() {
         }
     }, [tokenAmount]);
 
+    //Holder värit
+    const updateHolderColor = (event) => {
+        const selectedColorName = availableHolderColors.find(col => col.colorCode == event.target.value).name;
+        setHolderColor({name: selectedColorName, colorCode: event.target.value});
+    };
+
+    const updateLidColor = (event) => {
+        const selectedColorName = availableHolderColors.find(col => col.colorCode == event.target.value).name;
+        setLidColor({name: selectedColorName, colorCode: event.target.value});
+    };
+
     return (
         <Container sx={pageStyle}>
             {tokenState && (
                 <Stack spacing={4}>
-                    <Card sx={textCardStyle}>
+                    {/* <Card sx={{justifyContent: "center"}}>
                         <p>Customize your tokens.</p>
-                    </Card>
+                    </Card> */}
                     <Box>
                         <Box>
                             <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} onNewTokenClick={addNewToken}/>
                         </Box>
                     </Box>
-                    {tokenAmountCorrect && (
+                    <Stack direction="row" spacing={5} sx={{justifyContent: "space-between"}}>
+                        <Card>
+                            <p>Holder color</p>
+                            <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
+                                            <Select
+                                            labelId="holdercolor-select-label"
+                                            id="holdercolor-select"
+                                            value={holderColor.colorCode}
+                                            onChange={updateHolderColor}
+                                            >
+                                                {availableHolderColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row">
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="lidcolor-select-label">Lid color</InputLabel>
+                                            <Select
+                                            labelId="lidcolor-select-label"
+                                            id="lidcolor-select"
+                                            value={lidColor.colorCode}
+                                            onChange={updateLidColor}
+                                            >
+                                                {availableHolderColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row" >
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </Stack>
+                        </Card>
+                        <Stack spacing={5} sx={{flex: 1}}>
+                            {tokenAmountCorrect && (
                             <Card>
                                 <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
                                 <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
                             </Card>
-                        )}
-                    {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                        <Card>
-                            <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
-                            <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
-                        </Card>
-                    )}
-                    {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                        <Card>
-                            <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
-                            <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
-                        </Card>
-                    )}
-                    <Stack direction="row" sx={{justifyContent: "space-between"}}>
-                        <Box>
-                            <Button variant="contained" onClick={() => navigate("/home")}>
-                                Back
-                            </Button>
-                        </Box>
-                        <Box>
-                            <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
-                                Confirm
-                            </Button>
-                        </Box>
+                            )}
+                            {!tokenAmountCorrect && (tokenAmount>holderSize) && (
+                                <Card>
+                                    <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                                    <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
+                                </Card>
+                            )}
+                            {!tokenAmountCorrect && (tokenAmount<holderSize) && (
+                                <Card>
+                                    <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                                    <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
+                                </Card>
+                            )}
+                            <Stack direction="row" sx={{justifyContent: "space-between"}}>
+                                <Box>
+                                    <Button variant="contained" onClick={() => navigate("/home")}>
+                                        Back
+                                    </Button>
+                                </Box>
+                                <Box>
+                                    <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
+                                        Confirm
+                                    </Button>
+                                </Box>
+                            </Stack>
+                        </Stack>
                     </Stack>
+
                     {/* Token customization dialog */}
                     {selectedToken && updatedSelectedToken && (
                         <Dialog open onClose={() => setSelectedToken(null)}>
