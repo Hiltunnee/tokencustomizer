@@ -22,7 +22,7 @@ export default function CustomStepper() {
     const activeStep = stepsMap[location.pathname] ?? 0;
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '50%' , margin: "0 auto", my: 4}}>
         <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((label) => (
             <Step key={label}>

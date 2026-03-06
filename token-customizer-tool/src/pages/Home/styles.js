@@ -2,7 +2,8 @@ const pageStyle = {
     display:"flex",
     flexDirection:"column",
     justifyContent:"center",
-    alignContent: "center"
+    alignContent: "center",
+    maxWidth: "1000px"
 };
 
 const textCardStyle = {
