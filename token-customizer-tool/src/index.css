@@ -28,7 +28,8 @@
 
   /*Background colors*/
   --background-primary: #f5f8fd;
-  --backgound-secondary: #DBE3ED;
+  /* --backgound-secondary: #DBE3ED; */
+  --backgound-secondary: #ffffff;
 
   /*Accent colors*/
   --accent-primary: #A74E8B;

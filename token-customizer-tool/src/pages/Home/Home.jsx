@@ -53,9 +53,6 @@ export default function Home() {
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
-                <Card sx={textCardStyle}>
-                    <p>Choose how many tokens you want</p>
-                </Card>
                 <Box>
                     <HolderCardContainer/>
                 </Box>
