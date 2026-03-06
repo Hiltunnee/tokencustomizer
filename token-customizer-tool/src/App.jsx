@@ -1,6 +1,7 @@
-import TabsRouter from "./components/TabsRouter/TabsRouter";
+import Router from "./components/Router/Router";
 import './App.css'
 import { useState, useEffect } from "react";
+import { MemoryRouter } from "react-router-dom";
 
 //Contexts
 import { ThemeContext } from "./contexts/ThemeContext";
@@ -29,7 +30,9 @@ function App() {
     <ThemeContext.Provider value={{theme, setTheme}}>
       <TokensContext.Provider value={{tokenSet, setTokenSet}}>
         <HolderContext.Provider value={{selectedHolder, setSelectedHolder}}>
-          <TabsRouter />
+          <MemoryRouter initialEntries={["/"]}>
+            <Router />
+          </MemoryRouter>
         </HolderContext.Provider>
       </TokensContext.Provider>
     </ThemeContext.Provider>

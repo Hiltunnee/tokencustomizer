@@ -53,7 +53,7 @@ export default function Confirmation() {
     };
 
     const handleAddHolder = () => {
-        navigate("/home");
+        navigate("/");
     };
 
     const handleDeleteHolderConfirmation = () => {
