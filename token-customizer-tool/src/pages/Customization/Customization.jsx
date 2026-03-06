@@ -46,6 +46,7 @@ export default function Customization() {
     const [lidColor, setLidColor] = useState({name: availableHolderColors[0].name, colorCode: availableHolderColors[0].colorCode});
 
     const [openTokenDeletion, setOpenTokenDeletion] = useState(false);
+    const [tokenIndexToDelete, setTokenIndexToDele] = useState();
 
     useEffect(() => {
         setTokenState(tokenSet[0].tokens.map(
@@ -263,8 +264,8 @@ export default function Customization() {
             }
         } else {
             //Uusi tokeni ilman muutoksia (esim. tyhjä)
-         
-            // Samanlainen tokeni kun jo olemassa oleva
+            if (addingNewToken) {
+                // Samanlainen tokeni kun jo olemassa oleva
                 if (tokenState.some(token =>
                     token.text == updatedSelectedToken.text && 
                     token.baseColor == updatedSelectedToken.baseColor && 
@@ -285,12 +286,11 @@ export default function Customization() {
                         )
 
                     setTokenState(prev => [...tokensWithoutEmpty, {...updatedSelectedToken, amount: a}]);
-
                 } else {
                     //Uusi uniikki tokeni
                     setTokenState(prev => [...prev, updatedSelectedToken]);
                 }
-            
+            }   
         }
 
         setSelectedToken(null)
@@ -305,6 +305,7 @@ export default function Customization() {
             )
         );
         setSelectedToken(null);
+        setOpenTokenDeletion(false);
     };
 
     useEffect(() => {
