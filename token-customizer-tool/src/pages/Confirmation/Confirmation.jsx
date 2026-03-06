@@ -9,6 +9,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { pageStyle, textCardStyle } from "./styles";
@@ -20,6 +22,8 @@ export default function Confirmation() {
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const [tokenData, setTokenData] = useState([]);
     const [openHolders, setOpenHolders] = useState([]);
+    const [openSetDeletion, setOpenSetDeletion] = useState(false);
+    const [indexToDelete, setIndexToDelete] = useState();
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -52,6 +56,16 @@ export default function Confirmation() {
         navigate("/home");
     };
 
+    const handleDeleteHolderConfirmation = () => {
+        setOpenSetDeletion(false);
+        setTokenSet(prev => prev.filter((holder, i) => i != indexToDelete));
+    };
+
+    const handleDeleteButton = (index) => {
+        setIndexToDelete(index);
+        setOpenSetDeletion(true);
+    };
+
     const copyToClipboard = () => {
         const json = JSON.stringify(tokenData, null, 2);
         navigator.clipboard.writeText(json);
@@ -65,7 +79,7 @@ export default function Confirmation() {
                         <IconButton sx={{position: "absolute", top: 8, right: 20,}} onClick={() => setOpenHolders(prev => prev.includes(index)? prev.filter(i => i !== index): [...prev, index])}>
                             {openHolders.includes(index) ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)}
                         </IconButton>
-                        <IconButton disabled={!(tokenSet.length>1)} sx={{position: "absolute", top: 8, right: 60,}} onClick={() => {setTokenSet(prev => prev.filter((holder, i) => i != index))}}>
+                        <IconButton disabled={!(tokenSet.length>1)} sx={{position: "absolute", top: 8, right: 60,}} onClick={() => {handleDeleteButton(index)}}>
                             <DeleteIcon />
                         </IconButton>
                         <IconButton sx={{position: "absolute", top: 8, right: 100,}} onClick={() => {handleEditHolder(index)}}>
@@ -83,6 +97,22 @@ export default function Confirmation() {
                         </Collapse>
                     </Card>
                 )}
+
+                {/* Tokenset deletion dialog */}
+                <Dialog
+                    open={openSetDeletion}
+                    onClose={() => {setOpenSetDeletion(false)}}
+                    aria-labelledby="set-deletion-dialog-title"
+                    aria-describedby="set-deletion-dialog"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Delete set completely?"}
+                    </DialogTitle>
+                    <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                        <Button onClick={() => {setOpenSetDeletion(false)}}>Cancel</Button>
+                        <Button onClick={handleDeleteHolderConfirmation} autoFocus>Delete</Button>
+                    </Stack>
+                </Dialog>
 
                 <Box>
                     <Button variant="contained" onClick={handleAddHolder}>
