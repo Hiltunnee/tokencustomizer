@@ -11,6 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
+import Tooltip from "@mui/material/Tooltip";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { pageStyle, textCardStyle } from "./styles";
@@ -24,6 +25,7 @@ export default function Confirmation() {
     const [openHolders, setOpenHolders] = useState([]);
     const [openSetDeletion, setOpenSetDeletion] = useState(false);
     const [indexToDelete, setIndexToDelete] = useState();
+    const [copyTooltipOpen, setCopyTooltipOpen] = useState(false);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -69,6 +71,8 @@ export default function Confirmation() {
     const copyToClipboard = () => {
         const json = JSON.stringify(tokenData, null, 2);
         navigator.clipboard.writeText(json);
+        setCopyTooltipOpen(true);
+        setTimeout(() => setCopyTooltipOpen(false), 1000);
     };
 
     return (
@@ -114,16 +118,18 @@ export default function Confirmation() {
                     </Stack>
                 </Dialog>
 
-                <Box>
+                <Stack direction="row" spacing={15} sx={{justifyContent: "center"}}>
                     <Button variant="contained" onClick={handleAddHolder}>
-                        Add a holder
+                        Add new holder
                     </Button>
-                    <IconButton onClick={copyToClipboard}>
-                        <ContentCopyIcon />
-                    </IconButton>
-                </Box>
+                    <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
+                        <Button variant="contained" onClick={copyToClipboard}>
+                            Copy details <ContentCopyIcon sx={{ ml: 1 }} />
+                        </Button>
+                    </Tooltip>
+                </Stack>
                 <Stack direction="row" sx={{justifyContent: "flex-start"}}>
-                    <Button disabled variant="contained" onClick={() => navigate("/customization")}>
+                    <Button variant="contained" onClick={() => navigate("/customization")}>
                         Back
                     </Button>
                 </Stack>
