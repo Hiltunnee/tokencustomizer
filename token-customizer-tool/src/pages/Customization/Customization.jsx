@@ -414,7 +414,7 @@ export default function Customization() {
                             )}
                             <Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
-                                    <Button variant="contained" onClick={() => navigate("/home")}>
+                                    <Button variant="contained" onClick={() => navigate("/")}>
                                         Back
                                     </Button>
                                 </Box>
