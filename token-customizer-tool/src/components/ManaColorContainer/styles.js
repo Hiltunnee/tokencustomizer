@@ -49,7 +49,7 @@ const radioStyle = {
 
 const imageSizeStyle = { 
     maxWidth: '100%', 
-    height: 'auto' 
+    height: 'auto'
 };
 
 export { cardStyle, contentStyle, manaColorsContainerStyle, radioStyle, labelStyle, manaColorStyle, imageSizeStyle };

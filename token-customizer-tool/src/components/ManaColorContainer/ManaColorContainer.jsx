@@ -56,8 +56,8 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
     const noManaColor = {
         id: 7,
         name:"Basic preset",
-        imagePath: "colorless_mana_icon.png",
-        alt: "colorless_mana_icon"
+        imagePath: "custom_icon.png",
+        alt: "basic_preset_icon"
     };
 
     const handleChange = (event) => {
@@ -76,7 +76,6 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
                                             <Box key={mana.id}>
                                                 <p>{mana.name}</p>
                                                 <img src={mana.imagePath} alt={mana.alt} style={imageSizeStyle}></img>
-                                                {/* <FormControlLabel value={mana.id} sx={radioButtonStyle} control={<Radio/>}/> */}
                                             </Box>
                                         }/>
                                     </Card>
@@ -87,7 +86,6 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
                                     <Box>
                                         <p>{noManaColor.name}</p>
                                         <img src={noManaColor.imagePath} alt={noManaColor.alt} style={imageSizeStyle}></img>
-                                        {/* <FormControlLabel value={noManaColor.id} sx={radioButtonStyle} control={<Radio/>}/> */}
                                     </Box>
                                 }/>
                             </Card>
