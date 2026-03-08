@@ -10,7 +10,7 @@ import { HolderContext } from "../../contexts/HolderContext";
 import Stack from "@mui/material/Stack";
 
 //Styles
-import { cardStyle, contentStyle, manaColorsContainerStyle, radioButtonStyle, manaColorStyle, imageSizeStyle } from "./styles";
+import { cardStyle, contentStyle, manaColorsContainerStyle, radioStyle, labelStyle, manaColorStyle, imageSizeStyle } from "./styles";
 
 export default function ManaColorContainer({ selectedManaColor, setSelectedManaColor}) {
     //Hardcoded mana colors, these shouldn't change
@@ -56,13 +56,9 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
     const noManaColor = {
         id: 7,
         name:"Basic preset",
-        imagePath: "colorless_mana_icon.png",
-        alt: "colorless_mana_icon"
+        imagePath: "custom_icon.png",
+        alt: "basic_preset_icon"
     };
-
-    const { selectedHolder } = useContext(HolderContext);
-
-    //TODO: Kun valittu holderkoko ja manaväri/basic -> Contextiin preset
 
     const handleChange = (event) => {
         setSelectedManaColor(event.target.value);
@@ -75,18 +71,24 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
                     <Stack direction="row" spacing={2}>
                             <Box sx={manaColorsContainerStyle}>
                                 {availableManaColors.map(mana => (
-                                    <Box key={mana.id} sx={manaColorStyle}>
-                                        <p>{mana.name}</p>
-                                        <img src={mana.imagePath} alt={mana.alt} style={imageSizeStyle}></img>
-                                        <FormControlLabel value={mana.id} sx={radioButtonStyle} control={<Radio/>}/>
-                                    </Box>
+                                    <Card sx={manaColorStyle}>
+                                        <FormControlLabel value={mana.id} sx={labelStyle} control={<Radio sx={radioStyle}/>} label={
+                                            <Box key={mana.id}>
+                                                <p>{mana.name}</p>
+                                                <img src={mana.imagePath} alt={mana.alt} style={imageSizeStyle}></img>
+                                            </Box>
+                                        }/>
+                                    </Card>
                                 ))}
                             </Box>
-                            <Box sx={manaColorStyle}>
-                                <p>{noManaColor.name}</p>
-                                <img src={noManaColor.imagePath} alt={noManaColor.alt} style={imageSizeStyle}></img>
-                                <FormControlLabel value={noManaColor.id} sx={radioButtonStyle} control={<Radio/>}/>
-                            </Box>
+                            <Card sx={manaColorStyle}>
+                                <FormControlLabel value={noManaColor.id} sx={labelStyle} control={<Radio sx={radioStyle}/>} label={
+                                    <Box>
+                                        <p>{noManaColor.name}</p>
+                                        <img src={noManaColor.imagePath} alt={noManaColor.alt} style={imageSizeStyle}></img>
+                                    </Box>
+                                }/>
+                            </Card>
                     </Stack>
                 </RadioGroup>
             </FormControl>

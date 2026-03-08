@@ -1,9 +1,6 @@
 const holderCardStyle = {
     //Layout
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
     flex: "1 1 200px",
     padding: "1em",
     margin: "1em",
@@ -21,7 +18,30 @@ const holderCardStyle = {
 
 const radioButtonStyle = {
     margin: "0", 
-    justifyContent: "center"
+    justifyContent: "center",
 };
 
-export { holderCardStyle, radioButtonStyle };
+const boxStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+    textAlign: "center"
+};
+
+const imageStyle = {
+  maxWidth: "100%",
+  maxHeight: "100%",
+  objectFit: "contain"
+};
+
+const labelStyle = {
+    margin: 0,
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column-reverse"
+};
+
+export { holderCardStyle, radioButtonStyle, boxStyle, labelStyle, imageStyle };

@@ -3,78 +3,154 @@
         "id": 1,
         "name": "Black",
         "colorCode": "#000000",
+        "abbreviation": "BLK",
         "available": true
     },
     {
         "id": 2,
         "name": "White",
         "colorCode": "#ffffff",
+        "abbreviation": "WHT",
         "available": true
     },
     {
         "id": 3,
         "name": "Grey",
-        "colorCode": "#828a8f",
+        "colorCode": "#8f949b",
+        "abbreviation": "G",
         "available": true
     },
     {
         "id": 4,
-        "name": "Beige",
-        "colorCode": "#bea27b",
+        "name": "Blood Red",
+        "colorCode": "#880808",
+        "abbreviation": "BR",
         "available": true
     },
     {
         "id": 5,
-        "name": "Brown",
-        "colorCode": "#3c280d",
+        "name": "Red",
+        "colorCode": "#ea140e",
+        "abbreviation": "R",
         "available": true
     },
     {
         "id": 6,
-        "name": "Red",
-        "colorCode": "#e23632",
+        "name": "Pink",
+        "colorCode": "#f9b0bd",
+        "abbreviation": "P",
         "available": true
     },
     {
         "id": 7,
-        "name": "Dark Red",
-        "colorCode": "#4e1c1b",
+        "name": "Baby Pink",
+        "colorCode": "#eac9d6",
+        "abbreviation": "BAP",
         "available": true
     },
     {
         "id": 8,
-        "name": "Orange",
-        "colorCode": "#ed722f",
+        "name": "Army Green",
+        "colorCode": "#68724d",
+        "abbreviation": "ARG",
         "available": true
     },
     {
         "id": 9,
-        "name": "Yellow",
-        "colorCode": "#f9f008",
+        "name": "Poison Green",
+        "colorCode": "#78eb52",
+        "abbreviation": "POG",
         "available": true
     },
     {
         "id": 10,
-        "name": "Green",
-        "colorCode": "#64d638",
+        "name": "Forest Green",
+        "colorCode": "#60ad70",
+        "abbreviation": "FOG",
         "available": true
     },
     {
         "id": 11,
-        "name": "Blue",
-        "colorCode": "#0837d1",
+        "name": "Sea Green",
+        "colorCode": "#1abc83",
+        "abbreviation": "SEG",
         "available": true
     },
     {
         "id": 12,
-        "name": "Purple",
-        "colorCode": "#6b3dad",
+        "name": "Mint Green",
+        "colorCode": "#98ff98",
+        "abbreviation": "MIG",
         "available": true
     },
     {
         "id": 13,
-        "name": "Pink",
-        "colorCode": "#f9abb8",
+        "name": "Blue",
+        "colorCode": "#2240af",
+        "abbreviation": "B",
+        "available": true
+    },
+    {
+        "id": 14,
+        "name": "Sky Blue",
+        "colorCode": "#45c8d6",
+        "abbreviation": "SKB",
+        "available": true
+    },
+    {
+        "id": 15,
+        "name": "Turquoise",
+        "colorCode": "#00b1b7",
+        "abbreviation": "TRQ",
+        "available": true
+    },
+    {
+        "id": 16,
+        "name": "Purple",
+        "colorCode": "#603ba0",
+        "abbreviation": "PUR",
+        "available": true
+    },
+    {
+        "id": 17,
+        "name": "Yellow",
+        "colorCode": "#f6d701",
+        "abbreviation": "Y",
+        "available": true
+    },
+    {
+        "id": 18,
+        "name": "Orange",
+        "colorCode": "#fd7c18",
+        "abbreviation": "O",
+        "available": true
+    },
+    {
+        "id": 19,
+        "name": "Brown",
+        "colorCode": "#9e6a4b",
+        "abbreviation": "BRW",
+        "available": true
+    },
+    {
+        "id": 20,
+        "name": "Beige",
+        "colorCode": "#b19870",
+        "abbreviation": "BEI",
+        "available": true
+    },
+    {
+        "id": 21,
+        "name": "White Marble",
+        "colorCode": "#F7F3F0",
+        "abbreviation": "WMR",
+        "available": true
+    },
+    {
+        "id": 22,
+        "name": "Grey Marble",
+        "colorCode": "#c9c6c3",
+        "abbreviation": "GMR",
         "available": true
     }
 ]}
