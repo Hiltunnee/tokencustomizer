@@ -37,4 +37,10 @@ const textTokenStyle = {
   letterSpacing: 1,
 };
 
-export { textStyle, svgStyle, numberTokenStyle, textTokenStyle, svgStyleNoInteraction };
+const smallTextTokenStyle = {
+  ...textStyle,
+  fontSize: 12,
+  letterSpacing: 1,
+};
+
+export { textStyle, svgStyle, numberTokenStyle, textTokenStyle, svgStyleNoInteraction, smallTextTokenStyle };
