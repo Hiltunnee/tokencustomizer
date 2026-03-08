@@ -1,6 +1,7 @@
 const cardStyle = {
     display: "flex",
-    backgroundColor: "var(--backgound-primary)",
+    backgroundColor: "var(--backgound-secondary)",
+    padding: "2em"
 };
 
 const contentStyle = {
@@ -30,10 +31,18 @@ const manaColorStyle = {
     borderColor: "var(--accent-primary)",
     borderRadius: "5px",
     padding: "1em",
-    backgroundColor: "var(--backgound-secondary)",
+    backgroundColor: "var(--accent-tertiary)",
 };
 
-const radioButtonStyle = {
+const labelStyle = {
+    margin: 0,
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column-reverse"
+};
+
+const radioStyle = {
     margin: "0", 
     justifyContent: "center"
 };
@@ -43,4 +52,4 @@ const imageSizeStyle = {
     height: 'auto' 
 };
 
-export { cardStyle, contentStyle, manaColorsContainerStyle, radioButtonStyle, manaColorStyle, imageSizeStyle };
+export { cardStyle, contentStyle, manaColorsContainerStyle, radioStyle, labelStyle, manaColorStyle, imageSizeStyle };
