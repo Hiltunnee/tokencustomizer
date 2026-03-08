@@ -27,7 +27,8 @@ const boxStyle = {
     alignItems: "center",
     height: "100%",
     width: "100%",
-    textAlign: "center"
+    textAlign: "center",
+    color:"var(--text-primary)"
 };
 
 const imageStyle = {
