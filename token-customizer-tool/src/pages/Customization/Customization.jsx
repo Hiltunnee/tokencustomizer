@@ -335,13 +335,29 @@ export default function Customization() {
         setLidColor({name: selectedColorName, colorCode: event.target.value});
     };
 
+    //Holder teksti
+    const updateTokenText = (event) => {
+        let text = event.target.value;
+        const lines = text.split("\n").slice(0, 2);
+
+        if (lines[0].length > 10) {
+        const extra = lines[0].slice(10); 
+        lines[0] = lines[0].slice(0, 10);
+
+            if (lines.length === 1) {
+                lines.push(extra);
+            } else {
+                lines[1] = (extra + lines[1]).slice(0, 10);
+            }
+        }
+        const limitedLines = lines.map(line => line.slice(0, 10));
+        setUpdatedSelectedToken(prev => ({...prev, text: limitedLines.join("\n").toUpperCase()}))
+    };
+
     return (
         <Container sx={pageStyle}>
             {tokenState && (
                 <Stack spacing={4}>
-                    {/* <Card sx={{justifyContent: "center"}}>
-                        <p>Customize your tokens.</p>
-                    </Card> */}
                     <Box>
                         <Box>
                             <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} onNewTokenClick={addNewToken}/>
@@ -463,7 +479,7 @@ export default function Customization() {
                                     <ToggleButton value={false}>Keyword</ToggleButton>
                                 </ToggleButtonGroup>
                                 {!updatedSelectedToken.isNumberToken && (
-                                    <TextField id="keyword-input" variant="outlined" value={updatedSelectedToken.text} onChange={(event) => {setUpdatedSelectedToken(prev => ({...prev, text: event.target.value.toUpperCase()}))}}/>
+                                    <TextField id="keyword-input" variant="outlined" multiline maxRows={2} slotProps={{ maxLength: 9 }} value={updatedSelectedToken.text} onChange={updateTokenText}/>
                                 )}
                                 {updatedSelectedToken.isNumberToken && (
                                     <Stack direction="row">

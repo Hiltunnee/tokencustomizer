@@ -46,23 +46,21 @@ export default function Confirmation() {
 
     useEffect(() => {formatTokenData()},[tokenSet]);
 
-    const formatCopyData = () => {
-        setDataToCopy(tokenData.map(set => ({
-            HS: set.holderSize,
-            HC: holderColors.colors.find(color => color.name === set.holder)?.abbreviation,
-            ...(set.lid != undefined && {LD: set.lid}),
-            T: set.tokens.map(token => ({
-                kpl: token.amount,
-                txt: token.text,
-                P: (tokenColors.colors.find(color => color.name == token.base)?.abbreviation),
-                S: (tokenColors.colors.find(color => color.name == token.border)?.abbreviation)
-            }))
-        })));
-    };
+    // const formatCopyData = () => {
+    //     setDataToCopy(tokenData.map(set => ({
+    //         HS: set.holderSize,
+    //         HC: holderColors.colors.find(color => color.name === set.holder)?.abbreviation,
+    //         ...(set.lid != undefined && {LD: set.lid}),
+    //         T: set.tokens.map(token => ({
+    //             kpl: token.amount,
+    //             txt: token.text,
+    //             P: (tokenColors.colors.find(color => color.name == token.base)?.abbreviation),
+    //             S: (tokenColors.colors.find(color => color.name == token.border)?.abbreviation)
+    //         }))
+    //     })));
+    // };
 
-    useEffect(() => {console.log(dataToCopy)}, [dataToCopy]);
-
-    useEffect(() => {formatCopyData()}, [tokenData]);
+    // useEffect(() => {formatCopyData()}, [tokenData]);
 
     const handleEditHolder = (holderIndex) => {
         if (holderIndex!=0) {
@@ -90,7 +88,7 @@ export default function Confirmation() {
     };
 
     const copyToClipboard = () => {
-        const json = JSON.stringify(dataToCopy, null, 2);
+        const json = JSON.stringify(tokenData, null, 2);
         navigator.clipboard.writeText(json);
         setCopyTooltipOpen(true);
         setTimeout(() => setCopyTooltipOpen(false), 1000);
