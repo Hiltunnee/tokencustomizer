@@ -23,13 +23,23 @@ export default function CustomStepper() {
 
     return (
         <Box sx={{ width: '50%' , margin: "0 auto", my: 4}}>
-        <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-            <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-            </Step>
-            ))}
-        </Stepper>
+            <Stepper activeStep={activeStep} alternativeLabel sx={{
+            '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel': {
+                color: 'var(--text-secondary)', // Just text label (COMPLETED)
+                },
+            '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel': {
+                color: 'var(--text-secondary)', // Just text label (ACTIVE)
+                },
+            '& .MuiStepLabel-label.Mui-disabled.MuiStepLabel-alternativeLabel': {
+                color: 'var(--background-secondary)', // Just text label (INACTIVE)
+                },
+            }}>
+                {steps.map((label) => (
+                <Step key={label}>
+                    <StepLabel sx={{color: "pink"}}>{label}</StepLabel>
+                </Step>
+                ))}
+            </Stepper>
         </Box>
     );
 };

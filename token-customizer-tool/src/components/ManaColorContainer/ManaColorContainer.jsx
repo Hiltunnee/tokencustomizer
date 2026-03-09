@@ -69,7 +69,7 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
             <FormControl>
                 <RadioGroup value={selectedManaColor} onChange={handleChange}>
                     <Stack direction="row" spacing={2}>
-                            <Box sx={manaColorsContainerStyle}>
+                            {/* <Box sx={manaColorsContainerStyle}> */}
                                 {availableManaColors.map(mana => (
                                     <Card sx={manaColorStyle}>
                                         <FormControlLabel value={mana.id} sx={labelStyle} control={<Radio sx={radioStyle}/>} label={
@@ -80,7 +80,8 @@ export default function ManaColorContainer({ selectedManaColor, setSelectedManaC
                                         }/>
                                     </Card>
                                 ))}
-                            </Box>
+                            {/* </Box> */}
+                            <Box sx={{ width: 25 }} />
                             <Card sx={manaColorStyle}>
                                 <FormControlLabel value={noManaColor.id} sx={labelStyle} control={<Radio sx={radioStyle}/>} label={
                                     <Box>

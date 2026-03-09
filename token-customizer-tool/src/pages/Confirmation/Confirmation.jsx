@@ -98,7 +98,7 @@ export default function Confirmation() {
         <Container sx={pageStyle}>
             <Stack spacing={4}>
                 {tokenData.map((holder, index) => 
-                    <Card key={index} sx={{position: "relative"}}>
+                    <Card key={index} sx={{position: "relative", backgroundColor: "var(--background-tertiary)"}}>
                         <IconButton sx={{position: "absolute", top: 8, right: 20,}} onClick={() => setOpenHolders(prev => prev.includes(index)? prev.filter(i => i !== index): [...prev, index])}>
                             {openHolders.includes(index) ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)}
                         </IconButton>

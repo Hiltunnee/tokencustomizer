@@ -36,8 +36,8 @@ export default function Home() {
             matchingSet[0].tokens.forEach(token => {
                 token.baseColor = "Black",
                 token.baseColorCode = "#000000",
-                token.borderColor = "Red",
-                token.borderColorCode = "#ea140e",
+                token.borderColor = "White",
+                token.borderColorCode = "#ffffff",
                 token.text = token.text.toUpperCase()
             });
         };

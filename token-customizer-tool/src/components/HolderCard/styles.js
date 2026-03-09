@@ -13,7 +13,7 @@ const holderCardStyle = {
 
     //Colors
     color: "var(--color-primary)",
-    backgroundColor: "var(--accent-tertiary)"
+    backgroundColor: "var(--background-tertiary)"
 };
 
 const radioButtonStyle = {

@@ -364,7 +364,7 @@ export default function Customization() {
                         </Box>
                     </Box>
                     <Stack direction="row" spacing={5} sx={{justifyContent: "space-between"}}>
-                        <Card>
+                        <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                             <p>Holder color</p>
                             <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
                                     <Box>
@@ -375,6 +375,7 @@ export default function Customization() {
                                             id="holdercolor-select"
                                             value={holderColor.colorCode}
                                             onChange={updateHolderColor}
+                                            sx={{backgroundColor: "white"}}
                                             >
                                                 {availableHolderColors.map(col => 
                                                 <MenuItem value={col.colorCode}>
@@ -395,6 +396,7 @@ export default function Customization() {
                                             id="lidcolor-select"
                                             value={lidColor.colorCode}
                                             onChange={updateLidColor}
+                                            sx={{backgroundColor: "white"}}
                                             >
                                                 {availableHolderColors.map(col => 
                                                 <MenuItem value={col.colorCode}>
@@ -411,19 +413,19 @@ export default function Customization() {
                         </Card>
                         <Stack spacing={5} sx={{flex: 1}}>
                             {tokenAmountCorrect && (
-                            <Card>
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                 <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
                                 <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
                             </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                                <Card>
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                     <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
                                     <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
                                 </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                                <Card>
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                     <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
                                     <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
                                 </Card>
@@ -435,7 +437,7 @@ export default function Customization() {
                                     </Button>
                                 </Box>
                                 <Box>
-                                    <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
+                                    <Button variant="contained" sx={{backgroundColor:"#008000"}} disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
                                         Confirm
                                     </Button>
                                 </Box>
