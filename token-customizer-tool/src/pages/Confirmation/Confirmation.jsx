@@ -19,6 +19,7 @@ import { TokensContext } from "../../contexts/TokensContext";
 import Collapse from "@mui/material/Collapse";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 import tokenColors from "../../../../store-inventory/token-colors.json";
+import { sendOrder } from "./sendOrder";
 
 export default function Confirmation() {
     const navigate = useNavigate();
@@ -29,6 +30,8 @@ export default function Confirmation() {
     const [openSetDeletion, setOpenSetDeletion] = useState(false);
     const [indexToDelete, setIndexToDelete] = useState();
     const [copyTooltipOpen, setCopyTooltipOpen] = useState(false);
+    const [openEmailDialog, setOpenEmailDialog] = useState(false);
+    const [orderName, setOrderName] = useState("");
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -94,6 +97,18 @@ export default function Confirmation() {
         setTimeout(() => setCopyTooltipOpen(false), 1000);
     };
 
+    const handleSendOrder = async () => {
+        const result = await sendOrder(orderName, tokenData);
+
+        if (result.success) {
+        console.log("Order sent");
+        } else {
+        console.error("Error", result);
+        }
+
+        setOpenEmailDialog(false);
+    };
+
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
@@ -146,12 +161,37 @@ export default function Confirmation() {
                             Copy details <ContentCopyIcon sx={{ ml: 1 }} />
                         </Button>
                     </Tooltip>
+                    <Button variant="contained" onClick={() => setOpenEmailDialog(true)}>
+                        Send order
+                    </Button>
                 </Stack>
                 <Stack direction="row" sx={{justifyContent: "flex-start"}}>
                     <Button variant="contained" onClick={() => navigate("/customization")}>
                         Back
                     </Button>
                 </Stack>
+
+                <Dialog
+                    open={openEmailDialog}
+                    onConfirm={handleSendOrder}
+                    onClose={() => {setOpenSetDeletion(false)}}
+                    aria-labelledby="set-email-dialog-title"
+                    aria-describedby="set-email-dialog"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Send token order details"}
+                    </DialogTitle>
+                    <Stack spacing={2} sx={{padding: "1em"}}>
+                        <p>Enter order name:</p>
+                        <input type="text" value={orderName} onChange={(e) => setOrderName(e.target.value)} placeholder="Order name" />
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "flex-end"}}>
+                            <Button onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
+                            <Button onClick={handleSendOrder} disabled={!orderName} autoFocus>Send</Button>
+                        </Stack>
+                    </Stack>
+                </Dialog>
+
+                    
             </Stack>
         </Container>
     );
