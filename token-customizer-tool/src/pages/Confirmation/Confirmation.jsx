@@ -8,10 +8,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tooltip from "@mui/material/Tooltip";
+import Alert from "@mui/material/Alert";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { pageStyle, textCardStyle } from "./styles";
@@ -32,6 +35,9 @@ export default function Confirmation() {
     const [copyTooltipOpen, setCopyTooltipOpen] = useState(false);
     const [openEmailDialog, setOpenEmailDialog] = useState(false);
     const [orderName, setOrderName] = useState("");
+    const [sending, setSending] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -98,15 +104,26 @@ export default function Confirmation() {
     };
 
     const handleSendOrder = async () => {
-        const result = await sendOrder(orderName, tokenData);
+        try {
+            setSending(true);
+            setError("");
 
-        if (result.success) {
-        console.log("Order sent");
-        } else {
-        console.error("Error", result);
+            const result = await sendOrder(orderName, tokenData);
+            console.log(result);
+
+            if (result.success) {
+            setSuccess(true);
+            setOpenEmailDialog(false);
+            setOrderName("");
+            } else {
+            setError("Sending failed");
+            }
+        } catch (err) {
+            console.error("Send error:", err);
+            setError("Sending failed");
+        } finally {
+            setSending(false);
         }
-
-        setOpenEmailDialog(false);
     };
 
     return (
@@ -173,8 +190,7 @@ export default function Confirmation() {
 
                 <Dialog
                     open={openEmailDialog}
-                    onConfirm={handleSendOrder}
-                    onClose={() => {setOpenSetDeletion(false)}}
+                    onClose={() => setOpenEmailDialog(false)}
                     aria-labelledby="set-email-dialog-title"
                     aria-describedby="set-email-dialog"
                 >
@@ -182,14 +198,37 @@ export default function Confirmation() {
                         {"Send token order details"}
                     </DialogTitle>
                     <Stack spacing={2} sx={{padding: "1em"}}>
-                        <p>Enter order name:</p>
-                        <input type="text" value={orderName} onChange={(e) => setOrderName(e.target.value)} placeholder="Order name" />
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <p style={{ margin: 0 }}>Enter order name:</p>
+
+                            <Tooltip
+                                title="Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text."
+                                arrow
+                            >
+                                <IconButton size="small">
+                                <InfoOutlinedIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                        </Stack>
+                        <TextField label="Order name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth/>
                         <Stack direction="row" spacing={2} sx={{justifyContent: "flex-end"}}>
                             <Button onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
-                            <Button onClick={handleSendOrder} disabled={!orderName} autoFocus>Send</Button>
+                            <Button onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
                         </Stack>
                     </Stack>
                 </Dialog>
+
+                {error && (
+                    <Alert severity="error">
+                        {error}
+                    </Alert>
+                )}
+
+                {success && (
+                    <Alert severity="success">
+                        Order sent successfully.
+                    </Alert>
+                )}
 
                     
             </Stack>
