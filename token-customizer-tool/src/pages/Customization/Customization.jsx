@@ -156,7 +156,7 @@ export default function Customization() {
 
     // Kokonaan uusi tokeni
     const addNewToken = () => {
-        setSelectedToken({text: '', amount: 1, baseColor: 'Black', baseColorCode: '#000000', borderColor: "Red", borderColorCode: "#ea140e", isNumberToken: false});
+        setSelectedToken({text: '', amount: 1, baseColor: 'Black', baseColorCode: '#000000', borderColor: "White", borderColorCode: "#ffffff", isNumberToken: false});
         setAddingNewToken(true);
     };
 
@@ -375,7 +375,6 @@ export default function Customization() {
                                             id="holdercolor-select"
                                             value={holderColor.colorCode}
                                             onChange={updateHolderColor}
-                                            sx={{backgroundColor: "white"}}
                                             >
                                                 {availableHolderColors.map(col => 
                                                 <MenuItem value={col.colorCode}>
@@ -396,7 +395,6 @@ export default function Customization() {
                                             id="lidcolor-select"
                                             value={lidColor.colorCode}
                                             onChange={updateLidColor}
-                                            sx={{backgroundColor: "white"}}
                                             >
                                                 {availableHolderColors.map(col => 
                                                 <MenuItem value={col.colorCode}>
