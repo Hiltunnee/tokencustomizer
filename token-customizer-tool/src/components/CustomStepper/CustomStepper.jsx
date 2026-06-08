@@ -25,10 +25,10 @@ export default function CustomStepper() {
         <Box sx={{ width: '50%' , margin: "0 auto", my: 4}}>
             <Stepper activeStep={activeStep} alternativeLabel sx={{
             '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel': {
-                color: 'var(--text-secondary)', // Just text label (COMPLETED)
+                color: 'var(--text-primary)', // Just text label (COMPLETED)
                 },
             '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel': {
-                color: 'var(--text-secondary)', // Just text label (ACTIVE)
+                color: 'var(--text-primary)', // Just text label (ACTIVE)
                 },
             '& .MuiStepLabel-label.Mui-disabled.MuiStepLabel-alternativeLabel': {
                 color: 'var(--background-secondary)', // Just text label (INACTIVE)

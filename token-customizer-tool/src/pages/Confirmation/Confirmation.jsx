@@ -130,7 +130,7 @@ export default function Confirmation() {
         <Container sx={pageStyle}>
             <Stack spacing={4}>
                 {tokenData.map((holder, index) => 
-                    <Card key={index} sx={{position: "relative", backgroundColor: "var(--background-tertiary)"}}>
+                    <Card key={index} sx={{position: "relative", backgroundColor: "var(--background-secondary)"}}>
                         <IconButton sx={{position: "absolute", top: 8, right: 20,}} onClick={() => setOpenHolders(prev => prev.includes(index)? prev.filter(i => i !== index): [...prev, index])}>
                             {openHolders.includes(index) ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)}
                         </IconButton>
@@ -159,6 +159,7 @@ export default function Confirmation() {
                     onClose={() => {setOpenSetDeletion(false)}}
                     aria-labelledby="set-deletion-dialog-title"
                     aria-describedby="set-deletion-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                 >
                     <DialogTitle id="alert-dialog-title">
                         {"Delete set completely?"}
@@ -193,6 +194,7 @@ export default function Confirmation() {
                     onClose={() => setOpenEmailDialog(false)}
                     aria-labelledby="set-email-dialog-title"
                     aria-describedby="set-email-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                 >
                     <DialogTitle id="alert-dialog-title">
                         {"Send token order details"}

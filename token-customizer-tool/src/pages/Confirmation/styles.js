@@ -7,7 +7,7 @@ const pageStyle = {
 };
 
 const textCardStyle = {
-    backgroundColor:"var(--backgound-secondary)",
+    backgroundColor:"var(--background-secondary)",
     color:"var(--text-primary)",
     alignSelf:"center",
     // width: "fit-content",

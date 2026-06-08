@@ -447,7 +447,7 @@ export default function Customization() {
 
                     {/* Token customization dialog */}
                     {selectedToken && updatedSelectedToken && (
-                        <Dialog open onClose={() => setSelectedToken(null)}>
+                        <Dialog open onClose={() => setSelectedToken(null)} PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}>
                             <DialogTitle>Token customization</DialogTitle>
                             <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={() => {setOpenTokenDeletion(true)}}>
                                 <DeleteIcon />
@@ -459,6 +459,7 @@ export default function Customization() {
                                 onClose={() => {setOpenTokenDeletion(false)}}
                                 aria-labelledby="token-deletion-dialog-title"
                                 aria-describedby="token-deletion-dialog"
+                                PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                             >
                                 <DialogTitle id="alert-dialog-title">
                                     {"Delete token completely?"}

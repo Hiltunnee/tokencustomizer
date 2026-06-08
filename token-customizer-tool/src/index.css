@@ -28,12 +28,12 @@
   --text-secondary: #ffffff; 
 
   /*Background colors*/
-  /* --background-primary: #f5f8fd; */
-  /* --backgound-secondary: #DBE3ED; */
-  --background-primary: #424549;
+  --background-primary: #f5f8fd;
+  --background-secondary: #f7d9f8;
+  /* --background-primary: #424549;
   --background-secondary: #a3a3a3;
-  --background-tertiary: #d3d0d0;
-  /* --backgound-secondary: #424549; */
+  --background-tertiary: #d3d0d0; */
+  --backgound-secondary: #424549;
 
   /*Accent colors*/
   --accent-primary: #ffffff;
