@@ -156,7 +156,7 @@ export default function Customization() {
 
     // Kokonaan uusi tokeni
     const addNewToken = () => {
-        setSelectedToken({text: '', amount: 1, baseColor: 'Black', baseColorCode: '#000000', borderColor: "Red", borderColorCode: "#ea140e", isNumberToken: false});
+        setSelectedToken({text: '', amount: 1, baseColor: 'Black', baseColorCode: '#000000', borderColor: "White", borderColorCode: "#ffffff", isNumberToken: false});
         setAddingNewToken(true);
     };
 
@@ -364,7 +364,7 @@ export default function Customization() {
                         </Box>
                     </Box>
                     <Stack direction="row" spacing={5} sx={{justifyContent: "space-between"}}>
-                        <Card>
+                        <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                             <p>Holder color</p>
                             <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
                                     <Box>
@@ -411,19 +411,19 @@ export default function Customization() {
                         </Card>
                         <Stack spacing={5} sx={{flex: 1}}>
                             {tokenAmountCorrect && (
-                            <Card>
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                 <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
                                 <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
                             </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                                <Card>
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                     <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
                                     <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
                                 </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                                <Card>
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                     <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
                                     <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
                                 </Card>
@@ -435,7 +435,7 @@ export default function Customization() {
                                     </Button>
                                 </Box>
                                 <Box>
-                                    <Button variant="contained" disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
+                                    <Button variant="contained" sx={{backgroundColor:"#008000"}} disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
                                         Confirm
                                     </Button>
                                 </Box>
@@ -445,7 +445,7 @@ export default function Customization() {
 
                     {/* Token customization dialog */}
                     {selectedToken && updatedSelectedToken && (
-                        <Dialog open onClose={() => setSelectedToken(null)}>
+                        <Dialog open onClose={() => setSelectedToken(null)} PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}>
                             <DialogTitle>Token customization</DialogTitle>
                             <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={() => {setOpenTokenDeletion(true)}}>
                                 <DeleteIcon />
@@ -457,6 +457,7 @@ export default function Customization() {
                                 onClose={() => {setOpenTokenDeletion(false)}}
                                 aria-labelledby="token-deletion-dialog-title"
                                 aria-describedby="token-deletion-dialog"
+                                PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                             >
                                 <DialogTitle id="alert-dialog-title">
                                     {"Delete token completely?"}

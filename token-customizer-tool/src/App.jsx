@@ -1,12 +1,15 @@
 import Router from "./components/Router/Router";
 import './App.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { MemoryRouter } from "react-router-dom";
 
 //Contexts
 import { ThemeContext } from "./contexts/ThemeContext";
 import { TokensContext } from "./contexts/TokensContext";
 import { HolderContext } from "./contexts/HolderContext";
+
+// MUI
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 function App() {
   const [theme, setTheme] = useState("light");
@@ -26,13 +29,42 @@ function App() {
       };
   }, []);
 
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+  }, [theme]);
+
+  // MUI theme (IMPORTANT: prevents default blue)
+  const muiTheme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: theme,
+          primary: {
+            main: theme === "dark" ? "#A74E8B" : "#E1A9D0", //Ei tue muuttujia
+            
+          },
+          secondary: {
+            main: theme === "dark" ? "#A74E8B" : "#E1A9D0",
+          },
+        },
+      }),
+    [theme]
+  );
+
+
   return (
     <ThemeContext.Provider value={{theme, setTheme}}>
       <TokensContext.Provider value={{tokenSet, setTokenSet}}>
         <HolderContext.Provider value={{selectedHolder, setSelectedHolder}}>
-          <MemoryRouter initialEntries={["/"]}>
-            <Router />
-          </MemoryRouter>
+          <ThemeProvider theme={muiTheme}>
+            <MemoryRouter initialEntries={["/"]}>
+              <Router />
+            </MemoryRouter>
+          </ThemeProvider>
         </HolderContext.Provider>
       </TokensContext.Provider>
     </ThemeContext.Provider>

@@ -13,7 +13,7 @@ const holderCardStyle = {
 
     //Colors
     color: "var(--color-primary)",
-    backgroundColor: "var(--accent-tertiary)"
+    backgroundColor: "var(--background-tertiary)"
 };
 
 const radioButtonStyle = {
@@ -27,7 +27,8 @@ const boxStyle = {
     alignItems: "center",
     height: "100%",
     width: "100%",
-    textAlign: "center"
+    textAlign: "center",
+    color:"var(--text-primary)"
 };
 
 const imageStyle = {

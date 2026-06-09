@@ -24,28 +24,36 @@
   /*Light theme colors (default)*/
   /*Text colors*/
   --text-primary: #000000; 
-  --text-secondary: #6d6d6d; 
+  /* --text-primary: #ffffff;  */
+  --text-secondary: #ffffff; 
 
   /*Background colors*/
   --background-primary: #f5f8fd;
-  /* --backgound-secondary: #DBE3ED; */
-  --backgound-secondary: #ffffff;
+  --background-secondary: #f7d9f8;
+  /* --background-primary: #424549;
+  --background-secondary: #a3a3a3;
+  --background-tertiary: #d3d0d0; */
+  --backgound-secondary: #424549;
 
   /*Accent colors*/
-  --accent-primary: #A74E8B;
+  --accent-primary: #ffffff;
   --accent-secondary: #E1A9D0; 
-  --accent-tertiary: #C2AFBB;
+  --accent-tertiary: #1E2124;
 }
 
 /* Dark theme colors */
 .dark-theme {
   /*Text colors*/
-  --text-primary: #FFFFFF; 
-  --text-secondary: #6d6d6d; 
+  /* --text-primary: #FFFFFF;  */
+  --text-primary: #ffffff; 
+  --text-secondary: #ffffff; 
 
   /*Background colors*/
-  --background-primary: #222324;
-  --backgound-secondary: #525353;
+  /* --background-primary: #222324;
+  --backgound-secondary: #525353; */
+  --background-primary: #424549;
+  --background-secondary: #a3a3a3;
+  --background-tertiary: #d3d0d0;
 
   /*Accent colors*/
   --accent-primary: #A74E8B;

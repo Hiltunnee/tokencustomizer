@@ -1,6 +1,6 @@
 const cardStyle = {
     display: "flex",
-    backgroundColor: "var(--backgound-secondary)",
+    backgroundColor: "var(--background-secondary)",
     padding: "2em"
 };
 
@@ -31,7 +31,8 @@ const manaColorStyle = {
     borderColor: "var(--accent-primary)",
     borderRadius: "5px",
     padding: "1em",
-    backgroundColor: "var(--accent-tertiary)",
+    backgroundColor: "var(--background-tertiary)",
+    color:"var(--text-primary)"
 };
 
 const labelStyle = {

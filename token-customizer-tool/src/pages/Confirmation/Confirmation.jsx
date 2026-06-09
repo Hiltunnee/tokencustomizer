@@ -8,10 +8,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Tooltip from "@mui/material/Tooltip";
+import Alert from "@mui/material/Alert";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { pageStyle, textCardStyle } from "./styles";
@@ -19,6 +22,7 @@ import { TokensContext } from "../../contexts/TokensContext";
 import Collapse from "@mui/material/Collapse";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 import tokenColors from "../../../../store-inventory/token-colors.json";
+import { sendOrder } from "./sendOrder";
 
 export default function Confirmation() {
     const navigate = useNavigate();
@@ -29,6 +33,11 @@ export default function Confirmation() {
     const [openSetDeletion, setOpenSetDeletion] = useState(false);
     const [indexToDelete, setIndexToDelete] = useState();
     const [copyTooltipOpen, setCopyTooltipOpen] = useState(false);
+    const [openEmailDialog, setOpenEmailDialog] = useState(false);
+    const [orderName, setOrderName] = useState("");
+    const [sending, setSending] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -94,11 +103,34 @@ export default function Confirmation() {
         setTimeout(() => setCopyTooltipOpen(false), 1000);
     };
 
+    const handleSendOrder = async () => {
+        try {
+            setSending(true);
+            setError("");
+
+            const result = await sendOrder(orderName, tokenData);
+            console.log(result);
+
+            if (result.success) {
+            setSuccess(true);
+            setOpenEmailDialog(false);
+            setOrderName("");
+            } else {
+            setError("Sending failed");
+            }
+        } catch (err) {
+            console.error("Send error:", err);
+            setError("Sending failed");
+        } finally {
+            setSending(false);
+        }
+    };
+
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
                 {tokenData.map((holder, index) => 
-                    <Card key={index} sx={{position: "relative"}}>
+                    <Card key={index} sx={{position: "relative", backgroundColor: "var(--background-secondary)"}}>
                         <IconButton sx={{position: "absolute", top: 8, right: 20,}} onClick={() => setOpenHolders(prev => prev.includes(index)? prev.filter(i => i !== index): [...prev, index])}>
                             {openHolders.includes(index) ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)}
                         </IconButton>
@@ -127,6 +159,7 @@ export default function Confirmation() {
                     onClose={() => {setOpenSetDeletion(false)}}
                     aria-labelledby="set-deletion-dialog-title"
                     aria-describedby="set-deletion-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                 >
                     <DialogTitle id="alert-dialog-title">
                         {"Delete set completely?"}
@@ -146,12 +179,60 @@ export default function Confirmation() {
                             Copy details <ContentCopyIcon sx={{ ml: 1 }} />
                         </Button>
                     </Tooltip>
+                    <Button variant="contained" onClick={() => setOpenEmailDialog(true)}>
+                        Send order
+                    </Button>
                 </Stack>
                 <Stack direction="row" sx={{justifyContent: "flex-start"}}>
                     <Button variant="contained" onClick={() => navigate("/customization")}>
                         Back
                     </Button>
                 </Stack>
+
+                <Dialog
+                    open={openEmailDialog}
+                    onClose={() => setOpenEmailDialog(false)}
+                    aria-labelledby="set-email-dialog-title"
+                    aria-describedby="set-email-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        {"Send token order details"}
+                    </DialogTitle>
+                    <Stack spacing={2} sx={{padding: "1em"}}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <p style={{ margin: 0 }}>Enter order name:</p>
+
+                            <Tooltip
+                                title="Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text."
+                                arrow
+                            >
+                                <IconButton size="small">
+                                <InfoOutlinedIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                        </Stack>
+                        <TextField label="Order name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth/>
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "flex-end"}}>
+                            <Button onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
+                            <Button onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
+                        </Stack>
+                    </Stack>
+                </Dialog>
+
+                {error && (
+                    <Alert severity="error">
+                        {error}
+                    </Alert>
+                )}
+
+                {success && (
+                    <Alert severity="success">
+                        Order sent successfully.
+                    </Alert>
+                )}
+
+                    
             </Stack>
         </Container>
     );
