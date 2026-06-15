@@ -40,6 +40,7 @@ export default function Confirmation() {
     const [success, setSuccess] = useState(false);
 
     const formatTokenData = () => {
+        console.log(tokenSet);
         setTokenData(tokenSet.map(set => ({
             holderSize: set.holderSize,
             holder: set.holder.name,

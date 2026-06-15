@@ -14,13 +14,14 @@ import { useNavigate } from "react-router";
 
 export default function Home() {
     //Basic set
-    const [selectedManaColor, setSelectedManaColor] = useState(7);
+    const [selectedManaColor, setSelectedManaColor] = useState(7); //Tämä
     const { selectedHolder, setSelectedHolder } = useContext(HolderContext);
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const navigate = useNavigate();
 
     const moveToCustomization = () => {
-        searchMatchingPreset();
+        // searchMatchingPreset();
+        prepareTokenSetForCustomization();
         navigate("/customization");
     };
 
@@ -50,6 +51,16 @@ export default function Home() {
         }
     };
 
+    const prepareTokenSetForCustomization = () => {
+        const holderSizeFromId = (selectedHolder == 4) ? 48 : (selectedHolder == 2) ? 32 : (selectedHolder == 3) ? 40 : 16
+        const emptyTokenSet = {
+            holderSize: holderSizeFromId,
+            holder: null,
+            tokens: [],
+        };
+        setTokenSet([emptyTokenSet, ...tokenSet]);
+    };
+
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
@@ -57,12 +68,13 @@ export default function Home() {
                     <HolderCardContainer/>
                 </Box>
                 <Card sx={textCardStyle}>
-                    <p>Choose the base color of your deck</p>
-                    <p>You get to freely customize this later!</p>
+                    <p>Choose the size of the holder</p>
+                    {/* <p>Choose the base color of your deck</p>
+                    <p>You get to freely customize this later!</p> */}
                 </Card>
-                <Box>
+                {/* <Box>
                     <ManaColorContainer selectedManaColor={selectedManaColor} setSelectedManaColor={setSelectedManaColor} />
-                </Box>
+                </Box> */}
                 <Stack direction="row" sx={{justifyContent: "flex-end"}}>
                     <Button variant="contained" onClick={moveToCustomization}>
                         Continue
