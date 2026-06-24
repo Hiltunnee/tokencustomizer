@@ -19,16 +19,10 @@ export default function Home() {
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const navigate = useNavigate();
 
-    const moveToCustomization = () => {
-        // searchMatchingPreset();
-        prepareTokenSetForCustomization();
-        navigate("/customization");
-    };
-
-    //Holder id: 1.16x, 2.32x, 3.40x, 4.48x 
+    //Holder id: 1.16x, 2.32x, 3.48x 
     //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic
     const searchMatchingPreset = () => {
-        const holderSizeFromId = (selectedHolder == 4) ? 48 : (selectedHolder == 2) ? 32 : (selectedHolder == 3) ? 40 : 16
+        const holderSizeFromId = (selectedHolder == 3) ? 48 : (selectedHolder == 2) ? 32 : 16
         const matchingColorSets = setInventory.presets.filter(preset => preset.ManaId == selectedManaColor).flatMap(preset => preset.sets);
         const matchingSet = matchingColorSets.filter(preset => preset.holderSize == holderSizeFromId).flatMap(preset => preset);
         if (matchingSet.length == 0) {
@@ -51,8 +45,14 @@ export default function Home() {
         }
     };
 
+    const moveToCustomization = () => {
+        // searchMatchingPreset();
+        prepareTokenSetForCustomization();
+        navigate("/customization");
+    };
+
     const prepareTokenSetForCustomization = () => {
-        const holderSizeFromId = (selectedHolder == 4) ? 48 : (selectedHolder == 2) ? 32 : (selectedHolder == 3) ? 40 : 16
+        const holderSizeFromId = (selectedHolder == 3) ? 48 : (selectedHolder == 2) ? 32 : 16
         const emptyTokenSet = {
             holderSize: holderSizeFromId,
             holder: null,
