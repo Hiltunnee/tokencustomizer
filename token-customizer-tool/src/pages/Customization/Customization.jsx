@@ -10,6 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ListSubheader from '@mui/material/ListSubheader';
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
@@ -19,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
 import { useState, useContext, useEffect } from "react";
+import setInventory from "../../../../store-inventory/presets.json"
 import { TokensContext } from "../../contexts/TokensContext";
 import { useNavigate } from "react-router";
 import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
@@ -30,6 +32,10 @@ export default function Customization() {
     const navigate = useNavigate();
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const [tokenState, setTokenState] = useState();
+
+    //Basic MTG set = 7
+    const [selectedPreset, setSelectedPreset] = useState({presetName: "Empty set", tokens: tokenSet[0].tokens}); 
+    const [availablePresets, setAvailablePresets] = useState();
 
     const holderSize = tokenSet[0].holderSize;
     const [tokenAmount, setTokenAmount] = useState(holderSize);
@@ -48,6 +54,7 @@ export default function Customization() {
     const [openTokenDeletion, setOpenTokenDeletion] = useState(false);
     const [tokenIndexToDelete, setTokenIndexToDele] = useState();
 
+    // Tarkistaa isnumbertokenin ja asettaa  holderin ja lidin värit mustaksi
     useEffect(() => {
         setTokenState(tokenSet[0].tokens.map(
             token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false})
@@ -58,8 +65,62 @@ export default function Customization() {
                 setLidColor({name: tokenSet[0].lid.name, colorCode: tokenSet[0].lid.colorCode});
             }
         }
+        
+        searchMatchingPresets();
     }, []);
 
+    //Holder id: 1.16x, 2.32x, 3.40x, 4.48x 
+    //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic
+    const searchMatchingPresets = () => {
+        // const matchingSets = setInventory.presets.filter(preset => preset.ManaId == selectedPreset).flatMap(preset => preset.sets);
+        // const matchingSet = matchingSets.filter(preset => preset.holderSize == tokenAmount).flatMap(preset => preset);
+        // if (matchingSet.length == 0) {
+        //     console.log("PRESET PUUTTUU!");
+        // } else {
+        //     matchingSet[0].tokens.forEach(token => {
+        //         token.baseColor = "Black",
+        //         token.baseColorCode = "#000000",
+        //         token.borderColor = "White",
+        //         token.borderColorCode = "#ffffff",
+        //         token.text = token.text.toUpperCase()
+        //     });
+        // };
+
+        //Onko kyseessä eka holder
+        // if (tokenSet.length == 0) {
+        //     setTokenSet(matchingSet);
+        // } else {
+        //     setTokenSet([...matchingSet, ...tokenSet]);
+        // }
+
+        const matchingSets = setInventory.presets.flatMap(preset =>
+            preset.sets
+                .filter(set => set.holderSize == tokenAmount)
+                .map(set => ({
+                manaId: preset.ManaId,
+                presetName: preset.ManaColor,
+                ...set,
+                }))
+            );
+        
+        if (matchingSets.length == 0) {
+            console.log("PRESETIT PUUTTUU!");
+        } else {
+            matchingSets[0].tokens.forEach(token => {
+                token.baseColor = "Black",
+                token.baseColorCode = "#000000",
+                token.borderColor = "White",
+                token.borderColorCode = "#ffffff",
+                token.text = token.text.toUpperCase()
+            });
+        };
+
+        console.log("Matching presets:", matchingSets);
+        console.log(tokenSet);
+        setAvailablePresets([{presetName: "Empty set", tokens: tokenSet[0].tokens}, ...matchingSets]);
+    };
+
+    // Varmistaa, että tokenSetin holder ja lid data on ajan tasalla ennen confirmation sivulle siirtymistä
     const handleConfirmClick = () => {
         let holderColorData = {};
         if (holderColor.name == lidColor.name) {
@@ -324,6 +385,25 @@ export default function Customization() {
         }
     }, [tokenAmount]);
 
+    // Päivittää presetin valinnan dropdownista ja tokenState:n vastaamaan valittua presettiä
+    const updatePreset = (event) => {
+        const selectedPreset = availablePresets.find(preset => preset.presetName == event.target.value);
+        setSelectedPreset(selectedPreset);
+        let updatedTokens = selectedPreset.tokens.map(token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false}));
+        updatedTokens.forEach(token => {
+                token.baseColor = "Black",
+                token.baseColorCode = "#000000",
+                token.borderColor = "White",
+                token.borderColorCode = "#ffffff",
+                token.text = token.text.toUpperCase()
+            });
+        setTokenState(updatedTokens);
+    };
+
+    useEffect(() => {
+        console.log("Token state updated:", tokenState);
+    }, [tokenState]);
+
     //Holder värit
     const updateHolderColor = (event) => {
         const selectedColorName = availableHolderColors.find(col => col.colorCode == event.target.value).name;
@@ -412,22 +492,42 @@ export default function Customization() {
                         <Stack spacing={5} sx={{flex: 1}}>
                             {tokenAmountCorrect && (
                             <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
+                                <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
                                 <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
                             </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount>holderSize) && (
                                 <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
                                     <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
                                 </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount<holderSize) && (
                                 <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
                                     <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
                                 </Card>
                             )}
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>You can choose a preset as a base for you set.</p>
+                                <p>Selecting a preset will overwrite your previous changes.</p>
+                                <FormControl sx={{width: "80%", marginBottom: "1em"}}>
+                                    <InputLabel id="preset-select-label">Preset</InputLabel>
+                                    <Select
+                                    labelId="preset-select-label"
+                                    id="preset-select"
+                                    value={selectedPreset.presetName}
+                                    onChange={updatePreset}
+                                    >
+                                        {availablePresets.map(preset => 
+                                        <MenuItem value={preset.presetName}>
+                                            <Stack direction="row" >    
+                                                {preset.presetName}
+                                            </Stack>
+                                        </MenuItem>)}
+                                    </Select>
+                                </FormControl>
+                            </Card>
                             <Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
                                     <Button variant="contained" onClick={() => navigate("/")}>
