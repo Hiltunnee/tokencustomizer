@@ -38,6 +38,7 @@ export default function Confirmation() {
     const [sending, setSending] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+    const [startingOver, setStartingOver] = useState(false);
 
     const formatTokenData = () => {
         console.log(tokenSet);
@@ -127,6 +128,11 @@ export default function Confirmation() {
         }
     };
 
+    const handleStartNewOrder = () => {
+        setTokenSet([]);
+        navigate("/");
+    };
+
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
@@ -175,20 +181,23 @@ export default function Confirmation() {
                     <Button variant="contained" onClick={handleAddHolder}>
                         Add new holder
                     </Button>
-                    <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
+                    {/* <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
                         <Button variant="contained" onClick={copyToClipboard}>
                             Copy details <ContentCopyIcon sx={{ ml: 1 }} />
                         </Button>
-                    </Tooltip>
+                    </Tooltip> */}
+                    <Button variant="contained" onClick={() => setStartingOver(true)}>
+                        New order
+                    </Button>
                     <Button variant="contained" onClick={() => setOpenEmailDialog(true)}>
                         Send order
                     </Button>
                 </Stack>
-                <Stack direction="row" sx={{justifyContent: "flex-start"}}>
+                {/* <Stack direction="row" sx={{justifyContent: "flex-start"}}>
                     <Button variant="contained" onClick={() => navigate("/customization")}>
                         Back
                     </Button>
-                </Stack>
+                </Stack> */}
 
                 <Dialog
                     open={openEmailDialog}
@@ -221,6 +230,23 @@ export default function Confirmation() {
                     </Stack>
                 </Dialog>
 
+                <Dialog
+                    open={startingOver}
+                    onClose={() => setStartingOver(false)}
+                    aria-labelledby="starting-over-dialog-title"
+                    aria-describedby="starting-over-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                >
+                    <DialogTitle id="starting-over-dialog-title">
+                        {`Delete current changes \n
+                        and start new order?`}
+                    </DialogTitle>
+                    <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                        <Button variant="contained" onClick={() => {setStartingOver(false)}}>Cancel</Button>
+                        <Button variant="contained" onClick={handleStartNewOrder} autoFocus>New order</Button>
+                    </Stack>
+                </Dialog>
+
                 {error && (
                     <Alert severity="error">
                         {error}
@@ -232,8 +258,7 @@ export default function Confirmation() {
                         Order sent successfully.
                     </Alert>
                 )}
-
-                    
+  
             </Stack>
         </Container>
     );
