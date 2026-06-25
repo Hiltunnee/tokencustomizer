@@ -1193,7 +1193,7 @@
             ]
         },
         {
-            "ManaColor": "Basic",
+            "ManaColor": "General",
             "ManaId": 7,
             "sets": [
                 {
@@ -1453,6 +1453,221 @@
                     ]
                 }
             ]
+        },
+        {
+
+        "ManaColor": "Basic",
+        "ManaId": 8,
+        "sets": [
+            {
+                "id": 30,
+                "holderSize": 16,
+                "tokens": [
+                    {
+                        "text": "10",
+                        "amount": 8
+                    },
+                    {
+                        "text": "30",
+                        "amount": 4
+                    },
+                    {
+                        "text": "50",
+                        "amount": 2
+                    },
+                    {
+                        "text": "100",
+                        "amount": 2
+                    }
+                ]
+            },
+            {
+                "id": 31,
+                "holderSize": 32,
+                "tokens": [
+                    {
+                        "text": "ABILITY USED",
+                        "amount": 4
+                    },
+                    {
+                        "text": "CANT ATTACK",
+                        "amount": 1
+                    },
+                    {
+                        "text": "CANT RETREAT",
+                        "amount": 1
+                    },
+                    {
+                        "text": "NO ITEMS",
+                        "amount": 1
+                    },
+                    {
+                        "text": "ASLEEP",
+                        "amount": 1
+                    },
+                    {
+                        "text": "BURNED",
+                        "amount": 1
+                    },
+                    {
+                        "text": "CONFUSED",
+                        "amount": 1
+                    },
+                    {
+                        "text": "PARALYZED",
+                        "amount": 1
+                    },
+                    {
+                        "text": "POISONED",
+                        "amount": 1
+                    },
+                    {
+                        "text": "BANDAGE",
+                        "amount": 1
+                    },
+                    {
+                        "text": "10",
+                        "amount": 8
+                    },
+                    {
+                        "text": "30",
+                        "amount": 5
+                    },
+                    {
+                        "text": "50",
+                        "amount": 4
+                    },
+                    {
+                        "text": "100",
+                        "amount": 2
+                    }
+                ]
+            },
+            {
+                "id": 32,
+                "holderSize": 40,
+                "tokens": [
+                    {
+                        "text": "ABILITY USED",
+                        "amount": 4
+                    },
+                    {
+                        "text": "CANT ATTACK",
+                        "amount": 2
+                    },
+                    {
+                        "text": "CANT RETREAT",
+                        "amount": 2
+                    },
+                    {
+                        "text": "NO ITEMS",
+                        "amount": 1
+                    },
+                    {
+                        "text": "ASLEEP",
+                        "amount": 2
+                    },
+                    {
+                        "text": "BURNED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "CONFUSED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "PARALYZED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "POISONED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "BANDAGE",
+                        "amount": 2
+                    },
+                    {
+                        "text": "10",
+                        "amount": 8
+                    },
+                    {
+                        "text": "30",
+                        "amount": 5
+                    },
+                    {
+                        "text": "50",
+                        "amount": 4
+                    },
+                    {
+                        "text": "100",
+                        "amount": 2
+                    }
+
+                ]
+            },
+            {
+                "id": 33,
+                "holderSize": 48,
+                "tokens": [
+                    {
+                        "text": "ABILITY USED",
+                        "amount": 4
+                    },
+                    {
+                        "text": "CANT ATTACK",
+                        "amount": 2
+                    },
+                    {
+                        "text": "CANT RETREAT",
+                        "amount": 2
+                    },
+                    {
+                        "text": "NO ITEMS",
+                        "amount": 2
+                    },
+                    {
+                        "text": "ASLEEP",
+                        "amount": 2
+                    },
+                    {
+                        "text": "BURNED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "CONFUSED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "PARALYZED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "POISONED",
+                        "amount": 2
+                    },
+                    {
+                        "text": "BANDAGE",
+                        "amount": 2
+                    },
+                    {
+                        "text": "10",
+                        "amount": 12
+                    },
+                    {
+                        "text": "30",
+                        "amount": 6
+                    },
+                    {
+                        "text": "50",
+                        "amount": 4
+                    },
+                    {
+                        "text": "100",
+                        "amount": 4
+                    }
+                ]
+            }]
         }
     ]
 }
