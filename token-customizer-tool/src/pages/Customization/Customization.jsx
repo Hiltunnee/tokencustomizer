@@ -108,13 +108,16 @@ export default function Customization() {
         if (matchingSets.length == 0) {
             console.log("PRESETIT PUUTTUU!");
         } else {
-            matchingSets[0].tokens.forEach(token => {
+            matchingSets.forEach(set => {
+                set.tokens.forEach(token => {
                 token.baseColor = "Black",
                 token.baseColorCode = "#000000",
                 token.borderColor = "White",
                 token.borderColorCode = "#ffffff",
                 token.text = token.text.toUpperCase()
+                })
             });
+            console.log(matchingSets);
         };
 
         setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens}, ...matchingSets]);
@@ -390,19 +393,8 @@ export default function Customization() {
         const selectedPreset = availablePresets.find(preset => preset.presetName == event.target.value);
         setSelectedPreset(selectedPreset);
         let updatedTokens = selectedPreset.tokens.map(token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false}));
-        updatedTokens.forEach(token => {
-                token.baseColor = "Black",
-                token.baseColorCode = "#000000",
-                token.borderColor = "White",
-                token.borderColorCode = "#ffffff",
-                token.text = token.text.toUpperCase()
-            });
         setTokenState(updatedTokens);
     };
-
-    useEffect(() => {
-        console.log("Token state updated:", tokenState);
-    }, [tokenState]);
 
     //Holder värit
     const updateHolderColor = (event) => {
