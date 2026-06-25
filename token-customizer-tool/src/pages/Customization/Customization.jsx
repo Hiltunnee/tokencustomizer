@@ -33,7 +33,6 @@ export default function Customization() {
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const [tokenState, setTokenState] = useState();
 
-    //Basic MTG set = 7
     const [selectedPreset, setSelectedPreset] = useState({presetName: "Empty set", tokens: tokenSet[0].tokens}); 
     const [availablePresets, setAvailablePresets] = useState();
 
@@ -54,6 +53,8 @@ export default function Customization() {
     const [openTokenDeletion, setOpenTokenDeletion] = useState(false);
     const [tokenIndexToDelete, setTokenIndexToDele] = useState();
 
+    const [openBackDeletion, setOpenBackDeletion] = useState(false);
+
     // Tarkistaa isnumbertokenin ja asettaa  holderin ja lidin värit mustaksi
     useEffect(() => {
         setTokenState(tokenSet[0].tokens.map(
@@ -70,7 +71,7 @@ export default function Customization() {
     }, []);
 
     //Holder id: 1.16x, 2.32x, 3.40x, 4.48x 
-    //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic
+    //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic, 8. Pokemon basic
     const searchMatchingPresets = () => {
         // const matchingSets = setInventory.presets.filter(preset => preset.ManaId == selectedPreset).flatMap(preset => preset.sets);
         // const matchingSet = matchingSets.filter(preset => preset.holderSize == tokenAmount).flatMap(preset => preset);
@@ -99,6 +100,7 @@ export default function Customization() {
                 .map(set => ({
                 manaId: preset.ManaId,
                 presetName: preset.ManaColor,
+                presetGroup: preset.ManaId == 8 ? "pokemon" : "mtg", //Kovakoodatut groupit erottamaan Pokemon  ja MTG presetit
                 ...set,
                 }))
             );
@@ -115,9 +117,7 @@ export default function Customization() {
             });
         };
 
-        console.log("Matching presets:", matchingSets);
-        console.log(tokenSet);
-        setAvailablePresets([{presetName: "Empty set", tokens: tokenSet[0].tokens}, ...matchingSets]);
+        setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens}, ...matchingSets]);
     };
 
     // Varmistaa, että tokenSetin holder ja lid data on ajan tasalla ennen confirmation sivulle siirtymistä
@@ -434,6 +434,11 @@ export default function Customization() {
         setUpdatedSelectedToken(prev => ({...prev, text: limitedLines.join("\n").toUpperCase()}))
     };
 
+    const handleStartingOver = () => {
+        setTokenSet([]);
+        navigate("/");
+    };
+
     return (
         <Container sx={pageStyle}>
             {tokenState && (
@@ -510,7 +515,7 @@ export default function Customization() {
                             )}
                             <Card sx={{backgroundColor:"var(--background-secondary)"}}>
                                 <p>You can choose a preset as a base for you set.</p>
-                                <p>Selecting a preset will overwrite your previous changes.</p>
+                                <p>Selecting a preset will overwrite your previous changes!</p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
                                     <InputLabel id="preset-select-label">Preset</InputLabel>
                                     <Select
@@ -519,18 +524,69 @@ export default function Customization() {
                                     value={selectedPreset.presetName}
                                     onChange={updatePreset}
                                     >
-                                        {availablePresets.map(preset => 
+                                        {/* {availablePresets.map(preset => 
                                         <MenuItem value={preset.presetName}>
                                             <Stack direction="row" >    
                                                 {preset.presetName}
                                             </Stack>
-                                        </MenuItem>)}
+                                        </MenuItem>)} */}
+
+                                        {availablePresets
+                                                .filter(preset => preset.presetGroup === "other")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>POKEMON</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "pokemon")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>MTG</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "mtg")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+
+                                        {/* <ListSubheader>Other</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "other")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))} */}
                                     </Select>
                                 </FormControl>
                             </Card>
                             <Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
-                                    <Button variant="contained" onClick={() => navigate("/")}>
+                                    <Button variant="contained" onClick={() => setOpenBackDeletion(true)}>
                                         Back
                                     </Button>
                                 </Box>
@@ -542,6 +598,24 @@ export default function Customization() {
                             </Stack>
                         </Stack>
                     </Stack>
+
+                    {/* Back button deletion dialog */}
+                    <Dialog
+                        open={openBackDeletion}
+                        onClose={() => {setOpenBackDeletion(false)}}
+                    >
+                        <DialogTitle>
+                            {"Delete current changes and go back to starting new order?"}
+                        </DialogTitle>
+                        <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                            <Button variant="contained" onClick={() => {setOpenBackDeletion(false)}}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" onClick={handleStartingOver} autoFocus>
+                                New order
+                            </Button>
+                        </Stack>
+                    </Dialog>
 
                     {/* Token customization dialog */}
                     {selectedToken && updatedSelectedToken && (
