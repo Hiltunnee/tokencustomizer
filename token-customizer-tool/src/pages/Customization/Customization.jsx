@@ -476,11 +476,6 @@ export default function Customization() {
                                     </Select>
                                 </FormControl>
                             </Card>
-
-                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>Please note that this tool is for illustrative purposes only and may not perfectly reflect the final product (e.g. text size, positioning, and other details).
-                                    For a more accurate representation of the tokens, please visit the Priimacraft Etsy page and refer to the product images.</p>
-                            </Card>
                         </Stack>
 
                         <Stack spacing={5} sx={{flex: 1}}>
