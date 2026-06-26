@@ -111,7 +111,7 @@ export default function Confirmation() {
             setSending(true);
             setError("");
 
-            const result = await sendOrder(orderName, tokenData);
+            const result = await sendOrder(orderName, formattedEmailData);
 
             if (result.success) {
             console.log("Sending order with name:", orderName);
