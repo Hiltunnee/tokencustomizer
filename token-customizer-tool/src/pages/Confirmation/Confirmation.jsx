@@ -22,7 +22,7 @@ import { TokensContext } from "../../contexts/TokensContext";
 import Collapse from "@mui/material/Collapse";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 import tokenColors from "../../../../store-inventory/token-colors.json";
-import { sendOrder } from "./sendOrder";
+import { sendOrder } from "./sendOrder"; 
 
 export default function Confirmation() {
     const navigate = useNavigate();
@@ -172,14 +172,15 @@ export default function Confirmation() {
                         {"Delete set completely?"}
                     </DialogTitle>
                     <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
-                        <Button onClick={() => {setOpenSetDeletion(false)}}>Cancel</Button>
-                        <Button onClick={handleDeleteHolderConfirmation} autoFocus>Delete</Button>
+                        <Button variant="contained" onClick={() => {setOpenSetDeletion(false)}}>Cancel</Button>
+                        <Button variant="contained" onClick={handleDeleteHolderConfirmation} autoFocus>Delete</Button>
                     </Stack>
                 </Dialog>
 
                 <Stack direction="row" spacing={15} sx={{justifyContent: "center"}}>
                     <Button variant="contained" onClick={handleAddHolder}>
-                        Add new holder
+                        Add holder<br />
+                        to order
                     </Button>
                     {/* <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
                         <Button variant="contained" onClick={copyToClipboard}>
@@ -207,14 +208,14 @@ export default function Confirmation() {
                     PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {"Send token order details"}
+                        {"Send order details"}
                     </DialogTitle>
                     <Stack spacing={2} sx={{padding: "1em"}}>
                         <Stack direction="row" spacing={1} alignItems="center">
                             <p style={{ margin: 0 }}>Enter order name:</p>
 
                             <Tooltip
-                                title="Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text."
+                                title="This is just for the seller. Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text and not securely."
                                 arrow
                             >
                                 <IconButton size="small">
@@ -223,9 +224,9 @@ export default function Confirmation() {
                             </Tooltip>
                         </Stack>
                         <TextField label="Order name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth/>
-                        <Stack direction="row" spacing={2} sx={{justifyContent: "flex-end"}}>
-                            <Button onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
-                            <Button onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
+                            <Button variant="contained" onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
+                            <Button variant="contained" onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
                         </Stack>
                     </Stack>
                 </Dialog>
