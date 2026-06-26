@@ -22,7 +22,7 @@ import { TokensContext } from "../../contexts/TokensContext";
 import Collapse from "@mui/material/Collapse";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 import tokenColors from "../../../../store-inventory/token-colors.json";
-import { sendOrder } from "./sendOrder"; 
+import { sendOrder } from "./sendOrder";
 
 export default function Confirmation() {
     const navigate = useNavigate();
@@ -41,7 +41,6 @@ export default function Confirmation() {
     const [startingOver, setStartingOver] = useState(false);
 
     const formatTokenData = () => {
-        console.log(tokenSet);
         setTokenData(tokenSet.map(set => ({
             holderSize: set.holderSize,
             holder: set.holder.name,
@@ -106,14 +105,18 @@ export default function Confirmation() {
     };
 
     const handleSendOrder = async () => {
+        const formattedEmailData = formatDataForEmail();
+
         try {
             setSending(true);
             setError("");
 
             const result = await sendOrder(orderName, tokenData);
-            console.log(result);
 
             if (result.success) {
+            console.log("Sending order with name:", orderName);
+            console.log("Formatted email data:", formattedEmailData);
+
             setSuccess(true);
             setOpenEmailDialog(false);
             setOrderName("");
@@ -131,6 +134,28 @@ export default function Confirmation() {
     const handleStartNewOrder = () => {
         setTokenSet([]);
         navigate("/");
+    };
+
+    const formatDataForEmail = () => {
+        return tokenSet
+            .map((set, index) => {
+            const tokens = set.tokens
+                .map(
+                (token) =>
+                    ` ${token.amount} × "${token.text}" ( ${token.baseColor} / ${token.borderColor})`
+                )
+                .join("\n");
+
+            return [
+                `Set ${index + 1}`,
+                `Holder size: ${set.holderSize}`,
+                `Holder: ${set.holder.name}`,
+                ...(set.lid ? [`Lid: ${set.lid.name}`] : []),
+                "Tokens:",
+                tokens,
+            ].join("\n");
+            })
+            .join("\n\n");
     };
 
     return (
