@@ -73,13 +73,10 @@ export default function Home() {
                     <HolderCardContainer/>
                 </Box>
                 <Card sx={textCardStyle}>
-                    <p>Choose the size of the holder</p>
-                    {/* <p>Choose the base color of your deck</p>
-                    <p>You get to freely customize this later!</p> */}
+                    <p>Please note that this tool is for <strong>illustrative purposes only</strong> and may not perfectly reflect the final product (e.g. text size, positioning, and other details).</p>
+                    <p>For a more accurate representation of the tokens, please visit the <strong>Priimacraft</strong> Etsy page and refer to the product images.</p>
+                    <p>If you have specific needs or questions, don't hesitate to contact us on Etsy!</p>
                 </Card>
-                {/* <Box>
-                    <ManaColorContainer selectedManaColor={selectedManaColor} setSelectedManaColor={setSelectedManaColor} />
-                </Box> */}
                 <Stack direction="row" sx={{justifyContent: "flex-end"}}>
                     <Button variant="contained" onClick={moveToCustomization}>
                         Continue
