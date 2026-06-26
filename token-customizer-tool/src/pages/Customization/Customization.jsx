@@ -73,27 +73,6 @@ export default function Customization() {
     //Holder id: 1.16x, 2.32x, 3.40x, 4.48x 
     //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic, 8. Pokemon basic
     const searchMatchingPresets = () => {
-        // const matchingSets = setInventory.presets.filter(preset => preset.ManaId == selectedPreset).flatMap(preset => preset.sets);
-        // const matchingSet = matchingSets.filter(preset => preset.holderSize == tokenAmount).flatMap(preset => preset);
-        // if (matchingSet.length == 0) {
-        //     console.log("PRESET PUUTTUU!");
-        // } else {
-        //     matchingSet[0].tokens.forEach(token => {
-        //         token.baseColor = "Black",
-        //         token.baseColorCode = "#000000",
-        //         token.borderColor = "White",
-        //         token.borderColorCode = "#ffffff",
-        //         token.text = token.text.toUpperCase()
-        //     });
-        // };
-
-        //Onko kyseessä eka holder
-        // if (tokenSet.length == 0) {
-        //     setTokenSet(matchingSet);
-        // } else {
-        //     setTokenSet([...matchingSet, ...tokenSet]);
-        // }
-
         const matchingSets = setInventory.presets.flatMap(preset =>
             preset.sets
                 .filter(set => set.holderSize == tokenAmount)
@@ -441,9 +420,93 @@ export default function Customization() {
                         </Box>
                     </Box>
                     <Stack direction="row" spacing={5} sx={{justifyContent: "space-between"}}>
+
+                        <Stack spacing={5} sx={{flex: 1}}>
+
                         <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                            <p>Holder color</p>
-                            <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                <p>You can choose a preset as a base for your set.</p>
+                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <FormControl sx={{width: "80%", marginBottom: "1em"}}>
+                                    <InputLabel id="preset-select-label">Preset</InputLabel>
+                                    <Select
+                                    labelId="preset-select-label"
+                                    id="preset-select"
+                                    value={selectedPreset.presetName}
+                                    onChange={updatePreset}
+                                    >
+
+                                        {availablePresets
+                                                .filter(preset => preset.presetGroup === "other")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>POKEMON</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "pokemon")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>MTG</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "mtg")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                    </Select>
+                                </FormControl>
+                            </Card>
+
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>Please note that this tool is for illustrative purposes only and may not perfectly reflect the final product (e.g. text size, positioning, and other details).
+                                    For a more accurate representation of the tokens, please visit the Priimacraft Etsy page and refer to the product images.</p>
+                            </Card>
+                        </Stack>
+
+                        <Stack spacing={5} sx={{flex: 1}}>
+                            {tokenAmountCorrect && (
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
+                                <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
+                            </Card>
+                            )}
+                            {!tokenAmountCorrect && (tokenAmount>holderSize) && (
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
+                                    <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
+                                </Card>
+                            )}
+                            {!tokenAmountCorrect && (tokenAmount<holderSize) && (
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
+                                    <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
+                                </Card>
+                            )}
+
+                            
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>Holder color</p>
+                                <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
                                     <Box>
                                         <FormControl fullWidth>
                                             <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
@@ -485,101 +548,20 @@ export default function Customization() {
                                         </FormControl>
                                     </Box>
                                 </Stack>
-                        </Card>
-                        <Stack spacing={5} sx={{flex: 1}}>
-                            {tokenAmountCorrect && (
-                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
-                                <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
-                            </Card>
-                            )}
-                            {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
-                                    <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
-                                </Card>
-                            )}
-                            {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
-                                    <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
-                                </Card>
-                            )}
-                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>You can choose a preset as a base for you set.</p>
-                                <p>Selecting a preset will overwrite your previous changes!</p>
-                                <FormControl sx={{width: "80%", marginBottom: "1em"}}>
-                                    <InputLabel id="preset-select-label">Preset</InputLabel>
-                                    <Select
-                                    labelId="preset-select-label"
-                                    id="preset-select"
-                                    value={selectedPreset.presetName}
-                                    onChange={updatePreset}
-                                    >
-                                        {/* {availablePresets.map(preset => 
-                                        <MenuItem value={preset.presetName}>
-                                            <Stack direction="row" >    
-                                                {preset.presetName}
-                                            </Stack>
-                                        </MenuItem>)} */}
-
-                                        {availablePresets
-                                                .filter(preset => preset.presetGroup === "other")
-                                                .map(preset => (
-                                                    <MenuItem
-                                                        key={preset.presetName}
-                                                        value={preset.presetName}
-                                                    >
-                                                        {preset.presetName}
-                                                    </MenuItem>
-                                            ))
-                                        }
-
-                                        <ListSubheader>POKEMON</ListSubheader>
-                                            {availablePresets
-                                                .filter(preset => preset.presetGroup === "pokemon")
-                                                .map(preset => (
-                                                    <MenuItem
-                                                        key={preset.presetName}
-                                                        value={preset.presetName}
-                                                    >
-                                                        {preset.presetName}
-                                                    </MenuItem>
-                                            ))
-                                        }
-
-                                        <ListSubheader>MTG</ListSubheader>
-                                            {availablePresets
-                                                .filter(preset => preset.presetGroup === "mtg")
-                                                .map(preset => (
-                                                    <MenuItem
-                                                        key={preset.presetName}
-                                                        value={preset.presetName}
-                                                    >
-                                                        {preset.presetName}
-                                                    </MenuItem>
-                                            ))
-                                        }
-
-
-                                        {/* <ListSubheader>Other</ListSubheader>
-                                            {availablePresets
-                                                .filter(preset => preset.presetGroup === "other")
-                                                .map(preset => (
-                                                    <MenuItem
-                                                        key={preset.presetName}
-                                                        value={preset.presetName}
-                                                    >
-                                                        {preset.presetName}
-                                                    </MenuItem>
-                                            ))} */}
-                                    </Select>
-                                </FormControl>
+                                
                             </Card>
                             <Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
                                     <Button variant="contained" onClick={() => setOpenBackDeletion(true)}>
                                         Back
+                                    </Button>
+                                </Box>
+                                <Box>
+                                    <Button variant="contained" onClick={() => 
+                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens});
+                                        setTokenState(tokenSet[0].tokens);
+                                        }}>
+                                        Clear all
                                     </Button>
                                 </Box>
                                 <Box>
