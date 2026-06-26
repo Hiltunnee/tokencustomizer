@@ -38,6 +38,7 @@ export default function Confirmation() {
     const [sending, setSending] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
+    const [startingOver, setStartingOver] = useState(false);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -104,14 +105,18 @@ export default function Confirmation() {
     };
 
     const handleSendOrder = async () => {
+        const formattedEmailData = formatDataForEmail();
+
         try {
             setSending(true);
             setError("");
 
             const result = await sendOrder(orderName, tokenData);
-            console.log(result);
 
             if (result.success) {
+            console.log("Sending order with name:", orderName);
+            console.log("Formatted email data:", formattedEmailData);
+
             setSuccess(true);
             setOpenEmailDialog(false);
             setOrderName("");
@@ -124,6 +129,33 @@ export default function Confirmation() {
         } finally {
             setSending(false);
         }
+    };
+
+    const handleStartNewOrder = () => {
+        setTokenSet([]);
+        navigate("/");
+    };
+
+    const formatDataForEmail = () => {
+        return tokenSet
+            .map((set, index) => {
+            const tokens = set.tokens
+                .map(
+                (token) =>
+                    ` ${token.amount} × "${token.text}" ( ${token.baseColor} / ${token.borderColor})`
+                )
+                .join("\n");
+
+            return [
+                `Set ${index + 1}`,
+                `Holder size: ${set.holderSize}`,
+                `Holder: ${set.holder.name}`,
+                ...(set.lid ? [`Lid: ${set.lid.name}`] : []),
+                "Tokens:",
+                tokens,
+            ].join("\n");
+            })
+            .join("\n\n");
     };
 
     return (
@@ -165,29 +197,33 @@ export default function Confirmation() {
                         {"Delete set completely?"}
                     </DialogTitle>
                     <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
-                        <Button onClick={() => {setOpenSetDeletion(false)}}>Cancel</Button>
-                        <Button onClick={handleDeleteHolderConfirmation} autoFocus>Delete</Button>
+                        <Button variant="contained" onClick={() => {setOpenSetDeletion(false)}}>Cancel</Button>
+                        <Button variant="contained" onClick={handleDeleteHolderConfirmation} autoFocus>Delete</Button>
                     </Stack>
                 </Dialog>
 
                 <Stack direction="row" spacing={15} sx={{justifyContent: "center"}}>
                     <Button variant="contained" onClick={handleAddHolder}>
-                        Add new holder
+                        Add holder<br />
+                        to order
                     </Button>
-                    <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
+                    {/* <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
                         <Button variant="contained" onClick={copyToClipboard}>
                             Copy details <ContentCopyIcon sx={{ ml: 1 }} />
                         </Button>
-                    </Tooltip>
+                    </Tooltip> */}
+                    <Button variant="contained" onClick={() => setStartingOver(true)}>
+                        New order
+                    </Button>
                     <Button variant="contained" onClick={() => setOpenEmailDialog(true)}>
                         Send order
                     </Button>
                 </Stack>
-                <Stack direction="row" sx={{justifyContent: "flex-start"}}>
+                {/* <Stack direction="row" sx={{justifyContent: "flex-start"}}>
                     <Button variant="contained" onClick={() => navigate("/customization")}>
                         Back
                     </Button>
-                </Stack>
+                </Stack> */}
 
                 <Dialog
                     open={openEmailDialog}
@@ -197,14 +233,14 @@ export default function Confirmation() {
                     PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                 >
                     <DialogTitle id="alert-dialog-title">
-                        {"Send token order details"}
+                        {"Send order details"}
                     </DialogTitle>
                     <Stack spacing={2} sx={{padding: "1em"}}>
                         <Stack direction="row" spacing={1} alignItems="center">
                             <p style={{ margin: 0 }}>Enter order name:</p>
 
                             <Tooltip
-                                title="Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text."
+                                title="This is just for the seller. Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text and not securely."
                                 arrow
                             >
                                 <IconButton size="small">
@@ -213,10 +249,27 @@ export default function Confirmation() {
                             </Tooltip>
                         </Stack>
                         <TextField label="Order name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth/>
-                        <Stack direction="row" spacing={2} sx={{justifyContent: "flex-end"}}>
-                            <Button onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
-                            <Button onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
+                            <Button variant="contained" onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
+                            <Button variant="contained" onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
                         </Stack>
+                    </Stack>
+                </Dialog>
+
+                <Dialog
+                    open={startingOver}
+                    onClose={() => setStartingOver(false)}
+                    aria-labelledby="starting-over-dialog-title"
+                    aria-describedby="starting-over-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                >
+                    <DialogTitle id="starting-over-dialog-title">
+                        {`Delete current changes \n
+                        and start new order?`}
+                    </DialogTitle>
+                    <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                        <Button variant="contained" onClick={() => {setStartingOver(false)}}>Cancel</Button>
+                        <Button variant="contained" onClick={handleStartNewOrder} autoFocus>New order</Button>
                     </Stack>
                 </Dialog>
 
@@ -231,8 +284,7 @@ export default function Confirmation() {
                         Order sent successfully.
                     </Alert>
                 )}
-
-                    
+  
             </Stack>
         </Container>
     );

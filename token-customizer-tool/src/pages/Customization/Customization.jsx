@@ -10,6 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ListSubheader from '@mui/material/ListSubheader';
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import TextField from "@mui/material/TextField";
@@ -19,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
 import { useState, useContext, useEffect } from "react";
+import setInventory from "../../../../store-inventory/presets.json"
 import { TokensContext } from "../../contexts/TokensContext";
 import { useNavigate } from "react-router";
 import TokenCustomContainer from "../../components/TokenCustomContainer/TokenCustomContainer";
@@ -30,6 +32,9 @@ export default function Customization() {
     const navigate = useNavigate();
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const [tokenState, setTokenState] = useState();
+
+    const [selectedPreset, setSelectedPreset] = useState({presetName: "Empty set", tokens: tokenSet[0].tokens}); 
+    const [availablePresets, setAvailablePresets] = useState();
 
     const holderSize = tokenSet[0].holderSize;
     const [tokenAmount, setTokenAmount] = useState(holderSize);
@@ -48,6 +53,9 @@ export default function Customization() {
     const [openTokenDeletion, setOpenTokenDeletion] = useState(false);
     const [tokenIndexToDelete, setTokenIndexToDele] = useState();
 
+    const [openBackDeletion, setOpenBackDeletion] = useState(false);
+
+    // Tarkistaa isnumbertokenin ja asettaa  holderin ja lidin värit mustaksi
     useEffect(() => {
         setTokenState(tokenSet[0].tokens.map(
             token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false})
@@ -58,8 +66,43 @@ export default function Customization() {
                 setLidColor({name: tokenSet[0].lid.name, colorCode: tokenSet[0].lid.colorCode});
             }
         }
+        
+        searchMatchingPresets();
     }, []);
 
+    //Holder id: 1.16x, 2.32x, 3.40x, 4.48x 
+    //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic, 8. Pokemon basic
+    const searchMatchingPresets = () => {
+        const matchingSets = setInventory.presets.flatMap(preset =>
+            preset.sets
+                .filter(set => set.holderSize == tokenAmount)
+                .map(set => ({
+                manaId: preset.ManaId,
+                presetName: preset.ManaColor,
+                presetGroup: preset.ManaId == 8 ? "pokemon" : "mtg", //Kovakoodatut groupit erottamaan Pokemon  ja MTG presetit
+                ...set,
+                }))
+            );
+        
+        if (matchingSets.length == 0) {
+            console.log("PRESETIT PUUTTUU!");
+        } else {
+            matchingSets.forEach(set => {
+                set.tokens.forEach(token => {
+                token.baseColor = "Black",
+                token.baseColorCode = "#000000",
+                token.borderColor = "White",
+                token.borderColorCode = "#ffffff",
+                token.text = token.text.toUpperCase()
+                })
+            });
+            console.log(matchingSets);
+        };
+
+        setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens}, ...matchingSets]);
+    };
+
+    // Varmistaa, että tokenSetin holder ja lid data on ajan tasalla ennen confirmation sivulle siirtymistä
     const handleConfirmClick = () => {
         let holderColorData = {};
         if (holderColor.name == lidColor.name) {
@@ -324,6 +367,14 @@ export default function Customization() {
         }
     }, [tokenAmount]);
 
+    // Päivittää presetin valinnan dropdownista ja tokenState:n vastaamaan valittua presettiä
+    const updatePreset = (event) => {
+        const selectedPreset = availablePresets.find(preset => preset.presetName == event.target.value);
+        setSelectedPreset(selectedPreset);
+        let updatedTokens = selectedPreset.tokens.map(token => ({...token, isNumberToken: /\d/.test(token.text) ? true : false}));
+        setTokenState(updatedTokens);
+    };
+
     //Holder värit
     const updateHolderColor = (event) => {
         const selectedColorName = availableHolderColors.find(col => col.colorCode == event.target.value).name;
@@ -354,6 +405,11 @@ export default function Customization() {
         setUpdatedSelectedToken(prev => ({...prev, text: limitedLines.join("\n").toUpperCase()}))
     };
 
+    const handleStartingOver = () => {
+        setTokenSet([]);
+        navigate("/");
+    };
+
     return (
         <Container sx={pageStyle}>
             {tokenState && (
@@ -364,9 +420,31 @@ export default function Customization() {
                         </Box>
                     </Box>
                     <Stack direction="row" spacing={5} sx={{justifyContent: "space-between"}}>
+
+                        <Stack spacing={5} sx={{flex: 1}}>
+
+                            {tokenAmountCorrect && (
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
+                                <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
+                            </Card>
+                            )}
+                            {!tokenAmountCorrect && (tokenAmount>holderSize) && (
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
+                                    <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
+                                </Card>
+                            )}
+                            {!tokenAmountCorrect && (tokenAmount<holderSize) && (
+                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
+                                    <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
+                                </Card>
+                            )}
+
                         <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                            <p>Holder color</p>
-                            <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                <p>Holder color</p>
+                                <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
                                     <Box>
                                         <FormControl fullWidth>
                                             <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
@@ -408,30 +486,194 @@ export default function Customization() {
                                         </FormControl>
                                     </Box>
                                 </Stack>
-                        </Card>
+                            </Card>
+
+                        {/* <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>You can choose a preset as a base for your set.</p>
+                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <FormControl sx={{width: "80%", marginBottom: "1em"}}>
+                                    <InputLabel id="preset-select-label">Preset</InputLabel>
+                                    <Select
+                                    labelId="preset-select-label"
+                                    id="preset-select"
+                                    value={selectedPreset.presetName}
+                                    onChange={updatePreset}
+                                    >
+
+                                        {availablePresets
+                                                .filter(preset => preset.presetGroup === "other")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>POKEMON</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "pokemon")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>MTG</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "mtg")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                    </Select>
+                                </FormControl>
+                            </Card> */}
+                        </Stack>
+
                         <Stack spacing={5} sx={{flex: 1}}>
-                            {tokenAmountCorrect && (
+                            {/* {tokenAmountCorrect && (
                             <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>You have <strong>{tokenAmount}</strong> amount of tokens in your holder!</p>
+                                <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
                                 <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
                             </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount>holderSize) && (
                                 <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
                                     <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
                                 </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount<holderSize) && (
                                 <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> amount of tokens in your set. </p>
+                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
                                     <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
                                 </Card>
-                            )}
+                            )} */}
+
+                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>You can choose a preset as a base for your set.</p>
+                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <FormControl sx={{width: "80%", marginBottom: "1em"}}>
+                                    <InputLabel id="preset-select-label">Preset</InputLabel>
+                                    <Select
+                                    labelId="preset-select-label"
+                                    id="preset-select"
+                                    value={selectedPreset.presetName}
+                                    onChange={updatePreset}
+                                    >
+
+                                        {availablePresets
+                                                .filter(preset => preset.presetGroup === "other")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>POKEMON</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "pokemon")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                        <ListSubheader>MTG</ListSubheader>
+                                            {availablePresets
+                                                .filter(preset => preset.presetGroup === "mtg")
+                                                .map(preset => (
+                                                    <MenuItem
+                                                        key={preset.presetName}
+                                                        value={preset.presetName}
+                                                    >
+                                                        {preset.presetName}
+                                                    </MenuItem>
+                                            ))
+                                        }
+
+                                    </Select>
+                                </FormControl>
+                            </Card>
+                            
+                            {/* <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <p>Holder color</p>
+                                <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
+                                            <Select
+                                            labelId="holdercolor-select-label"
+                                            id="holdercolor-select"
+                                            value={holderColor.colorCode}
+                                            onChange={updateHolderColor}
+                                            >
+                                                {availableHolderColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row">
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="lidcolor-select-label">Lid color</InputLabel>
+                                            <Select
+                                            labelId="lidcolor-select-label"
+                                            id="lidcolor-select"
+                                            value={lidColor.colorCode}
+                                            onChange={updateLidColor}
+                                            >
+                                                {availableHolderColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row" >
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </Stack>
+                            </Card> */}
                             <Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
-                                    <Button variant="contained" onClick={() => navigate("/")}>
+                                    <Button variant="contained" onClick={() => setOpenBackDeletion(true)}>
                                         Back
+                                    </Button>
+                                </Box>
+                                <Box>
+                                    <Button variant="contained" onClick={() => 
+                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens});
+                                        setTokenState(tokenSet[0].tokens);
+                                        }}>
+                                        Clear
                                     </Button>
                                 </Box>
                                 <Box>
@@ -442,6 +684,25 @@ export default function Customization() {
                             </Stack>
                         </Stack>
                     </Stack>
+
+                    {/* Back button deletion dialog */}
+                    <Dialog
+                        open={openBackDeletion}
+                        onClose={() => {setOpenBackDeletion(false)}}
+                    >
+                        <DialogTitle>
+                            {"Back to beginning?"}
+                        </DialogTitle>
+                        <p>This action deletes all current changes.</p>
+                        <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                            <Button variant="contained" onClick={() => {setOpenBackDeletion(false)}}>
+                                Cancel
+                            </Button>
+                            <Button variant="contained" onClick={handleStartingOver} autoFocus>
+                                New order
+                            </Button>
+                        </Stack>
+                    </Dialog>
 
                     {/* Token customization dialog */}
                     {selectedToken && updatedSelectedToken && (
@@ -463,12 +724,12 @@ export default function Customization() {
                                     {"Delete token completely?"}
                                 </DialogTitle>
                                 <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
-                                    <Button onClick={() => {setOpenTokenDeletion(false)}}>Cancel</Button>
-                                    <Button onClick={handleTokenDeletion} autoFocus>Delete</Button>
+                                    <Button variant="contained"  onClick={() => {setOpenTokenDeletion(false)}}>Cancel</Button>
+                                    <Button variant="contained"  onClick={handleTokenDeletion} autoFocus>Delete</Button>
                                 </Stack>
                             </Dialog>
 
-                            <Stack spacing={2} sx={{padding:"20px", textAlign: 'center', alignItems: "center",}}>
+                            <Stack spacing={2} sx={{padding:"25px", textAlign: 'center', alignItems: "center",}}>
                                 <ToggleButtonGroup
                                     color="primary"
                                     value={updatedSelectedToken.isNumberToken}
@@ -534,9 +795,9 @@ export default function Customization() {
                                         </FormControl>
                                     </Box>
                                 </Stack>
-                                <Stack direction="row" >
-                                    <Button onClick={() => setSelectedToken(null)}>Discard changes</Button>
-                                    <Button onClick={saveUpdates}>Save changes</Button>
+                                <Stack direction="row" sx={{justifyContent: "space-between", width: "100%"}}>
+                                    <Button variant="contained" onClick={() => setSelectedToken(null)}>Discard changes</Button>
+                                    <Button variant="contained" onClick={saveUpdates}>Save changes</Button>
                                 </Stack>
                             </Stack>
                         </Dialog>

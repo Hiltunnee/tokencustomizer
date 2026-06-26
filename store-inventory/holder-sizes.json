@@ -17,14 +17,6 @@
     },
     {
         "id": 3,
-        "name":"40xHolder",
-        "tokenCount":40,
-        "imagePath":"holder40.avif",
-        "alt":"holder-40-image",
-        "available":true
-    },
-    {
-        "id": 4,
         "name":"48xHolder",
         "tokenCount":48,
         "imagePath":"holder48.avif",
