@@ -15,7 +15,8 @@ export async function sendOrder(orderName, orderData) {
     "message", 
     `Tilaustunniste: ${orderName}. 
     
-    Tilaustiedot: ${JSON.stringify(orderData, null, 2)}`);
+    Tilaustiedot: 
+    ${orderData}`);
 
   const res = await fetch("https://api.web3forms.com/submit", {
     method: "POST",
