@@ -16,42 +16,19 @@ import { HolderContext } from "../../contexts/HolderContext";
 import setInventory from "../../../../store-inventory/presets.json"
 import { useNavigate } from "react-router";
 
-export default function Home() {
-    //Basic set
-    //const [selectedManaColor, setSelectedManaColor] = useState(7); //Tämä
+export default function Home({ isMobile }) {
     const { selectedHolder, setSelectedHolder } = useContext(HolderContext);
     const { tokenSet, setTokenSet } = useContext(TokensContext);
-    const [openWelcomeDialog, setOpenWelcomeDialog] = useState(true);
+    const [openWelcomeDialog, setOpenWelcomeDialog] = useState(false);
     const navigate = useNavigate();
 
-    //Holder id: 1.16x, 2.32x, 3.48x 
-    //Mana id: 1.Black, 2.White, 3.Blue, 4.Green, 5.Red, 6.Colorless, 7.Basic
-    // const searchMatchingPreset = () => {
-    //     const holderSizeFromId = (selectedHolder == 3) ? 48 : (selectedHolder == 2) ? 32 : 16
-    //     const matchingColorSets = setInventory.presets.filter(preset => preset.ManaId == selectedManaColor).flatMap(preset => preset.sets);
-    //     const matchingSet = matchingColorSets.filter(preset => preset.holderSize == holderSizeFromId).flatMap(preset => preset);
-    //     if (matchingSet.length == 0) {
-    //         console.log("PRESET PUUTTUU!");
-    //     } else {
-    //         matchingSet[0].tokens.forEach(token => {
-    //             token.baseColor = "Black",
-    //             token.baseColorCode = "#000000",
-    //             token.borderColor = "White",
-    //             token.borderColorCode = "#ffffff",
-    //             token.text = token.text.toUpperCase()
-    //         });
-    //     };
-
-    //     //Onko kyseessä eka holder
-    //     if (tokenSet.length == 0) {
-    //         setTokenSet(matchingSet);
-    //     } else {
-    //         setTokenSet([...matchingSet, ...tokenSet]);
-    //     }
-    // };
+    useEffect(() => {
+        if (tokenSet.length === 0) {
+        setOpenWelcomeDialog(true);
+        }
+    }, []);
 
     const moveToCustomization = () => {
-        // searchMatchingPreset();
         prepareTokenSetForCustomization();
         navigate("/customization");
     };
@@ -70,7 +47,7 @@ export default function Home() {
         <Container sx={pageStyle}>
             <Stack spacing={4}>
                 <Box>
-                    <HolderCardContainer/>
+                    <HolderCardContainer isMobile={isMobile}/>
                 </Box>
                 <Card sx={textCardStyle}>
                     <p>Please note that this tool is for <strong>illustrative purposes only</strong> and may not perfectly reflect the final product (e.g. text size, positioning, and other details).</p>
@@ -91,7 +68,7 @@ export default function Home() {
                 aria-describedby="welcome-dialog"
                 PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", margin: "30px" }}}
             >
-                <img src={logo_white} alt="Logo" style={{width: "300px", height: "auto", margin: "20px 30px 0px 30px", display: "block"}} />
+                <img src={logo_white} alt="Logo" style={isMobile ? {width: "200px", height: "auto", margin: "20px 30px 0px 30px", display: "block"} : {width: "300px", height: "auto", margin: "20px 30px 0px 30px", display: "block"}} />
                 <p>Welcome to Token Customizer!</p>
                 <Button variant="contained" sx={{ width: "50%", marginBottom: "30px", alignSelf: "center" }} onClick={() => {setOpenWelcomeDialog(false)}}>Start</Button>
             </Dialog>

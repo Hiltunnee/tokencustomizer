@@ -3,14 +3,14 @@ const pageStyle = {
     flexDirection:"column",
     justifyContent:"center",
     alignContent: "center",
-    maxWidth: "1000px"
+    maxWidth: "1000px",
 };
 
 const textCardStyle = {
     backgroundColor:"var(--background-secondary)",
     color:"var(--text-primary)",
-    alignSelf:"center",
-    width: "fit-content",
+    // alignSelf:"center",
+    // width: "fit-content",
     padding: "0% 4% 0%"
 };
 

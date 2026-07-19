@@ -22,9 +22,14 @@ import { TokensContext } from "../../contexts/TokensContext";
 import Collapse from "@mui/material/Collapse";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 import tokenColors from "../../../../store-inventory/token-colors.json";
+import SendIcon from '@mui/icons-material/Send';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import AddIcon from '@mui/icons-material/Add';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import { sendOrder } from "./sendOrder";
 
-export default function Confirmation() {
+export default function Confirmation({ isMobile }) {
     const navigate = useNavigate();
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const [tokenData, setTokenData] = useState([]);
@@ -39,6 +44,7 @@ export default function Confirmation() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
     const [startingOver, setStartingOver] = useState(false);
+    const [infoTooltipOpen, setInfoTooltipOpen] = useState(false);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -172,7 +178,7 @@ export default function Confirmation() {
                         <IconButton sx={{position: "absolute", top: 8, right: 100,}} onClick={() => {handleEditHolder(index)}}>
                             <EditIcon />
                         </IconButton>
-                        <p><strong>Holder size:</strong> {holder.holderSize}</p>
+                        <p style={{...(isMobile && {position: "relative", left: "-100px",}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
                         <Collapse in={openHolders.includes(index)}>
                             <Card sx={textCardStyle}>
                                 <p>Holder color: {holder.holder}</p>
@@ -202,32 +208,24 @@ export default function Confirmation() {
                     </Stack>
                 </Dialog>
 
-                <Stack direction="row" spacing={15} sx={{justifyContent: "center"}}>
-                    <Button variant="contained" onClick={handleAddHolder}>
-                        Add holder<br />
-                        to order
+                <Stack direction="row" spacing={isMobile ? 3 : 13} sx={{justifyContent: "space-between"}}>
+                    <Button sx={{ padding: "0.5em 1em" }} variant="contained" onClick={handleAddHolder} endIcon={<AddCircleIcon sx={{ mr: 0.5}} />}>
+                        Add holder
                     </Button>
-                    {/* <Tooltip title="Copied!" open={copyTooltipOpen} disableFocusListener disableHoverListener disableTouchListener arrow>
-                        <Button variant="contained" onClick={copyToClipboard}>
-                            Copy details <ContentCopyIcon sx={{ ml: 1 }} />
-                        </Button>
-                    </Tooltip> */}
-                    <Button variant="contained" onClick={() => setStartingOver(true)}>
+                    <Button sx={{ padding: "0.5em 1em" }} variant="contained" onClick={() => setStartingOver(true)} endIcon={<ReplayCircleFilledIcon sx={{ mr: 1}} />}>
                         New order
                     </Button>
-                    <Button variant="contained" onClick={() => setOpenEmailDialog(true)}>
+                    <Button sx={{ padding: "0.5em 1em" }} variant="contained" onClick={() => setOpenEmailDialog(true)} endIcon={<SendIcon sx={{ mr: 0.5}} />} >
                         Send order
                     </Button>
                 </Stack>
-                {/* <Stack direction="row" sx={{justifyContent: "flex-start"}}>
-                    <Button variant="contained" onClick={() => navigate("/customization")}>
-                        Back
-                    </Button>
-                </Stack> */}
 
                 <Dialog
                     open={openEmailDialog}
-                    onClose={() => setOpenEmailDialog(false)}
+                    onClose={() => {
+                        setInfoTooltipOpen(false);
+                        setOpenEmailDialog(false);
+                    }}
                     aria-labelledby="set-email-dialog-title"
                     aria-describedby="set-email-dialog"
                     PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
@@ -239,14 +237,31 @@ export default function Confirmation() {
                         <Stack direction="row" spacing={1} alignItems="center">
                             <p style={{ margin: 0 }}>Enter order name:</p>
 
-                            <Tooltip
-                                title="This is just for the seller. Put the Etsy order number here if you have already made an order. If not, give the order a unique name and write that in the order description. Please do not put any sensitive information in the order name, as it will be sent in plain text and not securely."
+                            {!isMobile && (<Tooltip
+                                title="Give the order a unique name (for example, the Etsy order number if you have already placed the order) and inform the seller of it. Please do not put any sensitive information in the order name, as it will not be sent securely."
                                 arrow
                             >
-                                <IconButton size="small">
-                                <InfoOutlinedIcon fontSize="small" />
+                                <IconButton size="small" >
+                                    <InfoOutlinedIcon fontSize="small" />
                                 </IconButton>
-                            </Tooltip>
+                            </Tooltip>)}
+                            {isMobile && (<Tooltip
+                                title="Give the order a unique name (for example, the Etsy order number if you have already placed the order) and inform the seller of it. Please do not put any sensitive information in the order name, as it will not be sent securely."
+                                onClose={() => setInfoTooltipOpen(false)}
+                                open={infoTooltipOpen}
+                                disableFocusListener
+                                disableHoverListener
+                                disableTouchListener
+                                slotProps={{
+                                    popper: {
+                                        disablePortal: true,
+                                    },
+                                }}
+                            >
+                                <IconButton size="small" onClick={() => setInfoTooltipOpen(prev => !prev)}>
+                                    <InfoOutlinedIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>)}
                         </Stack>
                         <TextField label="Order name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth/>
                         <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>

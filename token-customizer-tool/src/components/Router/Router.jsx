@@ -11,7 +11,7 @@ import Home from "../../pages/Home/Home";
 import Customization from "../../pages/Customization/Customization";
 import Confirmation from "../../pages/Confirmation/Confirmation";
 
-export default function Router() {
+export default function Router({ isMobile }) {
   const { theme, setTheme } = useContext(ThemeContext);
 
   const handleThemeToggle = (event) => {
@@ -73,14 +73,14 @@ export default function Router() {
   return (
     <>
       <Box sx={{position: "relative", width: "100%"}}>
-        <CustomStepper />
-        <ThemeSwitch sx={{position: "absolute", top: "0", right: "20px", }} onChange={handleThemeToggle} checked={theme === "dark"} />
+        <CustomStepper isMobile={isMobile} />
+        <ThemeSwitch sx={isMobile ? {position: "absolute", top: "-5px", right: "10px", } : {position: "absolute", top: "-5px", right: "20px", }} onChange={handleThemeToggle} checked={theme === "dark"} />
       </Box>
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/customization" element={<Customization />} />
-        <Route path="/confirmation" element={<Confirmation />} />
+        <Route path="/" element={<Home isMobile={isMobile}/>} />
+        <Route path="/customization" element={<Customization isMobile={isMobile}/>} />
+        <Route path="/confirmation" element={<Confirmation isMobile={isMobile}/>} />
       </Routes>
     </>
   );
