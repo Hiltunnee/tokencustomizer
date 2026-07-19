@@ -181,10 +181,10 @@ export default function Confirmation({ isMobile }) {
                         <p style={{...(isMobile && {position: "relative", left: "-100px",}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
                         <Collapse in={openHolders.includes(index)}>
                             <Card sx={textCardStyle}>
-                                <p>Holder color: {holder.holder}</p>
-                                {holder.lid && (<p>Lid color: {holder.lid}</p>)}
+                                <p>Holder color: <span style={{ fontWeight: 500 }}>{holder.holder}</span></p>
+                                {holder.lid && (<p>Lid color: <span style={{ fontWeight: 500 }}>{holder.lid}</span></p>)}
                                 {holder.tokens.map((token, index) =>
-                                    <p key={index}>{token.amount}x {token.text} ({token.base} / {token.border})</p>
+                                    <p key={index}>{token.amount}x <span style={{ fontWeight: 500 }}>{token.text}</span> ({token.base} / {token.border})</p>
                                 )}
                             </Card>
                         </Collapse>
