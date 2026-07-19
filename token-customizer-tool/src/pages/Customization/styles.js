@@ -9,8 +9,6 @@ const pageStyle = {
 const textCardStyle = {
     backgroundColor:"var(--background-secondary)",
     color:"var(--text-primary)",
-    alignSelf:"center",
-    width: "fit-content",
     padding: "0% 4% 0%"
 };
 

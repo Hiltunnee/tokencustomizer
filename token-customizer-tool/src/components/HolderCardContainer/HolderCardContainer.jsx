@@ -10,9 +10,9 @@ import { HolderContext } from "../../contexts/HolderContext";
 import inventory from "../../../../store-inventory/holder-sizes.json"
 
 //Styles
-import { cardStyle, contentStyle } from "./styles";
+import { cardStyle, contentStyle, contentStyleMobile, cardStyleMobile } from "./styles";
 
-export default function HolderCardContainer() {
+export default function HolderCardContainer({isMobile}) {
     //Holder "available" options from store-inventory
     const availableHolders = inventory.holderSizes.filter(holder => holder.available);
 
@@ -23,12 +23,12 @@ export default function HolderCardContainer() {
     };
 
     return (
-        <Card sx={cardStyle}>
+        <Card sx={isMobile ? cardStyleMobile : cardStyle}>
             <FormControl>
                 <RadioGroup value={selectedHolder} onChange={handleChange}>
-                    <Box sx={contentStyle}>
+                    <Box sx={isMobile ? contentStyleMobile : contentStyle}>
                         {availableHolders.map(holder => (
-                            <HolderCard key={holder.id} id={holder.id} name={holder.name} imagePath={holder.imagePath} alt={holder.alt} />
+                            <HolderCard key={holder.id} id={holder.id} name={holder.name} imagePath={holder.imagePath} alt={holder.alt} isMobile={isMobile} />
                         ))}
                     </Box>
                 </RadioGroup>

@@ -2,6 +2,7 @@ import Router from "./components/Router/Router";
 import './App.css'
 import { useState, useEffect, useMemo } from "react";
 import { MemoryRouter } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 //Contexts
 import { ThemeContext } from "./contexts/ThemeContext";
@@ -15,6 +16,11 @@ function App() {
   const [theme, setTheme] = useState("light");
   const [tokenSet, setTokenSet] = useState([]);
   const [selectedHolder, setSelectedHolder] = useState(1); //Default holder is id=1
+  const isMobile = useMediaQuery("(max-width:750px)");
+
+  useEffect(() => {
+  document.body.classList.toggle("mobile", isMobile);
+}, [isMobile]);
 
   useEffect(() => {
       const handleBeforeUnload = (e) => {
@@ -61,7 +67,7 @@ function App() {
         <HolderContext.Provider value={{selectedHolder, setSelectedHolder}}>
           <ThemeProvider theme={muiTheme}>
             <MemoryRouter initialEntries={["/"]}>
-              <Router />
+              <Router isMobile={isMobile} />
             </MemoryRouter>
           </ThemeProvider>
         </HolderContext.Provider>

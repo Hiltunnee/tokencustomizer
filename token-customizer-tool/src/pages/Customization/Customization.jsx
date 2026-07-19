@@ -28,7 +28,7 @@ import NumberChanger from "../../components/NumberChanger/NumberChanger";
 import tokenColors from "../../../../store-inventory/token-colors.json";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 
-export default function Customization() {
+export default function Customization({ isMobile }) {
     const navigate = useNavigate();
     const { tokenSet, setTokenSet } = useContext(TokensContext);
     const [tokenState, setTokenState] = useState();
@@ -154,15 +154,18 @@ export default function Customization() {
         setUpdatedSelectedToken({...updatedSelectedToken, borderColorCode: event.target.value, borderColor: selectedColorName});
     };
 
-    const updateTokenType = () => {
-        if (updatedSelectedToken.isNumberToken) {
-            if (selectedToken.isNumberToken) {
-                setUpdatedSelectedToken({...updatedSelectedToken, text: "", isNumberToken: false});
+    const updateTokenType = (event, newValue) => {
+        if (newValue !== null) {
+            if (newValue) {
+                const numbersAsString = selectedTokenNumbersToText();
+                setUpdatedSelectedToken({...updatedSelectedToken, text: numbersAsString, isNumberToken: true});
             } else {
-                setUpdatedSelectedToken({...updatedSelectedToken, text: selectedToken.text, isNumberToken: false});
+                if (selectedToken.isNumberToken) {
+                    setUpdatedSelectedToken({...updatedSelectedToken, text: "", isNumberToken: false});
+                } else {
+                    setUpdatedSelectedToken({...updatedSelectedToken, text: selectedToken.text, isNumberToken: false});
+                }
             }
-        } else {
-            setUpdatedSelectedToken({...updatedSelectedToken, text: "+1+1", isNumberToken: true});
         }
     };
 
@@ -419,76 +422,30 @@ export default function Customization() {
                             <TokenCustomContainer tokens={tokenState} onTokenClick={handleTokenClick} onNewTokenClick={addNewToken}/>
                         </Box>
                     </Box>
-                    <Stack direction="row" spacing={5} sx={{justifyContent: "space-between"}}>
+                    <Stack direction={isMobile ? "column" : "row"} spacing={5} sx={{justifyContent: "space-between"}}>
 
                         <Stack spacing={5} sx={{flex: 1}}>
 
                             {tokenAmountCorrect && (
-                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                            <Card sx={textCardStyle}>
                                 <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
                                 <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
                             </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <Card sx={textCardStyle}>
                                     <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
                                     <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
                                 </Card>
                             )}
                             {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                                <Card sx={textCardStyle}>
                                     <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
                                     <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
                                 </Card>
                             )}
 
-                        <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>Holder color</p>
-                                <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
-                                    <Box>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
-                                            <Select
-                                            labelId="holdercolor-select-label"
-                                            id="holdercolor-select"
-                                            value={holderColor.colorCode}
-                                            onChange={updateHolderColor}
-                                            >
-                                                {availableHolderColors.map(col => 
-                                                <MenuItem value={col.colorCode}>
-                                                    <Stack direction="row">
-                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
-                                                        </Box>
-                                                        {col.name}
-                                                    </Stack>
-                                                </MenuItem>)}
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                    <Box>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="lidcolor-select-label">Lid color</InputLabel>
-                                            <Select
-                                            labelId="lidcolor-select-label"
-                                            id="lidcolor-select"
-                                            value={lidColor.colorCode}
-                                            onChange={updateLidColor}
-                                            >
-                                                {availableHolderColors.map(col => 
-                                                <MenuItem value={col.colorCode}>
-                                                    <Stack direction="row" >
-                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
-                                                        </Box>
-                                                        {col.name}
-                                                    </Stack>
-                                                </MenuItem>)}
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                </Stack>
-                            </Card>
-
-                        {/* <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                            {isMobile && (<Card sx={textCardStyle}>
                                 <p>You can choose a preset as a base for your set.</p>
                                 <p>Selecting a preset will overwrite your previous changes!</p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
@@ -540,30 +497,132 @@ export default function Customization() {
 
                                     </Select>
                                 </FormControl>
-                            </Card> */}
+                            </Card>)}
+
+                            <Card sx={{backgroundColor:"var(--background-secondary)", width: "100%", minWidth: 0,}}>
+                                <p>Holder color</p>
+                                <Stack sx={{padding: "1em 2em"}} direction="row" spacing={2} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
+                                            <Select
+                                            labelId="holdercolor-select-label"
+                                            id="holdercolor-select"
+                                            value={holderColor.colorCode}
+                                            onChange={updateHolderColor}
+                                            renderValue={() => (
+                                                // <Box
+                                                //     sx={{
+                                                //     overflow: "hidden",
+                                                //     textOverflow: "ellipsis",
+                                                //     whiteSpace: "nowrap",
+                                                //     }}
+                                                // >
+                                                //     <Stack direction="row">
+                                                //         <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: holderColor.colorCode}}>    
+                                                //         </Box>
+                                                //         {holderColor.name}
+                                                //     </Stack>
+                                                // </Box>
+                                                <Stack direction="row" alignItems="center" spacing={1}>
+                                                    <Box
+                                                    sx={{
+                                                        width: "1.3em",
+                                                        height: "1.3em",
+                                                        borderRadius: "2px",
+                                                        backgroundColor: holderColor.colorCode,
+                                                        flexShrink: 0,
+                                                    }}
+                                                    />
+                                                    <Box
+                                                    sx={{
+                                                        flex: 1,
+                                                        minWidth: 0,
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        whiteSpace: "nowrap",
+                                                    }}
+                                                    >
+                                                    {holderColor.name}
+                                                    </Box>
+                                                </Stack>
+                                            )}
+                                            >
+                                                {availableHolderColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row">
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="lidcolor-select-label">Lid color</InputLabel>
+                                            <Select
+                                            labelId="lidcolor-select-label"
+                                            id="lidcolor-select"
+                                            value={lidColor.colorCode}
+                                            onChange={updateLidColor}
+                                            renderValue={() => (
+                                                // <Box
+                                                //     sx={{
+                                                //     overflow: "hidden",
+                                                //     textOverflow: "ellipsis",
+                                                //     whiteSpace: "nowrap",
+                                                //     }}
+                                                // >
+                                                //     <Stack direction="row">
+                                                //         <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: lidColor.colorCode}}>    
+                                                //         </Box>
+                                                //         {lidColor.name}
+                                                //     </Stack>
+                                                // </Box>
+                                                <Stack direction="row" alignItems="center" spacing={1}>
+                                                    <Box
+                                                    sx={{
+                                                        width: "1.3em",
+                                                        height: "1.3em",
+                                                        borderRadius: "2px",
+                                                        backgroundColor: lidColor.colorCode,
+                                                        flexShrink: 0,
+                                                    }}
+                                                    />
+                                                    <Box
+                                                    sx={{
+                                                        flex: 1,
+                                                        minWidth: 0,
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        whiteSpace: "nowrap",
+                                                    }}
+                                                    >
+                                                    {lidColor.name}
+                                                    </Box>
+                                                </Stack>
+                                            )}
+                                            >
+                                                {availableHolderColors.map(col => 
+                                                <MenuItem value={col.colorCode}>
+                                                    <Stack direction="row" >
+                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
+                                                        </Box>
+                                                        {col.name}
+                                                    </Stack>
+                                                </MenuItem>)}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </Stack>
+                            </Card>                    
                         </Stack>
 
                         <Stack spacing={5} sx={{flex: 1}}>
-                            {/* {tokenAmountCorrect && (
-                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>You have <strong>{tokenAmount}</strong> tokens in your holder!</p>
-                                <p>Your holdersize is <strong>{holderSize}</strong> tokens.</p>
-                            </Card>
-                            )}
-                            {!tokenAmountCorrect && (tokenAmount>holderSize) && (
-                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
-                                    <p>That exceed your holdersize of <strong>{holderSize}</strong> by <strong>{tokenAmount-holderSize}</strong>. Please remove the extra.</p>
-                                </Card>
-                            )}
-                            {!tokenAmountCorrect && (tokenAmount<holderSize) && (
-                                <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                    <p>You have <strong>{tokenAmount}</strong> tokens in your set. </p>
-                                    <p>You can still add <strong>{holderSize-tokenAmount}</strong> to your holder of <strong>{holderSize}</strong> tokens..</p>
-                                </Card>
-                            )} */}
 
-                            <Card sx={{backgroundColor:"var(--background-secondary)"}}>
+                            {!isMobile && (<Card sx={textCardStyle}>
                                 <p>You can choose a preset as a base for your set.</p>
                                 <p>Selecting a preset will overwrite your previous changes!</p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
@@ -615,54 +674,9 @@ export default function Customization() {
 
                                     </Select>
                                 </FormControl>
-                            </Card>
+                            </Card>)}
                             
-                            {/* <Card sx={{backgroundColor:"var(--background-secondary)"}}>
-                                <p>Holder color</p>
-                                <Stack sx={{padding: "1em 2em"}} direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
-                                    <Box>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="holdercolor-select-label">Holder color</InputLabel>
-                                            <Select
-                                            labelId="holdercolor-select-label"
-                                            id="holdercolor-select"
-                                            value={holderColor.colorCode}
-                                            onChange={updateHolderColor}
-                                            >
-                                                {availableHolderColors.map(col => 
-                                                <MenuItem value={col.colorCode}>
-                                                    <Stack direction="row">
-                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
-                                                        </Box>
-                                                        {col.name}
-                                                    </Stack>
-                                                </MenuItem>)}
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                    <Box>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="lidcolor-select-label">Lid color</InputLabel>
-                                            <Select
-                                            labelId="lidcolor-select-label"
-                                            id="lidcolor-select"
-                                            value={lidColor.colorCode}
-                                            onChange={updateLidColor}
-                                            >
-                                                {availableHolderColors.map(col => 
-                                                <MenuItem value={col.colorCode}>
-                                                    <Stack direction="row" >
-                                                        <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: col.colorCode}}>    
-                                                        </Box>
-                                                        {col.name}
-                                                    </Stack>
-                                                </MenuItem>)}
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                </Stack>
-                            </Card> */}
-                            <Stack direction="row" sx={{justifyContent: "space-between"}}>
+                            {isMobile && (<Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
                                     <Button variant="contained" onClick={() => setOpenBackDeletion(true)}>
                                         Back
@@ -681,14 +695,38 @@ export default function Customization() {
                                         Confirm
                                     </Button>
                                 </Box>
-                            </Stack>
+                            </Stack>)}
+
+                            {!isMobile && (<Stack direction="row" sx={{justifyContent: "space-between"}}>
+                                <Box>
+                                    <Button variant="contained" onClick={() => 
+                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens});
+                                        setTokenState(tokenSet[0].tokens);
+                                        }}>
+                                        Clear
+                                    </Button>
+                                </Box>
+                                <Box>
+                                    <Button variant="contained" sx={{backgroundColor:"#008000"}} disabled={!tokenAmountCorrect} onClick={handleConfirmClick}>
+                                        Confirm
+                                    </Button>
+                                </Box>
+                            </Stack>)}
                         </Stack>
                     </Stack>
+                    {!isMobile && (<Stack direction="row">
+                        <Box>
+                            <Button variant="contained" onClick={() => setOpenBackDeletion(true)}>
+                                Back
+                            </Button>
+                        </Box>
+                    </Stack>)}
 
                     {/* Back button deletion dialog */}
                     <Dialog
                         open={openBackDeletion}
                         onClose={() => {setOpenBackDeletion(false)}}
+                        PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
                     >
                         <DialogTitle>
                             {"Back to beginning?"}
@@ -736,6 +774,16 @@ export default function Customization() {
                                     exclusive
                                     onChange={updateTokenType}
                                     aria-label="Token-type"
+                                    sx={{
+                                        "& .MuiToggleButton-root": {
+                                        color: "var(--text-primary)",
+                                        },
+                                        "& .MuiToggleButton-root.Mui-selected": {
+                                        backgroundColor: "var(--accent-secondary)",
+                                        color: "var(--text-primary)",
+                                        },
+                                    }}
+
                                     >
                                     <ToggleButton value={true}>Numeric</ToggleButton>
                                     <ToggleButton value={false}>Keyword</ToggleButton>
