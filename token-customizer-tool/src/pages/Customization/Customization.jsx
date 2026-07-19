@@ -843,7 +843,7 @@ export default function Customization({ isMobile }) {
                                         </FormControl>
                                     </Box>
                                 </Stack>
-                                <Stack direction="row" spacing={3} sx={{width: "100%", justifyContent: "space-between", paddingTop: "1em"}}>
+                                <Stack direction="row" spacing={3} sx={{width: "100%", justifyContent: "space-between"}}>
                                     <Button variant="contained" onClick={() => setSelectedToken(null)}>Discard changes</Button>
                                     <Button variant="contained" onClick={saveUpdates}>Save changes</Button>
                                 </Stack>
