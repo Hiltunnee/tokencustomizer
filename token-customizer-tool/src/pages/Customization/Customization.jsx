@@ -700,13 +700,13 @@ export default function Customization({ isMobile }) {
                     <Dialog
                         open={openBackDeletion}
                         onClose={() => {setOpenBackDeletion(false)}}
-                        PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                        PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                     >
-                        <DialogTitle>
+                        <DialogTitle sx={{ padding: "0em 0em 0.5em 0em" }}>
                             {"Back to beginning?"}
                         </DialogTitle>
                         <p>This action deletes all current changes.</p>
-                        <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "space-around", padding: "0.5em 0em 0em 0em"}}>
                             <Button variant="contained" onClick={() => {setOpenBackDeletion(false)}}>
                                 Cancel
                             </Button>
@@ -730,12 +730,12 @@ export default function Customization({ isMobile }) {
                                 onClose={() => {setOpenTokenDeletion(false)}}
                                 aria-labelledby="token-deletion-dialog-title"
                                 aria-describedby="token-deletion-dialog"
-                                PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                                PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                             >
-                                <DialogTitle id="alert-dialog-title">
+                                <DialogTitle id="alert-dialog-title" sx={{ padding: "0em 0em 1em 0em" }}>
                                     {"Delete token completely?"}
                                 </DialogTitle>
-                                <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                                <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
                                     <Button variant="contained"  onClick={() => {setOpenTokenDeletion(false)}}>Cancel</Button>
                                     <Button variant="contained"  onClick={handleTokenDeletion} autoFocus>Delete</Button>
                                 </Stack>
