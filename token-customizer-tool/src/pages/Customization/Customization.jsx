@@ -781,6 +781,9 @@ export default function Customization({ isMobile }) {
                                         "& .MuiToggleButton-root.Mui-selected": {
                                         backgroundColor: "var(--accent-secondary)",
                                         color: "var(--text-primary)",
+                                        "&:hover": {
+                                            backgroundColor: "var(--accent-secondary)", // pidä sama väri hoverissa
+                                        },
                                         },
                                     }}
 
