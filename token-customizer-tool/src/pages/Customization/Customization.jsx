@@ -181,13 +181,17 @@ export default function Customization({ isMobile }) {
     };
 
     const updateTokenNumberPower = (newValue) => {
-        const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
-        setSelectedTokenNumbers(prev => ([newValue, prev[1]]));
+        if (newValue !== null) {
+            const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
+            setSelectedTokenNumbers(prev => ([newValue, prev[1]]));
+        }
     };
 
     const updateTokenNumberToughness = (newValue) => {
-        const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
-        setSelectedTokenNumbers(prev => ([prev[0], newValue]));
+        if (newValue !== null) {
+            const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
+            setSelectedTokenNumbers(prev => ([prev[0], newValue]));
+        }
     };
 
     useEffect(() => {
