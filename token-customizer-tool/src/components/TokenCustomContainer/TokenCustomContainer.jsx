@@ -10,7 +10,7 @@ export default function TokenCustomContainer({tokens, onTokenClick, onNewTokenCl
             <Box sx={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(120px, 120px))",
-                gap: 5,
+                gap: 4.6,
                 justifyContent: "start",
                 padding: "2em",
                 backgroundColor: "var(--background-secondary)",

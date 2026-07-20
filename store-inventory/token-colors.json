@@ -141,20 +141,13 @@
     },
     {
         "id": 21,
-        "name": "Gold",
-        "colorCode": "#f6d701",
-        "abbreviation": "GOL",
-        "available": true
-    },
-    {
-        "id": 22,
         "name": "White Marble",
         "colorCode": "#F7F3F0",
         "abbreviation": "WMR",
         "available": true
     },
     {
-        "id": 23,
+        "id": 22,
         "name": "Grey Marble",
         "colorCode": "#c9c6c3",
         "abbreviation": "GMR",

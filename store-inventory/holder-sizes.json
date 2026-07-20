@@ -3,7 +3,7 @@
         "id": 1,
         "name":"16xHolder",
         "tokenCount":16,
-        "imagePath":"holder16.webp",
+        "imagePath":"holder16_new.png",
         "alt":"holder-16-image",
         "available":true
     },
@@ -11,7 +11,7 @@
         "id": 2,
         "name":"32xHolder",
         "tokenCount":32,
-        "imagePath":"holder32.avif",
+        "imagePath":"holder32_new.png",
         "alt":"holder-32-image",
         "available":true
     },
@@ -19,7 +19,7 @@
         "id": 3,
         "name":"48xHolder",
         "tokenCount":48,
-        "imagePath":"holder48.avif",
+        "imagePath":"holder48_new.png",
         "alt":"holder-48-image",
         "available":true
     }

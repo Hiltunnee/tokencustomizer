@@ -6,7 +6,7 @@ import Stack from "@mui/material/Stack";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
-import logo_white from "../../../public/logo_white.png";
+import logo_white from "/logo_white.png";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import { pageStyle, textCardStyle } from "./styles";
