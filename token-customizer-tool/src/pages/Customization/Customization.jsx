@@ -769,8 +769,8 @@ export default function Customization({ isMobile }) {
                                 )}
                                 {updatedSelectedToken.isNumberToken && (
                                     <Stack direction="row">
-                                        <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
-                                        <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
+                                        <NumberSpinner min={-999} max={999} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
+                                        <NumberSpinner min={-999} max={999} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
                                     </Stack>
                                 )}
                                 <Stack direction="row" alignItems="center" justifyContent="center">
