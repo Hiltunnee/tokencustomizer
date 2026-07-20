@@ -178,7 +178,7 @@ export default function Confirmation({ isMobile }) {
                         <IconButton sx={{position: "absolute", top: 8, right: 100,}} onClick={() => {handleEditHolder(index)}}>
                             <EditIcon />
                         </IconButton>
-                        <p style={{...(isMobile && {position: "relative", left: "-100px",}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
+                        <p style={{...(isMobile && {marginLeft: "-100px"}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
                         <Collapse in={openHolders.includes(index)}>
                             <Card sx={textCardStyle}>
                                 <p>Holder color: <span style={{ fontWeight: 500 }}>{holder.holder}</span></p>
