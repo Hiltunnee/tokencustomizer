@@ -511,19 +511,6 @@ export default function Customization({ isMobile }) {
                                             value={holderColor.colorCode}
                                             onChange={updateHolderColor}
                                             renderValue={() => (
-                                                // <Box
-                                                //     sx={{
-                                                //     overflow: "hidden",
-                                                //     textOverflow: "ellipsis",
-                                                //     whiteSpace: "nowrap",
-                                                //     }}
-                                                // >
-                                                //     <Stack direction="row">
-                                                //         <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: holderColor.colorCode}}>    
-                                                //         </Box>
-                                                //         {holderColor.name}
-                                                //     </Stack>
-                                                // </Box>
                                                 <Stack direction="row" alignItems="center" spacing={1}>
                                                     <Box
                                                     sx={{
@@ -568,19 +555,6 @@ export default function Customization({ isMobile }) {
                                             value={lidColor.colorCode}
                                             onChange={updateLidColor}
                                             renderValue={() => (
-                                                // <Box
-                                                //     sx={{
-                                                //     overflow: "hidden",
-                                                //     textOverflow: "ellipsis",
-                                                //     whiteSpace: "nowrap",
-                                                //     }}
-                                                // >
-                                                //     <Stack direction="row">
-                                                //         <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: lidColor.colorCode}}>    
-                                                //         </Box>
-                                                //         {lidColor.name}
-                                                //     </Stack>
-                                                // </Box>
                                                 <Stack direction="row" alignItems="center" spacing={1}>
                                                     <Box
                                                     sx={{
@@ -776,14 +750,14 @@ export default function Customization({ isMobile }) {
                                     aria-label="Token-type"
                                     sx={{
                                         "& .MuiToggleButton-root": {
-                                        color: "var(--text-primary)",
+                                            color: "var(--text-primary)",
                                         },
                                         "& .MuiToggleButton-root.Mui-selected": {
-                                        backgroundColor: "var(--accent-secondary)",
-                                        color: "var(--text-primary)",
-                                        "&:hover": {
-                                            backgroundColor: "var(--accent-secondary)", // pidä sama väri hoverissa
-                                        },
+                                            backgroundColor: "var(--accent-secondary)",
+                                            color: "var(--text-primary)",
+                                            "&:hover": {
+                                                backgroundColor: "var(--accent-secondary)", // pidä sama väri hoverissa
+                                            },
                                         },
                                     }}
 
