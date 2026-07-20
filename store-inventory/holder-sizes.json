@@ -3,24 +3,24 @@
         "id": 1,
         "name":"16xHolder",
         "tokenCount":16,
-        "imagePath":"holder16_new.png",
-        "alt":"holder-16-image",
+        "imagePath":"holder16_new.webp",
+        "alt":"Custom 16 piece token holder and tokens for Magic: The Gathering, Pokemon, One Piece or any TCG",
         "available":true
     },
     {
         "id": 2,
         "name":"32xHolder",
         "tokenCount":32,
-        "imagePath":"holder32_new.png",
-        "alt":"holder-32-image",
+        "imagePath":"holder32_new.webp",
+        "alt":"Custom 32 piece token holder and tokens for Magic: The Gathering, Pokemon, One Piece or any TCG",
         "available":true
     },
     {
         "id": 3,
         "name":"48xHolder",
         "tokenCount":48,
-        "imagePath":"holder48_new.png",
-        "alt":"holder-48-image",
+        "imagePath":"holder48_new.webp",
+        "alt":"Custom 48 piece token holder and tokens for Magic: The Gathering, Pokemon, One Piece or any TCG",
         "available":true
     }
 ]}
