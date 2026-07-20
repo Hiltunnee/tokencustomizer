@@ -96,10 +96,9 @@ export default function Customization({ isMobile }) {
                 token.text = token.text.toUpperCase()
                 })
             });
-            console.log(matchingSets);
         };
 
-        setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens}, ...matchingSets]);
+        setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: []}, ...matchingSets]);
     };
 
     // Varmistaa, että tokenSetin holder ja lid data on ajan tasalla ennen confirmation sivulle siirtymistä
@@ -447,7 +446,7 @@ export default function Customization({ isMobile }) {
 
                             {isMobile && (<Card sx={textCardStyle}>
                                 <p>You can choose a preset as a base for your set.</p>
-                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <p><strong>Selecting a preset will overwrite your previous changes!</strong></p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
                                     <InputLabel id="preset-select-label">Preset</InputLabel>
                                     <Select
@@ -511,19 +510,6 @@ export default function Customization({ isMobile }) {
                                             value={holderColor.colorCode}
                                             onChange={updateHolderColor}
                                             renderValue={() => (
-                                                // <Box
-                                                //     sx={{
-                                                //     overflow: "hidden",
-                                                //     textOverflow: "ellipsis",
-                                                //     whiteSpace: "nowrap",
-                                                //     }}
-                                                // >
-                                                //     <Stack direction="row">
-                                                //         <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: holderColor.colorCode}}>    
-                                                //         </Box>
-                                                //         {holderColor.name}
-                                                //     </Stack>
-                                                // </Box>
                                                 <Stack direction="row" alignItems="center" spacing={1}>
                                                     <Box
                                                     sx={{
@@ -568,19 +554,6 @@ export default function Customization({ isMobile }) {
                                             value={lidColor.colorCode}
                                             onChange={updateLidColor}
                                             renderValue={() => (
-                                                // <Box
-                                                //     sx={{
-                                                //     overflow: "hidden",
-                                                //     textOverflow: "ellipsis",
-                                                //     whiteSpace: "nowrap",
-                                                //     }}
-                                                // >
-                                                //     <Stack direction="row">
-                                                //         <Box sx={{width: "1.3em", borderRadius: "2px", backgroundColor: lidColor.colorCode}}>    
-                                                //         </Box>
-                                                //         {lidColor.name}
-                                                //     </Stack>
-                                                // </Box>
                                                 <Stack direction="row" alignItems="center" spacing={1}>
                                                     <Box
                                                     sx={{
@@ -624,7 +597,7 @@ export default function Customization({ isMobile }) {
 
                             {!isMobile && (<Card sx={textCardStyle}>
                                 <p>You can choose a preset as a base for your set.</p>
-                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <p><strong>Selecting a preset will overwrite your previous changes!</strong></p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
                                     <InputLabel id="preset-select-label">Preset</InputLabel>
                                     <Select
@@ -700,8 +673,8 @@ export default function Customization({ isMobile }) {
                             {!isMobile && (<Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
                                     <Button variant="contained" onClick={() => 
-                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens});
-                                        setTokenState(tokenSet[0].tokens);
+                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: []});
+                                        setTokenState([]);
                                         }}>
                                         Clear
                                     </Button>
@@ -726,13 +699,13 @@ export default function Customization({ isMobile }) {
                     <Dialog
                         open={openBackDeletion}
                         onClose={() => {setOpenBackDeletion(false)}}
-                        PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                        PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                     >
-                        <DialogTitle>
+                        <DialogTitle sx={{ padding: "0em 0em 0.5em 0em" }}>
                             {"Back to beginning?"}
                         </DialogTitle>
                         <p>This action deletes all current changes.</p>
-                        <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "space-around", padding: "0.5em 0em 0em 0em"}}>
                             <Button variant="contained" onClick={() => {setOpenBackDeletion(false)}}>
                                 Cancel
                             </Button>
@@ -756,12 +729,12 @@ export default function Customization({ isMobile }) {
                                 onClose={() => {setOpenTokenDeletion(false)}}
                                 aria-labelledby="token-deletion-dialog-title"
                                 aria-describedby="token-deletion-dialog"
-                                PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                                PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                             >
-                                <DialogTitle id="alert-dialog-title">
+                                <DialogTitle id="alert-dialog-title" sx={{ padding: "0em 0em 1em 0em" }}>
                                     {"Delete token completely?"}
                                 </DialogTitle>
-                                <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                                <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
                                     <Button variant="contained"  onClick={() => {setOpenTokenDeletion(false)}}>Cancel</Button>
                                     <Button variant="contained"  onClick={handleTokenDeletion} autoFocus>Delete</Button>
                                 </Stack>
@@ -776,11 +749,14 @@ export default function Customization({ isMobile }) {
                                     aria-label="Token-type"
                                     sx={{
                                         "& .MuiToggleButton-root": {
-                                        color: "var(--text-primary)",
+                                            color: "var(--text-primary)",
                                         },
                                         "& .MuiToggleButton-root.Mui-selected": {
-                                        backgroundColor: "var(--accent-secondary)",
-                                        color: "var(--text-primary)",
+                                            backgroundColor: "var(--accent-secondary)",
+                                            color: "var(--text-primary)",
+                                            "&:hover": {
+                                                backgroundColor: "var(--accent-secondary)", // pidä sama väri hoverissa
+                                            },
                                         },
                                     }}
 

@@ -178,7 +178,7 @@ export default function Confirmation({ isMobile }) {
                         <IconButton sx={{position: "absolute", top: 8, right: 100,}} onClick={() => {handleEditHolder(index)}}>
                             <EditIcon />
                         </IconButton>
-                        <p style={{...(isMobile && {position: "relative", left: "-100px",}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
+                        <p style={{...(isMobile && {marginLeft: "-100px"}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
                         <Collapse in={openHolders.includes(index)}>
                             <Card sx={textCardStyle}>
                                 <p>Holder color: <span style={{ fontWeight: 500 }}>{holder.holder}</span></p>
@@ -197,12 +197,12 @@ export default function Confirmation({ isMobile }) {
                     onClose={() => {setOpenSetDeletion(false)}}
                     aria-labelledby="set-deletion-dialog-title"
                     aria-describedby="set-deletion-dialog"
-                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                 >
-                    <DialogTitle id="alert-dialog-title">
+                    <DialogTitle id="alert-dialog-title" sx={{ padding: "0em 0em 1em 0em" }}>
                         {"Delete set completely?"}
                     </DialogTitle>
-                    <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                    <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
                         <Button variant="contained" onClick={() => {setOpenSetDeletion(false)}}>Cancel</Button>
                         <Button variant="contained" onClick={handleDeleteHolderConfirmation} autoFocus>Delete</Button>
                     </Stack>
@@ -228,17 +228,17 @@ export default function Confirmation({ isMobile }) {
                     }}
                     aria-labelledby="set-email-dialog-title"
                     aria-describedby="set-email-dialog"
-                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                 >
-                    <DialogTitle id="alert-dialog-title">
+                    <DialogTitle id="alert-dialog-title" sx={{ padding: "0em 0em 1em 0em" }}>
                         {"Send order details"}
                     </DialogTitle>
-                    <Stack spacing={2} sx={{padding: "1em"}}>
+                    <Stack spacing={2} sx={{padding: "0em"}}>
                         <Stack direction="row" spacing={1} alignItems="center">
                             <p style={{ margin: 0 }}>Enter order name:</p>
 
                             {!isMobile && (<Tooltip
-                                title="Give the order a unique name (for example, the Etsy order number if you have already placed the order) and inform the seller of it. Please do not put any sensitive information in the order name, as it will not be sent securely."
+                                title="Give the order a unique name and write it in the Etsy order description. Please do not use any sensitive information as the name, as it will not be sent securely."
                                 arrow
                             >
                                 <IconButton size="small" >
@@ -246,7 +246,7 @@ export default function Confirmation({ isMobile }) {
                                 </IconButton>
                             </Tooltip>)}
                             {isMobile && (<Tooltip
-                                title="Give the order a unique name (for example, the Etsy order number if you have already placed the order) and inform the seller of it. Please do not put any sensitive information in the order name, as it will not be sent securely."
+                                title="Give the order a unique name and write it in the Etsy order description. Please do not use any sensitive information as the name, as it will not be sent securely."
                                 onClose={() => setInfoTooltipOpen(false)}
                                 open={infoTooltipOpen}
                                 disableFocusListener
@@ -276,13 +276,12 @@ export default function Confirmation({ isMobile }) {
                     onClose={() => setStartingOver(false)}
                     aria-labelledby="starting-over-dialog-title"
                     aria-describedby="starting-over-dialog"
-                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
                 >
-                    <DialogTitle id="starting-over-dialog-title">
-                        {`Delete current changes \n
-                        and start new order?`}
+                    <DialogTitle id="starting-over-dialog-title" sx={{ padding: "0em 0em 1em 0em" }}>
+                        {"Discard current changes and start a new order?"}
                     </DialogTitle>
-                    <Stack direction="row" sx={{justifyContent: "space-around", padding: "1em"}}>
+                    <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
                         <Button variant="contained" onClick={() => {setStartingOver(false)}}>Cancel</Button>
                         <Button variant="contained" onClick={handleStartNewOrder} autoFocus>New order</Button>
                     </Stack>
