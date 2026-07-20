@@ -721,7 +721,7 @@ export default function Customization({ isMobile }) {
 
                     {/* Token customization dialog */}
                     {selectedToken && updatedSelectedToken && (
-                        <Dialog open onClose={() => setSelectedToken(null)} PaperProps={{ sx: { backgroundColor: "var(--background-secondary)" }}}>
+                        <Dialog open onClose={() => setSelectedToken(null)} PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", width: isMobile ? "auto" : "auto", maxWidth: isMobile ? "auto" : "auto"}}}>
                             <DialogTitle>Token customization</DialogTitle>
                             <IconButton sx={{position: "absolute", top: 20, left: 20,}} onClick={() => {setOpenTokenDeletion(true)}}>
                                 <DeleteIcon />
@@ -744,7 +744,7 @@ export default function Customization({ isMobile }) {
                                 </Stack>
                             </Dialog>
 
-                            <Stack spacing={2} sx={{padding:"25px", textAlign: 'center', alignItems: "center",}}>
+                            <Stack spacing={2} sx={{padding:"25px", textAlign: 'center', alignItems: "stretch",}}>
                                 <ToggleButtonGroup
                                     color="primary"
                                     value={updatedSelectedToken.isNumberToken}
@@ -762,6 +762,7 @@ export default function Customization({ isMobile }) {
                                                 backgroundColor: "var(--accent-secondary)", // pidä sama väri hoverissa
                                             },
                                         },
+                                        alignSelf: "center",
                                     }}
 
                                     >
@@ -769,20 +770,20 @@ export default function Customization({ isMobile }) {
                                     <ToggleButton value={false}>Keyword</ToggleButton>
                                 </ToggleButtonGroup>
                                 {!updatedSelectedToken.isNumberToken && (
-                                    <TextField id="keyword-input" variant="outlined" multiline maxRows={2} slotProps={{ maxLength: 9 }} value={updatedSelectedToken.text} onChange={updateTokenText}/>
+                                    <TextField id="keyword-input" variant="outlined" multiline maxRows={2} slotProps={{ maxLength: 9 }} value={updatedSelectedToken.text} onChange={updateTokenText} sx={{ alignSelf: "center"}}/>
                                 )}
                                 {updatedSelectedToken.isNumberToken && (
-                                    <Stack direction="row">
+                                    <Stack direction="row" sx={{ alignSelf: "center" }}>
                                         <NumberSpinner min={-999} max={999} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
                                         <NumberSpinner min={-999} max={999} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
                                     </Stack>
                                 )}
-                                <Stack direction="row" alignItems="center" justifyContent="center">
+                                <Stack direction="row" alignContent="center" alignItems="center" justifyContent="center" paddingLeft={isMobile ? "10px" : "20px"}>
                                     <Token text={updatedSelectedToken.text} color={updatedSelectedToken.baseColorCode} borderColor={updatedSelectedToken.borderColorCode} isNumberToken={updatedSelectedToken.isNumberToken} interactable={false}></Token>
                                     <NumberChanger amount={updatedSelectedToken.amount} changeAmount={updateAmount} />
                                 </Stack>
-                                <Stack direction="row" spacing={3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
-                                    <Box>
+                                <Stack direction="row" spacing={isMobile ? 2 : 3} justifyContent="center" divider={<Divider orientation="vertical" flexItem />}>
+                                    <Box sx={{ flexBasis: 0, flexGrow: 1, minWidth: 0 }}>
                                         <FormControl fullWidth>
                                             <InputLabel id="basecolor-select-label">Base color</InputLabel>
                                             <Select
@@ -790,6 +791,32 @@ export default function Customization({ isMobile }) {
                                             id="basecolor-select"
                                             value={updatedSelectedToken.baseColorCode}
                                             onChange={updateBaseColor}
+                                            renderValue={() => (
+                                                <Stack direction="row" alignItems="center" spacing={1} sx={{ width: "100%", minWidth: 0 }}>
+                                                    <Box
+                                                    sx={{
+                                                        width: "1.3em",
+                                                        height: "1.3em",
+                                                        borderRadius: "2px",
+                                                        backgroundColor: updatedSelectedToken.baseColorCode,
+                                                        flexShrink: 0,
+                                                    }}
+                                                    />
+                                                    <Box
+                                                    sx={{
+                                                        flex: 1,
+                                                        minWidth: 0,
+                                                        ...(isMobile && {
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        whiteSpace: "nowrap",
+                                                        }),
+                                                    }}
+                                                    >
+                                                    {updatedSelectedToken.baseColor}
+                                                    </Box>
+                                                </Stack>
+                                            )}
                                             >
                                                 {availableTokenColors.map(col => 
                                                 <MenuItem value={col.colorCode}>
@@ -800,9 +827,9 @@ export default function Customization({ isMobile }) {
                                                     </Stack>
                                                 </MenuItem>)}
                                             </Select>
-                                        </FormControl>
+                                        </FormControl >
                                     </Box>
-                                    <Box>
+                                    <Box sx={{ flexBasis: 0, flexGrow: 1, minWidth: 0 }}>
                                         <FormControl fullWidth>
                                             <InputLabel id="bordercolor-select-label">Border color</InputLabel>
                                             <Select
@@ -810,6 +837,30 @@ export default function Customization({ isMobile }) {
                                             id="bordercolor-select"
                                             value={updatedSelectedToken.borderColorCode}
                                             onChange={updateBorderColor}
+                                            renderValue={() => (
+                                                <Stack direction="row" alignItems="center" spacing={1} sx={{ width: "100%", minWidth: 0 }}>
+                                                    <Box
+                                                    sx={{
+                                                        width: "1.3em",
+                                                        height: "1.3em",
+                                                        borderRadius: "2px",
+                                                        backgroundColor: updatedSelectedToken.borderColorCode,
+                                                        flexShrink: 0,
+                                                    }}
+                                                    />
+                                                    <Box
+                                                    sx={{
+                                                        flex: 1,
+                                                        minWidth: 0,
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        whiteSpace: "nowrap",
+                                                    }}
+                                                    >
+                                                    {updatedSelectedToken.borderColor}
+                                                    </Box>
+                                                </Stack>
+                                            )}
                                             >
                                                 {availableTokenColors.map(col => 
                                                 <MenuItem value={col.colorCode}>
