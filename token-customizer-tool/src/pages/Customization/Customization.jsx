@@ -181,13 +181,17 @@ export default function Customization({ isMobile }) {
     };
 
     const updateTokenNumberPower = (newValue) => {
-        const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
-        setSelectedTokenNumbers(prev => ([newValue, prev[1]]));
+        if (newValue !== null) {
+            const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
+            setSelectedTokenNumbers(prev => ([newValue, prev[1]]));
+        }
     };
 
     const updateTokenNumberToughness = (newValue) => {
-        const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
-        setSelectedTokenNumbers(prev => ([prev[0], newValue]));
+        if (newValue !== null) {
+            const tokenNumbers = updatedSelectedToken.text.match(/\d+/g);
+            setSelectedTokenNumbers(prev => ([prev[0], newValue]));
+        }
     };
 
     useEffect(() => {
@@ -769,8 +773,8 @@ export default function Customization({ isMobile }) {
                                 )}
                                 {updatedSelectedToken.isNumberToken && (
                                     <Stack direction="row">
-                                        <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
-                                        <NumberSpinner min={-99} max={99} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
+                                        <NumberSpinner min={-999} max={999} value={selectedTokenNumbers[0]} onValueChange={(newValue) => {updateTokenNumberPower(newValue)}} size="small"/>
+                                        <NumberSpinner min={-999} max={999} value={selectedTokenNumbers[1]} onValueChange={(newValue) => {{updateTokenNumberToughness(newValue)}}} size="small"/>
                                     </Stack>
                                 )}
                                 <Stack direction="row" alignItems="center" justifyContent="center">

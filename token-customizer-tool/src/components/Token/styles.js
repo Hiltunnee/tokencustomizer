@@ -31,9 +31,15 @@ const numberTokenStyle = {
   letterSpacing: 2,
 };
 
-const bigNumberTokenStyle = {
+const twoDigitNumberTokenStyle = {
   ...textStyle,
   fontSize: 17,
+  letterSpacing: 2,
+};
+
+const threeDigitNumberTokenStyle = {
+  ...textStyle,
+  fontSize: 12,
   letterSpacing: 2,
 };
 
@@ -49,4 +55,4 @@ const smallTextTokenStyle = {
   letterSpacing: 1,
 };
 
-export { textStyle, svgStyle, numberTokenStyle, textTokenStyle, svgStyleNoInteraction, smallTextTokenStyle, bigNumberTokenStyle };
+export { textStyle, svgStyle, numberTokenStyle, textTokenStyle, svgStyleNoInteraction, smallTextTokenStyle, twoDigitNumberTokenStyle, threeDigitNumberTokenStyle };
