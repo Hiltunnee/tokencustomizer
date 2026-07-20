@@ -96,10 +96,9 @@ export default function Customization({ isMobile }) {
                 token.text = token.text.toUpperCase()
                 })
             });
-            console.log(matchingSets);
         };
 
-        setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens}, ...matchingSets]);
+        setAvailablePresets([{presetName: "Empty set", presetGroup: "other", tokens: []}, ...matchingSets]);
     };
 
     // Varmistaa, että tokenSetin holder ja lid data on ajan tasalla ennen confirmation sivulle siirtymistä
@@ -447,7 +446,7 @@ export default function Customization({ isMobile }) {
 
                             {isMobile && (<Card sx={textCardStyle}>
                                 <p>You can choose a preset as a base for your set.</p>
-                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <p><strong>Selecting a preset will overwrite your previous changes!</strong></p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
                                     <InputLabel id="preset-select-label">Preset</InputLabel>
                                     <Select
@@ -598,7 +597,7 @@ export default function Customization({ isMobile }) {
 
                             {!isMobile && (<Card sx={textCardStyle}>
                                 <p>You can choose a preset as a base for your set.</p>
-                                <p>Selecting a preset will overwrite your previous changes!</p>
+                                <p><strong>Selecting a preset will overwrite your previous changes!</strong></p>
                                 <FormControl sx={{width: "80%", marginBottom: "1em"}}>
                                     <InputLabel id="preset-select-label">Preset</InputLabel>
                                     <Select
@@ -674,8 +673,8 @@ export default function Customization({ isMobile }) {
                             {!isMobile && (<Stack direction="row" sx={{justifyContent: "space-between"}}>
                                 <Box>
                                     <Button variant="contained" onClick={() => 
-                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: tokenSet[0].tokens});
-                                        setTokenState(tokenSet[0].tokens);
+                                        {setSelectedPreset({presetName: "Empty set", presetGroup: "other", tokens: []});
+                                        setTokenState([]);
                                         }}>
                                         Clear
                                     </Button>
