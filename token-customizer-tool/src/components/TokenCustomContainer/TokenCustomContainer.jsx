@@ -9,7 +9,7 @@ export default function TokenCustomContainer({tokens, onTokenClick, onNewTokenCl
         <Card>
             <Box sx={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(120px, 120px))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
                 gap: 4.6,
                 justifyContent: "start",
                 padding: "2em",
