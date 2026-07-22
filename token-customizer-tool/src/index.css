@@ -28,12 +28,12 @@
 
   /*Background colors*/
   --background-primary: #f5f8fd;
-  --background-secondary: #f7d9f8;
-  --backgound-secondary: #424549;
+  --background-secondary: #f5e1e4;
+  /* --background-tertiary: #f5e1e4; */
 
   /*Accent colors*/
   --accent-primary: #ffffff;
-  --accent-secondary: #ebafd9; 
+  --accent-secondary: #FEA7B6; 
   --accent-tertiary: #1E2124;
 }
 
@@ -49,8 +49,8 @@
   --background-tertiary: #d3d0d0;
 
   /*Accent colors*/
-  --accent-primary: #E1A9D0;
-  --accent-secondary: #E1A9D0; 
+  --accent-primary: #FEA7B6;
+  --accent-secondary: #FEA7B6; 
   --accent-tertiary: #C2AFBB;
 }
 
