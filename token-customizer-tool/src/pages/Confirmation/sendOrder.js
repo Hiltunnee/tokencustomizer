@@ -1,8 +1,8 @@
 export async function sendOrder(orderName, orderData) {
   const formData = new FormData();
-  const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
 
-  console.log(accessKey);
+  console.log("Order data to send:", orderData);
+  console.log("Order name to send:", orderName);
 
   formData.append(
     "access_key",
