@@ -1,12 +1,10 @@
 export async function sendOrder(orderName, orderData) {
   const formData = new FormData();
-
-  console.log("Order data to send:", orderData);
-  console.log("Order name to send:", orderName);
+  const accessKey = import.meta.env.VITE_WEB3FORMS_KEY;
 
   formData.append(
     "access_key",
-    "1c8f7391-5c80-4c9d-a53c-e1379233c1c2"
+    accessKey
   );
 
   formData.append("subject", `Uusi tilaus: ${orderName}`);
