@@ -6,7 +6,7 @@ export async function sendOrder(orderName, orderData) {
 
   formData.append(
     "access_key",
-    accessKey
+    "1c8f7391-5c80-4c9d-a53c-e1379233c1c2"
   );
 
   formData.append("subject", `Uusi tilaus: ${orderName}`);
