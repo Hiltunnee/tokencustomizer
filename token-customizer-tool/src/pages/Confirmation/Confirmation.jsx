@@ -28,6 +28,8 @@ import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import { sendOrder } from "./sendOrder";
+import Token from "../../components/Token/Token";
+import TokenConfirmationContainer from "../../components/TokenConfirmationContainer/TokenConfirmationContainer";
 
 export default function Confirmation({ isMobile }) {
     const navigate = useNavigate();
@@ -45,6 +47,7 @@ export default function Confirmation({ isMobile }) {
     const [success, setSuccess] = useState(false);
     const [startingOver, setStartingOver] = useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = useState(false);
+    const [tokensVisual, setTokensVisual] = useState(false);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -55,7 +58,10 @@ export default function Confirmation({ isMobile }) {
                 amount: token.amount,
                 text: token.text,
                 base: token.baseColor,
-                border: token.borderColor
+                baseCode: token.baseColorCode,
+                border: token.borderColor,
+                borderCode: token.borderColorCode,
+                isNumberToken: token.isNumberToken
             }))
         })));
     };
@@ -103,12 +109,12 @@ export default function Confirmation({ isMobile }) {
         setOpenSetDeletion(true);
     };
 
-    const copyToClipboard = () => {
-        const json = JSON.stringify(tokenData, null, 2);
-        navigator.clipboard.writeText(json);
-        setCopyTooltipOpen(true);
-        setTimeout(() => setCopyTooltipOpen(false), 1000);
-    };
+    // const copyToClipboard = () => {
+    //     const json = JSON.stringify(tokenData, null, 2);
+    //     navigator.clipboard.writeText(json);
+    //     setCopyTooltipOpen(true);
+    //     setTimeout(() => setCopyTooltipOpen(false), 1000);
+    // };
 
     const handleSendOrder = async () => {
         const formattedEmailData = formatDataForEmail();
@@ -180,13 +186,20 @@ export default function Confirmation({ isMobile }) {
                         </IconButton>
                         <p style={{...(isMobile && {marginLeft: "-100px"}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
                         <Collapse in={openHolders.includes(index)}>
-                            <Card sx={textCardStyle}>
-                                <p>Holder color: <span style={{ fontWeight: 500 }}>{holder.holder}</span></p>
-                                {holder.lid && (<p>Lid color: <span style={{ fontWeight: 500 }}>{holder.lid}</span></p>)}
-                                {holder.tokens.map((token, index) =>
-                                    <p key={index}>{token.amount}x <span style={{ fontWeight: 500 }}>{token.text}</span> ({token.base} / {token.border})</p>
-                                )}
-                            </Card>
+                            <p>Holder color: <span style={{ fontWeight: 500 }}>{holder.holder}</span></p>
+                            {holder.lid && (<p>Lid color: <span style={{ fontWeight: 500 }}>{holder.lid}</span></p>)}
+                            {holder.tokens.map((token, index) =>
+                                <p key={index}>{token.amount}x <span style={{ fontWeight: 500 }}>{token.text}</span> ({token.base} / {token.border})</p>
+                            )}
+                            <Box display="flex" sx={{position: "relative", justifyContent: "center"}}>
+                                <p>Tokens</p>
+                                <IconButton onClick={() => setTokensVisual(prev => !prev)}>
+                                    {tokensVisual ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                </IconButton>
+                            </Box>
+                            <Collapse in={tokensVisual} sx={{padding: "0% 2% 0%"}}>
+                                <TokenConfirmationContainer tokens={holder.tokens} />
+                            </Collapse>
                         </Collapse>
                     </Card>
                 )}
