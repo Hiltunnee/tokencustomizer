@@ -8,10 +8,6 @@ import { useEffect } from "react";
 
 export default function TokenConfirmationContainer({tokens}) {
 
-    useEffect(() => {
-        console.log("tokens", tokens);
-    },[]);
-
     return (
             <Box sx={{
                 display: "grid",
@@ -24,7 +20,7 @@ export default function TokenConfirmationContainer({tokens}) {
                 {tokens.map(token => (
                     <Box key={`${token.text}-${token.baseColor}-${token.borderColor}`} sx={boxStyle}>
                         <Typography sx={amountTextStyle}>x {token.amount}</Typography>
-                        <Token text={token.text} baseColor={token.baseCode} borderColor={token.borderCode} isNumberToken={token.isNumberToken} interactable={false}></Token>
+                        <Token text={token.text} color={token.baseCode} borderColor={token.borderCode} isNumberToken={token.isNumberToken} interactable={false}></Token>
                     </Box>
                 ))}
             </Box>

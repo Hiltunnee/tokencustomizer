@@ -50,7 +50,7 @@ function App() {
         palette: {
           mode: theme,
           primary: {
-            main: theme === "dark" ? "#df90c7" : "#ffb3e8" //Ei tue muuttujia
+            main: theme === "dark" ? "#FEA7B6" : "#FEA7B6" //Ei tue muuttujia
           },
           secondary: {
             main: theme === "dark" ? "#df90c7" : "#db6ab9",

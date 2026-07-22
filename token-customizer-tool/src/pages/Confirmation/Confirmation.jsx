@@ -10,6 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -23,10 +24,9 @@ import Collapse from "@mui/material/Collapse";
 import holderColors from "../../../../store-inventory/holder-colors.json";
 import tokenColors from "../../../../store-inventory/token-colors.json";
 import SendIcon from '@mui/icons-material/Send';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
+import LinkIcon from '@mui/icons-material/Link';
 import { sendOrder } from "./sendOrder";
 import Token from "../../components/Token/Token";
 import TokenConfirmationContainer from "../../components/TokenConfirmationContainer/TokenConfirmationContainer";
@@ -47,7 +47,7 @@ export default function Confirmation({ isMobile }) {
     const [success, setSuccess] = useState(false);
     const [startingOver, setStartingOver] = useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = useState(false);
-    const [tokensVisual, setTokensVisual] = useState(false);
+    const [tokensVisual, setTokensVisual] = useState([]);
 
     const formatTokenData = () => {
         setTokenData(tokenSet.map(set => ({
@@ -126,9 +126,6 @@ export default function Confirmation({ isMobile }) {
             const result = await sendOrder(orderName, formattedEmailData);
 
             if (result.success) {
-            console.log("Sending order with name:", orderName);
-            console.log("Formatted email data:", formattedEmailData);
-
             setSuccess(true);
             setOpenEmailDialog(false);
             setOrderName("");
@@ -173,19 +170,19 @@ export default function Confirmation({ isMobile }) {
     return (
         <Container sx={pageStyle}>
             <Stack spacing={4}>
-                {tokenData.map((holder, index) => 
-                    <Card key={index} sx={{position: "relative", backgroundColor: "var(--background-secondary)"}}>
-                        <IconButton sx={{position: "absolute", top: 8, right: 20,}} onClick={() => setOpenHolders(prev => prev.includes(index)? prev.filter(i => i !== index): [...prev, index])}>
-                            {openHolders.includes(index) ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)}
+                {tokenData.map((holder, holderIndex) => 
+                    <Card key={holderIndex} sx={{position: "relative", backgroundColor: "var(--background-secondary)"}}>
+                        <IconButton sx={{position: "absolute", top: 8, right: 20,}} onClick={() => setOpenHolders(prev => prev.includes(holderIndex)? prev.filter(i => i !== holderIndex): [...prev, holderIndex])}>
+                            {openHolders.includes(holderIndex) ? (<ExpandLessIcon />) : (<ExpandMoreIcon />)}
                         </IconButton>
-                        <IconButton disabled={!(tokenSet.length>1)} sx={{position: "absolute", top: 8, right: 60,}} onClick={() => {handleDeleteButton(index)}}>
+                        <IconButton disabled={!(tokenSet.length>1)} sx={{position: "absolute", top: 8, right: 60,}} onClick={() => {handleDeleteButton(holderIndex)}}>
                             <DeleteIcon />
                         </IconButton>
-                        <IconButton sx={{position: "absolute", top: 8, right: 100,}} onClick={() => {handleEditHolder(index)}}>
+                        <IconButton sx={{position: "absolute", top: 8, right: 100,}} onClick={() => {handleEditHolder(holderIndex)}}>
                             <EditIcon />
                         </IconButton>
                         <p style={{...(isMobile && {marginLeft: "-100px"}),}}><strong>Holder size:</strong> {holder.holderSize}</p>
-                        <Collapse in={openHolders.includes(index)}>
+                        <Collapse in={openHolders.includes(holderIndex)}>
                             <p>Holder color: <span style={{ fontWeight: 500 }}>{holder.holder}</span></p>
                             {holder.lid && (<p>Lid color: <span style={{ fontWeight: 500 }}>{holder.lid}</span></p>)}
                             {holder.tokens.map((token, index) =>
@@ -193,16 +190,26 @@ export default function Confirmation({ isMobile }) {
                             )}
                             <Box display="flex" sx={{position: "relative", justifyContent: "center"}}>
                                 <p>Tokens</p>
-                                <IconButton onClick={() => setTokensVisual(prev => !prev)}>
-                                    {tokensVisual ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                <IconButton onClick={() =>setTokensVisual(prev => prev.includes(holderIndex) ? prev.filter(i => i !== holderIndex) : [...prev, holderIndex])}>
+                                    {tokensVisual.includes(holderIndex) ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                 </IconButton>
                             </Box>
-                            <Collapse in={tokensVisual} sx={{padding: "0% 2% 0%"}}>
+                            <Collapse in={tokensVisual.includes(holderIndex)
+                            } sx={{padding: "0% 2% 0%"}}>
                                 <TokenConfirmationContainer tokens={holder.tokens} />
                             </Collapse>
                         </Collapse>
                     </Card>
                 )}
+
+                <Card sx={textCardStyle}>
+                    <p>Please note that this tool is for <strong>illustrative purposes only</strong> and may not perfectly reflect the final product (e.g. text size, positioning, and other details). Send your order and put the name of it in the Etsy order description.</p>
+                    <p>If you have specific needs or questions, don't hesitate to contact us!</p>
+                    <Stack direction="row" sx={{justifyContent: "center", gap: 0.2, marginBottom: 2}}>
+                        <LinkIcon />
+                        <Link href="https://linktr.ee/priimacraft?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGnZuzZaPhqNGLry9Tx2Igq4lSckaxW7M3fUq9wKZ2I9EEiBFCW59MWk0eOO0E_aem_80L7n-B99CkyXpRXEY_VZg" underline="hover" color="inherit">Priimacraft</Link>
+                    </Stack>
+                </Card>
 
                 {/* Tokenset deletion dialog */}
                 <Dialog
