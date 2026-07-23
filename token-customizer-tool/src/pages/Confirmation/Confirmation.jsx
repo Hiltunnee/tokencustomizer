@@ -203,7 +203,7 @@ export default function Confirmation({ isMobile }) {
                 )}
 
                 <Card sx={textCardStyle}>
-                    <p>Please note that this tool is for <strong>illustrative purposes only</strong> and may not perfectly reflect the final product (e.g. text size, positioning, and other details). Send your order and put the name of it in the Etsy order description.</p>
+                    <p>Please note that this tool is for <strong>illustrative purposes only</strong> and may not perfectly reflect the final product (e.g. text size, positioning, and other details). <mark style={{ backgroundColor: "var(--accent-secondary)" }}>Send your customization plan and put the name of it in the Etsy order description.</mark></p>
                     <p>If you have specific needs or questions, don't hesitate to contact us!</p>
                     <Stack direction="row" sx={{justifyContent: "center", gap: 0.2, marginBottom: 2}}>
                         <LinkIcon />
@@ -233,10 +233,10 @@ export default function Confirmation({ isMobile }) {
                         Add holder
                     </Button>
                     <Button sx={{ padding: "0.5em 1em" }} variant="contained" onClick={() => setStartingOver(true)} endIcon={<ReplayCircleFilledIcon sx={{ mr: 1}} />}>
-                        New order
+                        New
                     </Button>
                     <Button sx={{ padding: "0.5em 1em" }} variant="contained" onClick={() => setOpenEmailDialog(true)} endIcon={<SendIcon sx={{ mr: 0.5}} />} >
-                        Send order
+                        Send
                     </Button>
                 </Stack>
 
@@ -248,17 +248,17 @@ export default function Confirmation({ isMobile }) {
                     }}
                     aria-labelledby="set-email-dialog-title"
                     aria-describedby="set-email-dialog"
-                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em"}}}
                 >
                     <DialogTitle id="alert-dialog-title" sx={{ padding: "0em 0em 1em 0em" }}>
-                        {"Send order details"}
+                        {"Send customization plan"}
                     </DialogTitle>
                     <Stack spacing={2} sx={{padding: "0em"}}>
                         <Stack direction="row" spacing={1} alignItems="center">
-                            <p style={{ margin: 0 }}>Enter order name:</p>
+                            <p style={{ margin: 0 }}>Name your set:</p>
 
                             {!isMobile && (<Tooltip
-                                title="Give the order a unique name and write it in the Etsy order description. Please do not use any sensitive information as the name, as it will not be sent securely."
+                                title="Give the customization plan a unique name and write it in the Etsy order description. Please do not use any sensitive information as the name, as it will not be sent securely."
                                 arrow
                             >
                                 <IconButton size="small" >
@@ -266,7 +266,7 @@ export default function Confirmation({ isMobile }) {
                                 </IconButton>
                             </Tooltip>)}
                             {isMobile && (<Tooltip
-                                title="Give the order a unique name and write it in the Etsy order description. Please do not use any sensitive information as the name, as it will not be sent securely."
+                                title="Give the customization plan a unique name and write it in the Etsy order description. Please do not use any sensitive information as the name, as it will not be sent securely."
                                 onClose={() => setInfoTooltipOpen(false)}
                                 open={infoTooltipOpen}
                                 disableFocusListener
@@ -283,8 +283,9 @@ export default function Confirmation({ isMobile }) {
                                 </IconButton>
                             </Tooltip>)}
                         </Stack>
-                        <TextField label="Order name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth/>
-                        <Stack direction="row" spacing={2} sx={{justifyContent: "space-around"}}>
+                        <TextField label="Set name" value={orderName} onChange={(e) => setOrderName(e.target.value)} fullWidth />
+                        <p><strong>Remember!</strong> The tool is for planning only.<br/> You need to place the actual order on Etsy!</p>
+                        <Stack direction="row" spacing={2} sx={{justifyContent: "space-around", paddingTop: "0.5em"}}>
                             <Button variant="contained" onClick={() => setOpenEmailDialog(false)}>Cancel</Button>
                             <Button variant="contained" onClick={handleSendOrder} disabled={!orderName.trim()} autoFocus>Send</Button>
                         </Stack>
