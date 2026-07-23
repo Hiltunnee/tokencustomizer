@@ -28,6 +28,7 @@ export default function Home({ isMobile }) {
         if (tokenSet.length === 0) {
         setOpenWelcomeDialog(true);
         }
+        console.log(import.meta.env.VITE_WEB3FORMS_KEY);
     }, []);
 
     const moveToCustomization = () => {
