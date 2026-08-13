@@ -109,12 +109,11 @@ export default function Confirmation({ isMobile }) {
         setOpenSetDeletion(true);
     };
 
-    // const copyToClipboard = () => {
-    //     const json = JSON.stringify(tokenData, null, 2);
-    //     navigator.clipboard.writeText(json);
-    //     setCopyTooltipOpen(true);
-    //     setTimeout(() => setCopyTooltipOpen(false), 1000);
-    // };
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(orderName);
+        setCopyTooltipOpen(true);
+        setTimeout(() => setCopyTooltipOpen(false), 1000);
+    };
 
     const handleSendOrder = async () => {
         const formattedEmailData = formatDataForEmail();
@@ -128,7 +127,6 @@ export default function Confirmation({ isMobile }) {
             if (result.success) {
             setSuccess(true);
             setOpenEmailDialog(false);
-            setOrderName("");
             } else {
             setError("Sending failed");
             }
@@ -314,11 +312,30 @@ export default function Confirmation({ isMobile }) {
                     </Alert>
                 )}
 
-                {success && (
-                    <Alert severity="success">
-                        Order sent successfully.
-                    </Alert>
-                )}
+                <Dialog
+                    open={success}
+                    onClose={() => setSuccess(false)}
+                    aria-labelledby="order-sent-dialog-title"
+                    aria-describedby="order-sent-dialog"
+                    PaperProps={{ sx: { backgroundColor: "var(--background-secondary)", padding: "1em" }}}
+                >
+                    <DialogTitle>Customization plan sent successfully</DialogTitle>
+                    <Stack spacing={3} sx={{alignItems: "center", marginBottom: "1em"}}>
+                        <p>Now you can place your order on Etsy <br/>and add this name to your order description:</p>
+                        <Stack direction="row" sx={{justifyContent: "center", gap: 0.5}}>
+                            <p><strong>{orderName}</strong></p>
+                            <IconButton onClick={copyToClipboard}>
+                                <Tooltip title={copyTooltipOpen ? "Copied!" : "Copy to clipboard"} open={copyTooltipOpen} arrow>
+                                    <ContentCopyIcon />
+                                </Tooltip>
+                            </IconButton>
+                        </Stack>
+                        <Button variant="contained" href="https://priimacraft.etsy.com/" rel="noopener" target="_blank" sx={{ width: 'fit-content'}}>
+                            Buy your set
+                        </Button>
+                        <p>Thank you for using our customization tool!</p>
+                    </Stack>
+                </Dialog>
   
             </Stack>
         </Container>
