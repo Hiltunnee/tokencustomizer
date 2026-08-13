@@ -52,9 +52,9 @@ export default function Home({ isMobile }) {
                     <HolderCardContainer isMobile={isMobile}/>
                 </Box>
                 <Card sx={textCardStyle}>
-                    <p><mark style={{ backgroundColor: "var(--accent-secondary)" }}>This tool is used to customize your design. The actual order must be placed through the <strong><Link href="https://www.etsy.com/fi-en/shop/Priimacraft?dd_referrer=https%3A%2F%2Fwww.google.com%2F" underline="hover" color="inherit">Priimacraft Etsy shop.</Link></strong></mark></p>
+                    <p><mark style={{ backgroundColor: "var(--accent-secondary)" }}>This tool is used to customize your design. The actual order must be placed through the <strong><Link href="https://priimacraft.etsy.com/" rel="noopener" target="_blank" underline="hover" color="inherit">Priimacraft Etsy shop.</Link></strong></mark></p>
                     <p>Please note that this tool is for <strong>illustrative purposes only</strong> and may not perfectly reflect the final product (e.g. text size, positioning, and other details).</p>
-                    <p>For a more accurate representation of the tokens, please visit the <strong><Link href="https://www.etsy.com/fi-en/shop/Priimacraft?dd_referrer=https%3A%2F%2Fwww.google.com%2F" underline="hover" color="inherit">Priimacraft Etsy page</Link></strong> and refer to the product images.</p>
+                    <p>For a more accurate representation of the tokens, please visit the <strong><Link href="https://priimacraft.etsy.com/" rel="noopener" target="_blank" underline="hover" color="inherit">Priimacraft Etsy page</Link></strong> and refer to the product images.</p>
                     <p>If you have specific needs or questions, don't hesitate to contact us on Etsy!</p>
                 </Card>
                 <Stack direction="row" sx={{justifyContent: "flex-end"}}>

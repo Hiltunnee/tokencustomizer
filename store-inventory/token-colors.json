@@ -107,7 +107,7 @@
     {
         "id": 16,
         "name": "Purple",
-        "colorCode": "#603ba0",
+        "colorCode": "#4D2D73",
         "abbreviation": "PUR",
         "available": true
     },
@@ -151,6 +151,27 @@
         "name": "Grey Marble",
         "colorCode": "#c9c6c3",
         "abbreviation": "GMR",
+        "available": true
+    },
+    {
+        "id": 23,
+        "name": "Navy Blue",
+        "colorCode": "#042F56",
+        "abbreviation": "NB",
+        "available": true
+    },
+    {
+        "id": 24,
+        "name": "Rust Orange",
+        "colorCode": "#99390F",
+        "abbreviation": "RO",
+        "available": true
+    },
+    {
+        "id": 25,
+        "name": "Red Marble",
+        "colorCode": "#AD4431",
+        "abbreviation": "RM",
         "available": true
     }
 ]}
